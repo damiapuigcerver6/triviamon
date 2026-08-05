@@ -1,0 +1,66 @@
+.hero-text {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+}
+
+.hero-text h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  margin-bottom: 0.5rem;
+}
+
+.hero-text p {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+.game-card--soon {
+  opacity: 0.55;
+}
+
+.game-card-icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.game-card h2 {
+  font-size: 1.15rem;
+}
+
+.game-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.game-card-cta {
+  margin-top: 0.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
