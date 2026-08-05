@@ -1,6 +1,7 @@
 :root {
   color-scheme: light dark;
   --bg: #0f1115;
+  --bg-rgb: 15, 17, 21;
   --surface: #171a21;
   --surface-2: #1f232c;
   --border: #2a2f3a;
@@ -9,14 +10,11 @@
   --accent: #f8d030;
   --accent-2: #6890f0;
 
-  --mult-0: #23262e;
-  --mult-0-text: #7d8290;
-  --mult-half: #2f6f4f;
-  --mult-half-text: #8ff0c0;
-  --mult-1: #2a2f3a;
-  --mult-1-text: #c7cbd3;
-  --mult-2: #9c2b2b;
-  --mult-2-text: #ffd3d3;
+  /* Colores de eficacia: fijos en ambos temas, como las insignias de tipo */
+  --mult-0: #ffffff; /* nula (no afecta) */
+  --mult-half: #f0932b; /* mitad */
+  --mult-1: #8a8f98; /* neutra */
+  --mult-2: #2ecc71; /* doble */
 
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
@@ -24,21 +22,34 @@
 @media (prefers-color-scheme: light) {
   :root {
     --bg: #f6f7fb;
+    --bg-rgb: 246, 247, 251;
     --surface: #ffffff;
     --surface-2: #eef0f5;
     --border: #dde1e8;
     --text: #14161a;
     --text-dim: #5b6270;
-
-    --mult-0: #e4e6eb;
-    --mult-0-text: #6b7280;
-    --mult-half: #cdeedd;
-    --mult-half-text: #206a44;
-    --mult-1: #eef0f5;
-    --mult-1-text: #4b5160;
-    --mult-2: #ffd9d9;
-    --mult-2-text: #a31f1f;
   }
+}
+
+/* Selector de tema manual: fuerza claro/oscuro por encima de prefers-color-scheme */
+:root[data-theme="dark"] {
+  --bg: #0f1115;
+  --bg-rgb: 15, 17, 21;
+  --surface: #171a21;
+  --surface-2: #1f232c;
+  --border: #2a2f3a;
+  --text: #f2f3f5;
+  --text-dim: #9aa0ab;
+}
+
+:root[data-theme="light"] {
+  --bg: #f6f7fb;
+  --bg-rgb: 246, 247, 251;
+  --surface: #ffffff;
+  --surface-2: #eef0f5;
+  --border: #dde1e8;
+  --text: #14161a;
+  --text-dim: #5b6270;
 }
 
 * {

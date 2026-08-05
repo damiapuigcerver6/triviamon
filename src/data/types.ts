@@ -55,3 +55,8 @@ export function typeIcon(id: TypeId): string {
 export function typeBadge(id: TypeId): string {
   return `/tipos/badges/${id}.png`;
 }
+
+export function randomTypeIcon(): string {
+  const id = TYPE_IDS[Math.floor(Math.random() * TYPE_IDS.length)];
+  return typeIcon(id);
+}

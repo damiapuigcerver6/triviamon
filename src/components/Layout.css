@@ -2,32 +2,115 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--bg-rgb), 0.72);
 }
 
 .site-header {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--text);
   text-decoration: none;
-  letter-spacing: -0.02em;
 }
 
 .brand-icon {
-  width: 2rem;
-  height: 2rem;
+  height: 2.4rem;
+  width: 2.4rem;
+  border-radius: 7px;
+  display: block;
 }
 
-.brand-accent {
-  color: var(--accent);
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.icon-btn:hover {
+  border-color: var(--accent);
+}
+
+.games-menu {
+  position: relative;
+}
+
+.games-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 60;
+  min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.games-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.games-dropdown-item:hover {
+  background: var(--surface-2);
+}
+
+.games-dropdown-item img {
+  width: 1.8rem;
+  height: 1.8rem;
+  object-fit: contain;
+  border-radius: 5px;
 }
 
 .site-main {
@@ -43,4 +126,16 @@
   padding: 1.25rem;
   font-size: 0.8rem;
   color: var(--text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.site-footer a {
+  color: var(--text-dim);
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  color: var(--text);
 }
