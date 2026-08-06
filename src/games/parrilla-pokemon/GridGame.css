@@ -88,6 +88,12 @@
   background: rgba(46, 204, 113, 0.12);
 }
 
+.pg-cell--revealed {
+  box-shadow: inset 0 0 0 3px #e74c3c;
+  background: rgba(231, 76, 60, 0.12);
+  opacity: 0.9;
+}
+
 .pg-cell--shake {
   animation: pg-shake 0.4s;
   box-shadow: inset 0 0 0 3px #e74c3c;
@@ -187,16 +193,6 @@
 
 .pg-finish p {
   color: var(--text-dim);
-}
-
-.pg-solution {
-  text-align: left;
-  align-self: stretch;
-}
-
-.pg-solution p {
-  font-size: 0.85rem;
-  margin: 0.3rem 0;
 }
 
 .pg-finish-actions {

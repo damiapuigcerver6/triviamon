@@ -83,6 +83,7 @@ export default function GridGame({
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [shakeCell, setShakeCell] = useState<number | null>(null);
+  const [revealedAnswers, setRevealedAnswers] = useState<Record<number, number>>({});
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filledCount = Object.keys(filled).length;
@@ -158,6 +159,24 @@ export default function GridGame({
     setSelectedCell(null);
   }
 
+  useEffect(() => {
+    if (!revealed) return;
+    const used = new Set(usedIds);
+    const answers: Record<number, number> = {};
+    for (let i = 0; i < 9; i++) {
+      if (filled[i] !== undefined) continue;
+      const row = Math.floor(i / 3);
+      const col = i % 3;
+      const answer = exampleAnswer(puzzle, row, col, used);
+      if (answer) {
+        answers[i] = answer.id;
+        used.add(answer.id);
+      }
+    }
+    setRevealedAnswers(answers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealed, puzzle]);
+
   async function handleShare() {
     const text = `Triviamon - ${t.games.parrillaPokemon.title}${dateLabel ? ` (${dateLabel})` : ""}\n${
       revealed ? t.parrillaPokemon.shareGaveUp : t.parrillaPokemon.shareCompleted
@@ -197,18 +216,20 @@ export default function GridGame({
             {puzzle.cols.map((_, colIdx) => {
               const cellIdx = rowIdx * 3 + colIdx;
               const pokemonId = filled[cellIdx];
-              const pokemon = pokemonId !== undefined ? pokedexById.get(pokemonId) : undefined;
+              const isRevealed = pokemonId === undefined && revealedAnswers[cellIdx] !== undefined;
+              const displayId = pokemonId ?? revealedAnswers[cellIdx];
+              const pokemon = displayId !== undefined ? pokedexById.get(displayId) : undefined;
               const isSelected = selectedCell === cellIdx;
               const isShaking = shakeCell === cellIdx;
               return (
                 <button
                   type="button"
                   key={`cell-${cellIdx}`}
-                  className={`pg-cell pg-cell--answer ${pokemon ? "pg-cell--filled" : ""} ${
-                    isSelected ? "pg-cell--selected" : ""
-                  } ${isShaking ? "pg-cell--shake" : ""}`}
+                  className={`pg-cell pg-cell--answer ${pokemonId !== undefined ? "pg-cell--filled" : ""} ${
+                    isRevealed ? "pg-cell--revealed" : ""
+                  } ${isSelected ? "pg-cell--selected" : ""} ${isShaking ? "pg-cell--shake" : ""}`}
                   onClick={() => selectCell(cellIdx)}
-                  disabled={gameOver || pokemon !== undefined}
+                  disabled={gameOver || pokemonId !== undefined}
                 >
                   {pokemon && (
                     <>
@@ -264,25 +285,6 @@ export default function GridGame({
         <div className="pg-finish">
           <h3>{complete ? t.parrillaPokemon.completedTitle : t.parrillaPokemon.revealedTitle}</h3>
           <p>{t.parrillaPokemon.cellsSolved(filledCount, attempts)}</p>
-          {revealed && !complete && (
-            <div className="pg-solution">
-              {Array.from({ length: 9 }, (_, i) => i)
-                .filter((i) => filled[i] === undefined)
-                .map((i) => {
-                  const row = Math.floor(i / 3);
-                  const col = i % 3;
-                  const answer = exampleAnswer(puzzle, row, col, usedIds);
-                  return (
-                    <p key={i}>
-                      <strong>
-                        {puzzle.rows[row].label} + {puzzle.cols[col].label}:
-                      </strong>{" "}
-                      {answer ? pokemonName(answer, lang) : "—"}
-                    </p>
-                  );
-                })}
-            </div>
-          )}
           <div className="pg-finish-actions">
             {complete && (
               <button type="button" className="pg-btn pg-btn--primary" onClick={handleShare}>
