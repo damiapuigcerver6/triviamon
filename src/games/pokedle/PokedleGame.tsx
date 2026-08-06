@@ -56,10 +56,10 @@ export default function PokedleGame({
   const initial = useMemo(() => loadProgress(storageKey), [storageKey]);
   const [guessIds, setGuessIds] = useState<number[]>(initial.guessIds);
   const [status, setStatus] = useState<StoredProgress["status"]>(initial.status);
-  const [query, setQuery] = useState("");
+  const [currentGuess, setCurrentGuess] = useState("");
   const [shake, setShake] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const hiddenInputRef = useRef<HTMLInputElement>(null);
 
   const gameOver = status !== "playing";
 
@@ -71,6 +71,10 @@ export default function PokedleGame({
     if (status === "won") onSolved?.();
   }, [status, onSolved]);
 
+  useEffect(() => {
+    if (!gameOver) hiddenInputRef.current?.focus();
+  }, [gameOver, guessIds.length]);
+
   const guessedIds = useMemo(() => new Set(guessIds), [guessIds]);
 
   function triggerInvalid(msg: string) {
@@ -79,12 +83,24 @@ export default function PokedleGame({
     setTimeout(() => setShake(false), 400);
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (gameOver || !query.trim()) return;
+  function focusInput() {
+    hiddenInputRef.current?.focus();
+  }
 
-    const target = normalizeGuess(query);
-    const match = candidates.find((p) => normalizeGuess(pokemonName(p, lang)) === target);
+  function handleTypedChange(raw: string) {
+    setError(null);
+    setCurrentGuess(raw.replace(/[^a-zA-Z0-9]/g, "").slice(0, answerLength));
+  }
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault();
+    if (gameOver) return;
+    if (currentGuess.length < answerLength) {
+      triggerInvalid(t.pokedle.notEnoughLetters);
+      return;
+    }
+
+    const match = candidates.find((p) => normalizeGuess(pokemonName(p, lang)) === normalizeGuess(currentGuess));
 
     if (!match) {
       triggerInvalid(t.pokedle.notAPokemon);
@@ -96,7 +112,7 @@ export default function PokedleGame({
     }
 
     setError(null);
-    setQuery("");
+    setCurrentGuess("");
     const nextGuessIds = [...guessIds, match.id];
     setGuessIds(nextGuessIds);
 
@@ -105,6 +121,7 @@ export default function PokedleGame({
     } else if (nextGuessIds.length >= MAX_ATTEMPTS) {
       setStatus("lost");
     }
+    focusInput();
   }
 
   function handleReveal() {
@@ -136,60 +153,71 @@ export default function PokedleGame({
         <span>{t.pokedle.attemptsLabel(guessIds.length, MAX_ATTEMPTS)}</span>
       </div>
 
-      <div className="pk-rows">
-        {Array.from({ length: MAX_ATTEMPTS }, (_, rowIdx) => {
-          const id = guessIds[rowIdx];
-          const isActive = !gameOver && rowIdx === guessIds.length;
-          if (id === undefined) {
+      <form onSubmit={handleSubmit}>
+        <div className="pk-rows" onClick={focusInput}>
+          {Array.from({ length: MAX_ATTEMPTS }, (_, rowIdx) => {
+            const id = guessIds[rowIdx];
+
+            if (id !== undefined) {
+              const p = pokedexById.get(id)!;
+              const name = pokemonName(p, lang);
+              const states = compareGuess(name, answerName);
+              const letters = [...letterWord(name)];
+              return (
+                <div className="pk-row" key={id}>
+                  {letters.map((ch, i) => (
+                    <span key={i} className={`pk-tile pk-tile--${states[i] as LetterState}`}>
+                      {ch}
+                    </span>
+                  ))}
+                </div>
+              );
+            }
+
+            const isActive = !gameOver && rowIdx === guessIds.length;
+            const typedLetters = isActive ? [...currentGuess] : [];
             return (
               <div className={`pk-row ${isActive && shake ? "pk-row--shake" : ""}`} key={rowIdx}>
                 {Array.from({ length: answerLength }, (_, i) => (
-                  <span key={i} className="pk-tile pk-tile--empty" />
+                  <span
+                    key={i}
+                    className={`pk-tile ${typedLetters[i] ? "pk-tile--typed" : "pk-tile--empty"}`}
+                  >
+                    {typedLetters[i]?.toUpperCase() ?? ""}
+                  </span>
                 ))}
               </div>
             );
-          }
-          const p = pokedexById.get(id)!;
-          const name = pokemonName(p, lang);
-          const states = compareGuess(name, answerName);
-          const letters = [...letterWord(name)];
-          return (
-            <div className="pk-row" key={id}>
-              {letters.map((ch, i) => (
-                <span key={i} className={`pk-tile pk-tile--${states[i] as LetterState}`}>
-                  {ch}
-                </span>
-              ))}
-            </div>
-          );
-        })}
-      </div>
+          })}
+        </div>
+
+        {!gameOver && (
+          <input
+            ref={hiddenInputRef}
+            type="text"
+            value={currentGuess}
+            onChange={(e) => handleTypedChange(e.target.value)}
+            className="pk-hidden-input"
+            autoComplete="off"
+            autoCapitalize="characters"
+            autoFocus
+          />
+        )}
+      </form>
 
       {!gameOver && (
-        <form className="pk-controls" onSubmit={handleSubmit}>
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              setError(null);
-            }}
-            placeholder={t.pokedle.placeholder}
-            className="pk-input"
-            autoComplete="off"
-          />
+        <div className="pk-controls">
           {error && <p className="pk-message">{error}</p>}
           <p className="pk-legend">{t.pokedle.legend}</p>
           <div className="pk-controls-actions">
-            <button type="submit" className="pk-btn pk-btn--primary">
+            <button type="button" className="pk-btn pk-btn--primary" onClick={handleSubmit}>
               {t.pokedle.guessButton}
             </button>
             <button type="button" className="pk-btn pk-btn--danger" onClick={handleReveal}>
               {t.pokedle.giveUp}
             </button>
           </div>
-        </form>
+        </div>
       )}
 
       {gameOver && (

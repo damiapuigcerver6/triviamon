@@ -149,9 +149,9 @@ export interface Strings {
   };
   pokedle: {
     attemptsLabel: (n: number, max: number) => string;
-    placeholder: string;
     legend: string;
     guessButton: string;
+    notEnoughLetters: string;
     notAPokemon: string;
     alreadyGuessed: (name: string) => string;
     giveUp: string;
@@ -345,9 +345,9 @@ export const STRINGS_ES: Strings = {
   },
   pokedle: {
     attemptsLabel: (n, max) => `Intento ${n}/${max}`,
-    placeholder: "Escribe el nombre de un Pokémon...",
     legend: "🟩 posición correcta · 🟨 está en el nombre · ⬛ no está en el nombre",
     guessButton: "Adivinar",
+    notEnoughLetters: "Faltan letras.",
     notAPokemon: "Eso no es un Pokémon.",
     alreadyGuessed: (name) => `Ya has probado ${name}.`,
     giveUp: "Rendirse",
@@ -541,9 +541,9 @@ export const STRINGS_EN: Strings = {
   },
   pokedle: {
     attemptsLabel: (n, max) => `Attempt ${n}/${max}`,
-    placeholder: "Type a Pokémon's name...",
     legend: "🟩 right spot · 🟨 in the name, wrong spot · ⬛ not in the name",
     guessButton: "Guess",
+    notEnoughLetters: "Not enough letters.",
     notAPokemon: "That's not a Pokémon.",
     alreadyGuessed: (name) => `You've already tried ${name}.`,
     giveUp: "Give up",
