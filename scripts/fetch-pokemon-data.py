@@ -73,6 +73,23 @@ STONE_ES = {
     "ice-stone": "Piedra Hielo",
 }
 
+MOVE_SLUGS = [
+    "fire-punch", "thunder-punch", "ice-punch", "icicle-crash",
+    "flamethrower", "hydro-pump", "thunderbolt", "ice-beam",
+    "psychic", "shadow-ball", "earthquake", "rock-slide",
+    "sludge-bomb", "poison-jab", "crunch", "bite",
+    "dragon-claw", "outrage", "leaf-blade", "close-combat",
+    "iron-head", "iron-tail", "extreme-speed", "double-edge",
+    "megahorn", "x-scissor", "bug-buzz", "stone-edge",
+    "shadow-claw", "night-slash", "air-slash", "brave-bird",
+    "aqua-tail", "water-pulse", "moonblast", "play-rough",
+    "meteor-mash", "zen-headbutt", "swords-dance", "dragon-dance",
+    "recover", "roost", "u-turn", "knock-off", "toxic",
+    "stealth-rock", "will-o-wisp", "spore", "earth-power",
+    "draco-meteor",
+]
+MOVE_SLUG_SET = set(MOVE_SLUGS)
+
 CHAIN_CACHE = {}
 CHAIN_LOCK = threading.Lock()
 
@@ -197,6 +214,13 @@ def fetch_species(species_id):
 
         stats = {STAT_ES[s["stat"]["name"]]: s["base_stat"] for s in poke["stats"] if s["stat"]["name"] in STAT_ES}
 
+        # "Puede aprender" = por cualquier metodo (nivel, MT, tutor, huevo...) en cualquier
+        # juego; no solo evolucion natural por nivel. Weavile, por ejemplo, aprende
+        # Chuzos (Icicle Crash) por entrenamiento especial, no por nivel.
+        movimientos = sorted({
+            m["move"]["name"] for m in poke["moves"] if m["move"]["name"] in MOVE_SLUG_SET
+        })
+
         nombre = base_name if region is None else f"{base_name} de {region[0]}"
         gen = generation if region is None else region[1]
 
@@ -219,6 +243,7 @@ def fetch_species(species_id):
             "ataque_especial": stats.get("ataque_especial", 0),
             "defensa_especial": stats.get("defensa_especial", 0),
             "velocidad": stats.get("velocidad", 0),
+            "movimientos": movimientos,
         })
     return entries
 

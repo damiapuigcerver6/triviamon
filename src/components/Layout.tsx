@@ -121,6 +121,23 @@ const HELP_CONTENT: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/parrilla-pokemon": {
+    title: "Cómo jugar: Parrilla Pokémon",
+    body: (
+      <>
+        <p>
+          Cada fila y cada columna tiene una categoría (tipo, generación, evolución,
+          debilidades, movimientos que puede aprender...). Selecciona una casilla vacía y
+          escribe un Pokémon que cumpla a la vez la categoría de su fila y la de su columna.
+        </p>
+        <p>
+          Si aciertas, la casilla se rellena y avanzas a la siguiente. Si fallas, no pasa nada:
+          puedes reintentarlo las veces que quieras. Eso sí, no puedes repetir el mismo Pokémon
+          en dos casillas de la misma partida.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {

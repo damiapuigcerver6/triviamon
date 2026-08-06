@@ -1,0 +1,45 @@
+.pg-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pg-page h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.pg-subtitle {
+  color: var(--text-dim);
+}
+
+.pg-loading {
+  color: var(--text-dim);
+}
+
+.pg-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.pg-tab {
+  padding: 0.55rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.pg-tab--active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.pg-mode--hidden {
+  display: none;
+}

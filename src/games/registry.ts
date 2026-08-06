@@ -55,4 +55,13 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/pikachu-silueta.png",
     disponible: true,
   },
+  {
+    id: "parrilla-pokemon",
+    path: "/juegos/parrilla-pokemon",
+    titulo: "Parrilla Pokémon",
+    descripcion:
+      "Rellena la cuadrícula 3x3 con un Pokémon distinto por casilla que cumpla su fila y su columna a la vez.",
+    icono: "/brand/parrilla-icono.png",
+    disponible: true,
+  },
 ];

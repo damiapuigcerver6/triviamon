@@ -6,6 +6,7 @@ import DetectivePokemonPage from "./games/detective-pokemon/DetectivePokemonPage
 import ConexionesPage from "./games/conexiones/ConexionesPage";
 import HigherLowerPage from "./games/higher-lower/HigherLowerPage";
 import QuienEsEsePokemonPage from "./games/quien-es-ese-pokemon/QuienEsEsePokemonPage";
+import ParrillaPokemonPage from "./games/parrilla-pokemon/ParrillaPokemonPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/juegos/conexiones" element={<ConexionesPage />} />
         <Route path="/juegos/mayor-o-menor" element={<HigherLowerPage />} />
         <Route path="/juegos/quien-es-ese-pokemon" element={<QuienEsEsePokemonPage />} />
+        <Route path="/juegos/parrilla-pokemon" element={<ParrillaPokemonPage />} />
       </Route>
     </Routes>
   );
