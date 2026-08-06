@@ -54,4 +54,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/parrilla-icono.png",
     disponible: true,
   },
+  {
+    id: "pokedle",
+    path: "/juegos/pokedle",
+    strKey: "pokedle",
+    icono: "/brand/pokedle-icono.png",
+    disponible: true,
+  },
 ];

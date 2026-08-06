@@ -32,6 +32,7 @@ export interface Strings {
     mayorMenor: { title: string; description: string };
     quienEsEsePokemon: { title: string; description: string };
     parrillaPokemon: { title: string; description: string };
+    pokedle: { title: string; description: string };
   };
   stats: {
     modalTitle: string;
@@ -146,6 +147,18 @@ export interface Strings {
     shareCompleted: string;
     shareMistakesLine: (m: number) => string;
   };
+  pokedle: {
+    attemptsLabel: (n: number, max: number) => string;
+    placeholder: string;
+    legend: string;
+    giveUp: string;
+    wonTitle: (name: string) => string;
+    guessedInAttempts: (n: number, max: number) => string;
+    lostTitle: (name: string) => string;
+    anotherWord: string;
+    shareWon: (n: number, max: number) => string;
+    shareLost: (max: number) => string;
+  };
 }
 
 export const STRINGS_ES: Strings = {
@@ -205,6 +218,11 @@ export const STRINGS_ES: Strings = {
       title: "Parrilla Pokémon",
       description:
         "Rellena la cuadrícula 3x3 con un Pokémon distinto por casilla que cumpla su fila y su columna a la vez.",
+    },
+    pokedle: {
+      title: "Pokédle",
+      description:
+        "Adivina el Pokémon oculto en 6 intentos. Cada letra de tu intento se colorea según esté en el sitio correcto, en otro sitio o no esté.",
     },
   },
   stats: {
@@ -322,6 +340,18 @@ export const STRINGS_ES: Strings = {
     shareCompleted: "Completado",
     shareMistakesLine: (m) => `Fallos: ${m}`,
   },
+  pokedle: {
+    attemptsLabel: (n, max) => `Intento ${n}/${max}`,
+    placeholder: "Escribe el nombre de un Pokémon...",
+    legend: "🟩 posición correcta · 🟨 está en el nombre · ⬛ no está en el nombre",
+    giveUp: "Rendirse",
+    wonTitle: (name) => `¡Correcto! Era ${name}`,
+    guessedInAttempts: (n, max) => `Adivinado en ${n}/${max} intentos`,
+    lostTitle: (name) => `Era ${name}`,
+    anotherWord: "Otra palabra",
+    shareWon: (n, max) => `${n}/${max}`,
+    shareLost: (max) => `X/${max}`,
+  },
 };
 
 export const STRINGS_EN: Strings = {
@@ -381,6 +411,11 @@ export const STRINGS_EN: Strings = {
       title: "Pokémon Grid",
       description:
         "Fill the 3x3 grid with a different Pokémon per cell that matches both its row and its column.",
+    },
+    pokedle: {
+      title: "Pokédle",
+      description:
+        "Guess the hidden Pokémon in 6 tries. Every letter of your guess is colored by whether it's in the right spot, elsewhere, or not in the name.",
     },
   },
   stats: {
@@ -497,5 +532,17 @@ export const STRINGS_EN: Strings = {
     shareGaveUp: "Gave up",
     shareCompleted: "Completed",
     shareMistakesLine: (m) => `Mistakes: ${m}`,
+  },
+  pokedle: {
+    attemptsLabel: (n, max) => `Attempt ${n}/${max}`,
+    placeholder: "Type a Pokémon's name...",
+    legend: "🟩 right spot · 🟨 in the name, wrong spot · ⬛ not in the name",
+    giveUp: "Give up",
+    wonTitle: (name) => `Correct! It was ${name}`,
+    guessedInAttempts: (n, max) => `Guessed in ${n}/${max} tries`,
+    lostTitle: (name) => `It was ${name}`,
+    anotherWord: "Another word",
+    shareWon: (n, max) => `${n}/${max}`,
+    shareLost: (max) => `X/${max}`,
   },
 };

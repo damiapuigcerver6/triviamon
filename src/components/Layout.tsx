@@ -150,6 +150,24 @@ const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/pokedle": {
+    title: "Cómo jugar: Pokédle",
+    body: (
+      <>
+        <p>
+          Hay un Pokémon oculto y tienes 6 intentos para adivinarlo. Escribe un Pokémon (con
+          autocompletado) y sus letras se colorean: verde si está en el sitio correcto, amarillo
+          si está en el nombre pero en otra posición, y gris si no aparece.
+        </p>
+        <p>
+          En el <strong>Reto diario</strong> todo el mundo intenta adivinar el mismo Pokémon cada
+          día y puedes compartir tu resultado con la cuadrícula de colores. En{" "}
+          <strong>Práctica libre</strong> puedes rendirte para ver la solución y empezar otra
+          palabra.
+        </p>
+      </>
+    ),
+  },
 };
 
 const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
@@ -255,6 +273,24 @@ const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/pokedle": {
+    title: "How to play: Pokédle",
+    body: (
+      <>
+        <p>
+          There's a hidden Pokémon and you have 6 tries to guess it. Type a Pokémon (with
+          autocomplete) and its letters get colored: green if it's in the right spot, yellow if
+          it's in the name but in the wrong spot, and gray if it doesn't appear at all.
+        </p>
+        <p>
+          In the <strong>Daily challenge</strong> everyone tries to guess the same Pokémon each
+          day and you can share your result as a grid of colors. In{" "}
+          <strong>Free practice</strong> you can give up to see the answer and start another
+          word.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
@@ -291,6 +327,7 @@ export default function Layout() {
 
   const guessStats = loadStats("detective-pokemon");
   const connectionsStats = loadStats("conexiones");
+  const pokedleStats = loadStats("pokedle");
 
   return (
     <div className="layout">
@@ -403,6 +440,8 @@ export default function Layout() {
           <StatsSection title={t.games.detectivePokemon.title} stats={guessStats} t={t} />
           <div style={{ height: "1rem" }} />
           <StatsSection title={t.games.conexiones.title} stats={connectionsStats} t={t} />
+          <div style={{ height: "1rem" }} />
+          <StatsSection title={t.games.pokedle.title} stats={pokedleStats} t={t} />
         </Modal>
       )}
 
