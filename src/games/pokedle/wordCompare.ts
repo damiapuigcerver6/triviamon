@@ -1,11 +1,21 @@
-import { normalize } from "../../data/pokedex";
-
 export type LetterState = "correct" | "present" | "absent";
+
+/** Letras "puras" del nombre: sin acentos, may/min, espacios, guiones ni puntuacion. */
+export function letterWord(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-zA-Z0-9]/g, "");
+}
+
+export function normalizeGuess(text: string): string {
+  return letterWord(text).toLowerCase();
+}
 
 /** Compara letra a letra (estilo Wordle), gestionando bien las letras repetidas. */
 export function compareGuess(guessRaw: string, answerRaw: string): LetterState[] {
-  const guess = normalize(guessRaw).split("");
-  const answer = normalize(answerRaw).split("");
+  const guess = normalizeGuess(guessRaw).split("");
+  const answer = normalizeGuess(answerRaw).split("");
   const states: LetterState[] = new Array(guess.length).fill("absent");
   const answerUsed: boolean[] = new Array(answer.length).fill(false);
 
@@ -29,5 +39,5 @@ export function compareGuess(guessRaw: string, answerRaw: string): LetterState[]
 }
 
 export function isExactGuess(guessRaw: string, answerRaw: string): boolean {
-  return normalize(guessRaw) === normalize(answerRaw);
+  return normalizeGuess(guessRaw) === normalizeGuess(answerRaw);
 }

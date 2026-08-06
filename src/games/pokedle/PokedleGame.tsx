@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
-import { normalize, pokemonName, pokemonSprite } from "../../data/pokedex";
+import { pokemonName, pokemonSprite } from "../../data/pokedex";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { baseSpecies, pickAnswer, MAX_ATTEMPTS } from "./pokedleBuilder";
-import { compareGuess, isExactGuess, type LetterState } from "./wordCompare";
+import { compareGuess, isExactGuess, letterWord, normalizeGuess, type LetterState } from "./wordCompare";
 import "./PokedleGame.css";
 
 interface Props {
@@ -44,6 +44,8 @@ export default function PokedleGame({
 }: Props) {
   const { lang, t } = useLanguage();
   const answer = useMemo(() => pickAnswer(pokedex, seed), [pokedex, seed]);
+  const answerName = pokemonName(answer, lang);
+  const answerLength = useMemo(() => letterWord(answerName).length, [answerName]);
   const candidates = useMemo(() => baseSpecies(pokedex), [pokedex]);
   const pokedexById = useMemo(() => {
     const map = new Map<number, PokemonEntry>();
@@ -55,6 +57,8 @@ export default function PokedleGame({
   const [guessIds, setGuessIds] = useState<number[]>(initial.guessIds);
   const [status, setStatus] = useState<StoredProgress["status"]>(initial.status);
   const [query, setQuery] = useState("");
+  const [shake, setShake] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const gameOver = status !== "playing";
@@ -69,31 +73,37 @@ export default function PokedleGame({
 
   const guessedIds = useMemo(() => new Set(guessIds), [guessIds]);
 
-  const suggestions = useMemo(() => {
-    const q = normalize(query);
-    if (!q) return [];
-    return candidates
-      .filter((p) => !guessedIds.has(p.id) && normalize(pokemonName(p, lang)).includes(q))
-      .slice(0, 8);
-  }, [query, candidates, guessedIds, lang]);
+  function triggerInvalid(msg: string) {
+    setError(msg);
+    setShake(true);
+    setTimeout(() => setShake(false), 400);
+  }
 
-  function submitGuess(pokemon: PokemonEntry) {
-    if (gameOver || guessedIds.has(pokemon.id)) return;
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (gameOver || !query.trim()) return;
 
-    const nextGuessIds = [...guessIds, pokemon.id];
-    setGuessIds(nextGuessIds);
+    const target = normalizeGuess(query);
+    const match = candidates.find((p) => normalizeGuess(pokemonName(p, lang)) === target);
+
+    if (!match) {
+      triggerInvalid(t.pokedle.notAPokemon);
+      return;
+    }
+    if (guessedIds.has(match.id)) {
+      triggerInvalid(t.pokedle.alreadyGuessed(pokemonName(match, lang)));
+      return;
+    }
+
+    setError(null);
     setQuery("");
+    const nextGuessIds = [...guessIds, match.id];
+    setGuessIds(nextGuessIds);
 
-    if (isExactGuess(pokemonName(pokemon, lang), pokemonName(answer, lang))) {
+    if (isExactGuess(pokemonName(match, lang), answerName)) {
       setStatus("won");
     } else if (nextGuessIds.length >= MAX_ATTEMPTS) {
       setStatus("lost");
-    }
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter" && suggestions.length > 0) {
-      submitGuess(suggestions[0]);
     }
   }
 
@@ -104,7 +114,7 @@ export default function PokedleGame({
   async function handleShare() {
     const rows = guessIds.map((id) => {
       const p = pokedexById.get(id);
-      const states = compareGuess(pokemonName(p!, lang), pokemonName(answer, lang));
+      const states = compareGuess(pokemonName(p!, lang), answerName);
       return states.map((s) => (s === "correct" ? "🟩" : s === "present" ? "🟨" : "⬛")).join("");
     });
     const resultLine =
@@ -127,12 +137,22 @@ export default function PokedleGame({
       </div>
 
       <div className="pk-rows">
-        {guessIds.map((id) => {
-          const p = pokedexById.get(id);
-          if (!p) return null;
+        {Array.from({ length: MAX_ATTEMPTS }, (_, rowIdx) => {
+          const id = guessIds[rowIdx];
+          const isActive = !gameOver && rowIdx === guessIds.length;
+          if (id === undefined) {
+            return (
+              <div className={`pk-row ${isActive && shake ? "pk-row--shake" : ""}`} key={rowIdx}>
+                {Array.from({ length: answerLength }, (_, i) => (
+                  <span key={i} className="pk-tile pk-tile--empty" />
+                ))}
+              </div>
+            );
+          }
+          const p = pokedexById.get(id)!;
           const name = pokemonName(p, lang);
-          const states = compareGuess(name, pokemonName(answer, lang));
-          const letters = [...name];
+          const states = compareGuess(name, answerName);
+          const letters = [...letterWord(name)];
           return (
             <div className="pk-row" key={id}>
               {letters.map((ch, i) => (
@@ -146,42 +166,36 @@ export default function PokedleGame({
       </div>
 
       {!gameOver && (
-        <div className="pk-controls">
+        <form className="pk-controls" onSubmit={handleSubmit}>
           <input
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setError(null);
+            }}
             placeholder={t.pokedle.placeholder}
             className="pk-input"
             autoComplete="off"
           />
-          {suggestions.length > 0 && (
-            <ul className="pk-suggestions">
-              {suggestions.map((p) => (
-                <li key={p.id}>
-                  <button type="button" onClick={() => submitGuess(p)}>
-                    <img src={pokemonSprite(p.id)} alt="" loading="lazy" />
-                    <span>{pokemonName(p, lang)}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+          {error && <p className="pk-message">{error}</p>}
           <p className="pk-legend">{t.pokedle.legend}</p>
-          <button type="button" className="pk-btn pk-btn--danger" onClick={handleReveal}>
-            {t.pokedle.giveUp}
-          </button>
-        </div>
+          <div className="pk-controls-actions">
+            <button type="submit" className="pk-btn pk-btn--primary">
+              {t.pokedle.guessButton}
+            </button>
+            <button type="button" className="pk-btn pk-btn--danger" onClick={handleReveal}>
+              {t.pokedle.giveUp}
+            </button>
+          </div>
+        </form>
       )}
 
       {gameOver && (
         <div className="pk-finish">
-          <h3>
-            {status === "won" ? t.pokedle.wonTitle(pokemonName(answer, lang)) : t.pokedle.lostTitle(pokemonName(answer, lang))}
-          </h3>
-          <img className="pk-finish-sprite" src={pokemonSprite(answer.id)} alt={pokemonName(answer, lang)} />
+          <h3>{status === "won" ? t.pokedle.wonTitle(answerName) : t.pokedle.lostTitle(answerName)}</h3>
+          <img className="pk-finish-sprite" src={pokemonSprite(answer.id)} alt={answerName} />
           {status === "won" && <p>{t.pokedle.guessedInAttempts(guessIds.length, MAX_ATTEMPTS)}</p>}
           <div className="pk-finish-actions">
             <button type="button" className="pk-btn pk-btn--primary" onClick={handleShare}>

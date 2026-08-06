@@ -58,6 +58,28 @@
   color: var(--text-dim);
 }
 
+.pk-tile--empty {
+  background: transparent;
+  border-color: var(--border);
+}
+
+.pk-row--shake {
+  animation: pk-shake 0.4s;
+}
+
+@keyframes pk-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
 .pk-controls {
   display: flex;
   flex-direction: column;
@@ -73,39 +95,16 @@
   font-size: 1rem;
 }
 
-.pk-suggestions {
-  list-style: none;
+.pk-message {
+  color: #e74c3c;
+  font-weight: 600;
+  font-size: 0.9rem;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  max-height: 260px;
-  overflow-y: auto;
 }
 
-.pk-suggestions button {
+.pk-controls-actions {
   display: flex;
-  align-items: center;
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.4rem 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  text-align: left;
-}
-
-.pk-suggestions button:hover {
-  background: var(--surface-2);
-}
-
-.pk-suggestions img {
-  width: 2rem;
-  height: 2rem;
-  object-fit: contain;
 }
 
 .pk-legend {

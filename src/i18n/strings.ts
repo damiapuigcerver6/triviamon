@@ -151,6 +151,9 @@ export interface Strings {
     attemptsLabel: (n: number, max: number) => string;
     placeholder: string;
     legend: string;
+    guessButton: string;
+    notAPokemon: string;
+    alreadyGuessed: (name: string) => string;
     giveUp: string;
     wonTitle: (name: string) => string;
     guessedInAttempts: (n: number, max: number) => string;
@@ -344,6 +347,9 @@ export const STRINGS_ES: Strings = {
     attemptsLabel: (n, max) => `Intento ${n}/${max}`,
     placeholder: "Escribe el nombre de un Pokémon...",
     legend: "🟩 posición correcta · 🟨 está en el nombre · ⬛ no está en el nombre",
+    guessButton: "Adivinar",
+    notAPokemon: "Eso no es un Pokémon.",
+    alreadyGuessed: (name) => `Ya has probado ${name}.`,
     giveUp: "Rendirse",
     wonTitle: (name) => `¡Correcto! Era ${name}`,
     guessedInAttempts: (n, max) => `Adivinado en ${n}/${max} intentos`,
@@ -537,6 +543,9 @@ export const STRINGS_EN: Strings = {
     attemptsLabel: (n, max) => `Attempt ${n}/${max}`,
     placeholder: "Type a Pokémon's name...",
     legend: "🟩 right spot · 🟨 in the name, wrong spot · ⬛ not in the name",
+    guessButton: "Guess",
+    notAPokemon: "That's not a Pokémon.",
+    alreadyGuessed: (name) => `You've already tried ${name}.`,
     giveUp: "Give up",
     wonTitle: (name) => `Correct! It was ${name}`,
     guessedInAttempts: (n, max) => `Guessed in ${n}/${max} tries`,
