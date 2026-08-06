@@ -263,8 +263,8 @@ export function buildInstance(pokedex: PokemonEntry[], seed: number): Connection
   return { puzzle, cardOrder };
 }
 
-export const GROUP_COLORS = ["amarillo", "verde", "azul", "morado"] as const;
-export const GROUP_EMOJI = ["🟨", "🟩", "🟦", "🟪"];
+export const GROUP_COLORS = ["amarillo", "verde", "azul", "rojo"] as const;
+export const GROUP_EMOJI = ["🟨", "🟩", "🟦", "🟥"];
 
 export function categoryColorIndex(puzzle: ConnectionsPuzzle, categoryId: string): number {
   return puzzle.groups.findIndex((g) => g.category.id === categoryId);
