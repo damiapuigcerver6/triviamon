@@ -1,13 +1,22 @@
 .pk-game {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
   max-width: 640px;
+  margin: 0 auto;
+}
+
+.pk-game > form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .pk-topbar {
   font-size: 0.95rem;
   color: var(--text-dim);
+  text-align: center;
 }
 
 .pk-topbar strong {
@@ -17,26 +26,26 @@
 .pk-rows {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.5rem;
   cursor: text;
 }
 
 .pk-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 .pk-tile {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.2rem;
-  height: 2.2rem;
+  min-width: 2.9rem;
+  height: 2.9rem;
   padding: 0 0.15rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   text-transform: uppercase;
   color: #fff;
   border: 1px solid var(--border);
@@ -90,6 +99,8 @@
 .pk-controls {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 0.5rem;
 }
 
@@ -167,7 +178,6 @@
 }
 
 .pk-btn--danger {
-  align-self: flex-start;
   background: transparent;
   color: #e74c3c;
   border-color: #e74c3c;
@@ -175,8 +185,8 @@
 
 @media (max-width: 560px) {
   .pk-tile {
-    min-width: 1.9rem;
-    height: 1.9rem;
-    font-size: 0.95rem;
+    min-width: 2.3rem;
+    height: 2.3rem;
+    font-size: 1.15rem;
   }
 }
