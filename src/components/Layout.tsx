@@ -8,6 +8,7 @@ import { GAMES } from "../games/registry";
 import { useLanguage } from "../i18n/LanguageContext";
 import type { Strings } from "../i18n/strings";
 import Modal from "./Modal";
+import CookieBanner from "./CookieBanner";
 import "./Layout.css";
 
 function StatsSection({
@@ -433,6 +434,9 @@ export default function Layout() {
           {t.footer.creditBefore} <a href="https://mdlabs.app">MDLabs</a> · {t.footer.creditAfter}{" "}
           <a href="https://linktr.ee/thehoodieapp">HOODIE</a>.
         </p>
+        <p>
+          <Link to="/privacidad">{t.footer.privacyLink}</Link>
+        </p>
       </footer>
 
       {statsOpen && (
@@ -450,6 +454,8 @@ export default function Layout() {
           {help.body}
         </Modal>
       )}
+
+      <CookieBanner />
     </div>
   );
 }

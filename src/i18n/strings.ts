@@ -20,6 +20,7 @@ export interface Strings {
     disclaimer: string;
     creditBefore: string; // "Un proyecto de" / "A project by"
     creditAfter: string; // "descubre también" / "check out"
+    privacyLink: string;
   };
   home: {
     play: string;
@@ -149,6 +150,31 @@ export interface Strings {
     shareCompleted: string;
     shareMistakesLine: (m: number) => string;
   };
+  cookieBanner: {
+    message: string;
+    accept: string;
+    reject: string;
+    learnMore: string;
+  };
+  privacy: {
+    title: string;
+    lastUpdated: string;
+    introBody: string;
+    dataTitle: string;
+    dataBody: string;
+    cookiesTitle: string;
+    cookiesBody: string;
+    adsTitle: string;
+    adsBody: string;
+    hostingTitle: string;
+    hostingBody: string;
+    childrenTitle: string;
+    childrenBody: string;
+    changesTitle: string;
+    changesBody: string;
+    contactTitle: string;
+    contactBody: string;
+  };
   pokedle: {
     attemptsLabel: (n: number, max: number) => string;
     legend: string;
@@ -188,6 +214,7 @@ export const STRINGS_ES: Strings = {
     disclaimer: "Proyecto de aficionado, sin ánimo de lucro. Pokémon © Nintendo / Game Freak.",
     creditBefore: "Un proyecto de",
     creditAfter: "descubre también",
+    privacyLink: "Política de privacidad",
   },
   home: {
     play: "Jugar →",
@@ -348,6 +375,39 @@ export const STRINGS_ES: Strings = {
     shareCompleted: "Completado",
     shareMistakesLine: (m) => `Fallos: ${m}`,
   },
+  cookieBanner: {
+    message:
+      "Usamos cookies para publicidad (incluida publicidad personalizada) una vez se activen los anuncios. El resto de datos de juego se guardan solo en tu navegador.",
+    accept: "Aceptar",
+    reject: "Rechazar",
+    learnMore: "Más información",
+  },
+  privacy: {
+    title: "Política de privacidad",
+    lastUpdated: "Última actualización: agosto de 2026",
+    introBody:
+      "Triviamon es un proyecto de aficionado hecho por MDLabs. No es necesario registrarse ni crear una cuenta para jugar. Esta página explica qué datos se manejan al usar el sitio.",
+    dataTitle: "Qué se guarda",
+    dataBody:
+      "Las puntuaciones, rachas, el progreso de las partidas y preferencias (como el idioma o el tema) se guardan únicamente en tu propio navegador (localStorage). Triviamon no tiene servidores propios que almacenen esta información ni la asocian a tu identidad: si borras los datos del navegador o cambias de dispositivo, se pierden.",
+    cookiesTitle: "Cookies",
+    cookiesBody:
+      "Triviamon en sí no usa cookies propias de seguimiento. Si en el futuro se activan anuncios (ver más abajo), Google puede instalar cookies para mostrar publicidad, incluida publicidad personalizada. La primera vez que visitas el sitio te pedimos tu consentimiento para ese uso; puedes cambiar tu decisión en cualquier momento.",
+    adsTitle: "Publicidad (Google AdSense)",
+    adsBody:
+      "Triviamon puede mostrar anuncios gestionados por Google AdSense. Google y sus socios pueden usar cookies u otros identificadores para ofrecer anuncios basados en tus visitas a este y otros sitios web. Puedes informarte sobre cómo Google usa estos datos en policies.google.com/technologies/ads, y gestionar la publicidad personalizada en adssettings.google.com.",
+    hostingTitle: "Alojamiento",
+    hostingBody:
+      "El sitio está alojado en Vercel, que como cualquier proveedor de hosting puede registrar datos técnicos básicos (como la dirección IP) por motivos de seguridad y rendimiento, de forma independiente a Triviamon.",
+    childrenTitle: "Menores de edad",
+    childrenBody:
+      "Triviamon no está dirigido específicamente a menores de 13 años ni recopila intencionadamente datos personales de menores.",
+    changesTitle: "Cambios en esta política",
+    changesBody:
+      "Esta política puede actualizarse si cambia el funcionamiento del sitio (por ejemplo, al activar la publicidad). La fecha de la última actualización aparece arriba.",
+    contactTitle: "Contacto",
+    contactBody: "Para cualquier duda sobre esta política, puedes contactar a través de mdlabs.app.",
+  },
   pokedle: {
     attemptsLabel: (n, max) => `Intento ${n}/${max}`,
     legend: "🟩 posición correcta · 🟨 está en el nombre · ⬛ no está en el nombre",
@@ -387,6 +447,7 @@ export const STRINGS_EN: Strings = {
     disclaimer: "Fan project, not for profit. Pokémon © Nintendo / Game Freak.",
     creditBefore: "A project by",
     creditAfter: "check out",
+    privacyLink: "Privacy policy",
   },
   home: {
     play: "Play →",
@@ -546,6 +607,39 @@ export const STRINGS_EN: Strings = {
     shareGaveUp: "Gave up",
     shareCompleted: "Completed",
     shareMistakesLine: (m) => `Mistakes: ${m}`,
+  },
+  cookieBanner: {
+    message:
+      "We use cookies for advertising (including personalized ads) once ads are enabled. All other game data stays only in your browser.",
+    accept: "Accept",
+    reject: "Reject",
+    learnMore: "Learn more",
+  },
+  privacy: {
+    title: "Privacy Policy",
+    lastUpdated: "Last updated: August 2026",
+    introBody:
+      "Triviamon is a fan project made by MDLabs. There's no sign-up or account needed to play. This page explains what data is involved when you use the site.",
+    dataTitle: "What gets stored",
+    dataBody:
+      "Scores, streaks, game progress, and preferences (like language or theme) are stored only in your own browser (localStorage). Triviamon has no servers of its own that store this information or tie it to your identity: if you clear your browser data or switch devices, it's gone.",
+    cookiesTitle: "Cookies",
+    cookiesBody:
+      "Triviamon itself doesn't use its own tracking cookies. If ads are enabled in the future (see below), Google may set cookies to serve ads, including personalized ads. The first time you visit, we ask for your consent for that use; you can change your choice at any time.",
+    adsTitle: "Advertising (Google AdSense)",
+    adsBody:
+      "Triviamon may show ads served through Google AdSense. Google and its partners may use cookies or other identifiers to serve ads based on your visits to this and other websites. You can learn how Google uses this data at policies.google.com/technologies/ads, and manage personalized advertising at adssettings.google.com.",
+    hostingTitle: "Hosting",
+    hostingBody:
+      "The site is hosted on Vercel, which like any hosting provider may log basic technical data (such as IP address) for security and performance purposes, independently of Triviamon.",
+    childrenTitle: "Children's privacy",
+    childrenBody:
+      "Triviamon isn't specifically directed at children under 13 and doesn't knowingly collect personal data from children.",
+    changesTitle: "Changes to this policy",
+    changesBody:
+      "This policy may be updated if how the site works changes (for example, when ads are enabled). The last-updated date is shown above.",
+    contactTitle: "Contact",
+    contactBody: "For any questions about this policy, you can reach out via mdlabs.app.",
   },
   pokedle: {
     attemptsLabel: (n, max) => `Attempt ${n}/${max}`,

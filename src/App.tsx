@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import PrivacyPage from "./pages/PrivacyPage";
 import TablaTiposPage from "./games/tabla-tipos/TablaTiposPage";
 import DetectivePokemonPage from "./games/detective-pokemon/DetectivePokemonPage";
 import ConexionesPage from "./games/conexiones/ConexionesPage";
@@ -14,6 +15,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/privacidad" element={<PrivacyPage />} />
         <Route path="/juegos/tabla-de-tipos" element={<TablaTiposPage />} />
         <Route path="/juegos/detective-pokemon" element={<DetectivePokemonPage />} />
         <Route path="/juegos/conexiones" element={<ConexionesPage />} />
