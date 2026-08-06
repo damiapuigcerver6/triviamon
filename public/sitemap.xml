@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://triviamon.mdlabs.app/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/tabla-de-tipos</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/detective-pokemon</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/conexiones</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/mayor-o-menor</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/quien-es-ese-pokemon</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/parrilla-pokemon</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/pokedle</loc>
+    <priority>0.8</priority>
+  </url>
+</urlset>

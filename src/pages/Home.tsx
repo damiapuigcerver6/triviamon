@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GAMES } from "../games/registry";
 import { randomTypeIcon } from "../data/types";
 import { useLanguage } from "../i18n/LanguageContext";
+import Seo from "../components/Seo";
 import "./Home.css";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
 
   return (
     <div className="home">
+      <Seo title={t.home.seoTitle} description={t.home.seoDescription} />
       <section className="hero-banner">
         <img src="/brand/wordmark.png" alt="Triviamon" />
       </section>

@@ -3,6 +3,7 @@ import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
 import { recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import ConnectionsGame from "./ConnectionsGame";
 import "./ConexionesPage.css";
 
@@ -68,6 +69,7 @@ export default function ConexionesPage() {
 
   return (
     <div className="cx-page">
+      <Seo title={`${t.games.conexiones.title} · Triviamon`} description={t.games.conexiones.description} />
       <h1>{t.games.conexiones.title}</h1>
       <p className="cx-subtitle">{t.conexiones.subtitle}</p>
 

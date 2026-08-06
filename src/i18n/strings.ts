@@ -24,6 +24,8 @@ export interface Strings {
   home: {
     play: string;
     comingSoon: string;
+    seoTitle: string;
+    seoDescription: string;
   };
   games: {
     tablaTipos: { title: string; description: string };
@@ -190,6 +192,9 @@ export const STRINGS_ES: Strings = {
   home: {
     play: "Jugar →",
     comingSoon: "Próximamente",
+    seoTitle: "Triviamon - Minijuegos de Pokémon gratis: Conexiones, Pokédle, Parrilla y más",
+    seoDescription:
+      "Triviamon es un hub gratuito de minijuegos de Pokémon: Conexiones, Pokédle, Detective Pokémon, Parrilla Pokémon, Mayor o menor, Tabla de tipos y ¿Quién es ese Pokémon? Reto diario y práctica libre, en español e inglés.",
   },
   games: {
     tablaTipos: {
@@ -386,6 +391,9 @@ export const STRINGS_EN: Strings = {
   home: {
     play: "Play →",
     comingSoon: "Coming soon",
+    seoTitle: "Triviamon - Free Pokémon Mini-Games: Connections, Pokédle, Grid and more",
+    seoDescription:
+      "Triviamon is a free hub of Pokémon mini-games: Connections, Pokédle, Pokémon Detective, Pokémon Grid, Higher or Lower, Type Chart and Who's That Pokémon? Daily challenge and free practice, in English and Spanish.",
   },
   games: {
     tablaTipos: {

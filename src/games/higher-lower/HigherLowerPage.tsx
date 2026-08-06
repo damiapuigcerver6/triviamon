@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, type PokemonEntry } from "../../data/pokedex";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import { statOptions, loadBestStreak, type StatKey } from "./stats";
 import HigherLowerGame from "./HigherLowerGame";
 import "./HigherLowerPage.css";
@@ -27,6 +28,7 @@ export default function HigherLowerPage() {
   if (!statKey) {
     return (
       <div className="hl-page">
+        <Seo title={`${t.games.mayorMenor.title} · Triviamon`} description={t.games.mayorMenor.description} />
         <h1>{t.games.mayorMenor.title}</h1>
         <p className="hl-subtitle">{t.mayorMenor.subtitle}</p>
         <div className="hl-stat-grid">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, type PokemonEntry } from "../../data/pokedex";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import { loadBestScore, loadBestStreak } from "./stats";
 import SilhouetteGame from "./SilhouetteGame";
 import "./QuienEsEsePokemonPage.css";
@@ -27,6 +28,10 @@ export default function QuienEsEsePokemonPage() {
   if (!playing) {
     return (
       <div className="sil-page">
+        <Seo
+          title={`${t.games.quienEsEsePokemon.title} · Triviamon`}
+          description={t.games.quienEsEsePokemon.description}
+        />
         <h1>{t.games.quienEsEsePokemon.title}</h1>
         <p className="sil-subtitle">{t.quienEsEsePokemon.subtitle}</p>
         <div className="sil-start-stats">

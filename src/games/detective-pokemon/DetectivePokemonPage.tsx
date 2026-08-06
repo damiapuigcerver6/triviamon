@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import GuessGame from "./GuessGame";
 import "./DetectivePokemonPage.css";
 
@@ -75,6 +76,10 @@ export default function DetectivePokemonPage() {
 
   return (
     <div className="qp-page">
+      <Seo
+        title={`${t.games.detectivePokemon.title} · Triviamon`}
+        description={t.games.detectivePokemon.description}
+      />
       <h1>{t.games.detectivePokemon.title}</h1>
 
       <div className="qp-tabs" role="tablist">

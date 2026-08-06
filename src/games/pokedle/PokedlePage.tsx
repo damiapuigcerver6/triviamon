@@ -3,6 +3,7 @@ import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
 import { recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import PokedleGame from "./PokedleGame";
 import "./PokedlePage.css";
 
@@ -68,6 +69,7 @@ export default function PokedlePage() {
 
   return (
     <div className="pk-page">
+      <Seo title={`${t.games.pokedle.title} · Triviamon`} description={t.games.pokedle.description} />
       <h1>{t.games.pokedle.title}</h1>
 
       <div className="pk-tabs" role="tablist">

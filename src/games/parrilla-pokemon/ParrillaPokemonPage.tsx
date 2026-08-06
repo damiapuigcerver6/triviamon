@@ -3,6 +3,7 @@ import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
 import { recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
 import GridGame from "./GridGame";
 import "./ParrillaPokemonPage.css";
 
@@ -68,6 +69,10 @@ export default function ParrillaPokemonPage() {
 
   return (
     <div className="pg-page">
+      <Seo
+        title={`${t.games.parrillaPokemon.title} · Triviamon`}
+        description={t.games.parrillaPokemon.description}
+      />
       <h1>{t.games.parrillaPokemon.title}</h1>
 
       <div className="pg-tabs" role="tablist">
