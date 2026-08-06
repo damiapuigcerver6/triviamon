@@ -66,6 +66,12 @@
   color: var(--text);
 }
 
+.icon-btn--lang {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
 .icon-btn:hover {
   border-color: var(--accent);
 }

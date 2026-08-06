@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
-import { normalize, pokemonSprite } from "../../data/pokedex";
+import { normalize, pokemonName, pokemonSprite, colorLabel, metodoLabel } from "../../data/pokedex";
 import { typeIcon } from "../../data/types";
+import { useLanguage } from "../../i18n/LanguageContext";
+import type { Lang } from "../../data/language";
 import {
   compareGuess,
   shareGrid,
@@ -10,17 +12,6 @@ import {
   type GuessResult,
 } from "./compare";
 import "./GuessGame.css";
-
-const ATTR_LABEL: Record<AttributeKey, string> = {
-  tipo1: "Tipo 1",
-  tipo2: "Tipo 2",
-  generacion: "Gen.",
-  fase: "Fase evol.",
-  metodo: "Método evol.",
-  color: "Color",
-  altura: "Altura",
-  peso: "Peso",
-};
 
 const HINT_EVERY = 4;
 
@@ -73,6 +64,18 @@ export default function GuessGame({
   onNewPractice,
   onWin,
 }: Props) {
+  const { lang, t } = useLanguage();
+  const ATTR_LABEL: Record<AttributeKey, string> = {
+    tipo1: t.detectivePokemon.attrTipo1,
+    tipo2: t.detectivePokemon.attrTipo2,
+    generacion: t.detectivePokemon.attrGen,
+    fase: t.detectivePokemon.attrFase,
+    metodo: t.detectivePokemon.attrMetodo,
+    color: t.detectivePokemon.attrColor,
+    altura: t.detectivePokemon.attrAltura,
+    peso: t.detectivePokemon.attrPeso,
+  };
+
   const [query, setQuery] = useState("");
   const [guesses, setGuesses] = useState<GuessResult[]>(
     () => loadStored(storageKey, pokedex, target).guesses,
@@ -102,9 +105,9 @@ export default function GuessGame({
     const q = normalize(query);
     if (!q) return [];
     return pokedex
-      .filter((p) => !guessedIds.has(p.id) && normalize(p.nombre).includes(q))
+      .filter((p) => !guessedIds.has(p.id) && normalize(pokemonName(p, lang)).includes(q))
       .slice(0, 8);
-  }, [query, pokedex, guessedIds]);
+  }, [query, pokedex, guessedIds, lang]);
 
   const solvedAttrs = useMemo(() => {
     const s = new Set<AttributeKey>();
@@ -137,10 +140,15 @@ export default function GuessGame({
 
   async function handleShare() {
     const ordered = [...guesses].reverse();
-    const text = shareGrid(ordered, dateLabel ?? "");
+    const text = shareGrid(
+      ordered,
+      dateLabel ?? "",
+      t.games.detectivePokemon.title,
+      t.detectivePokemon.shareGuessesLabel,
+    );
     try {
       await navigator.clipboard.writeText(text);
-      alert("¡Resultado copiado! Pégalo donde quieras.");
+      alert(t.common.shareCopied);
     } catch {
       alert(text);
     }
@@ -155,7 +163,7 @@ export default function GuessGame({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Escribe el nombre de un Pokémon..."
+            placeholder={t.detectivePokemon.placeholder}
             className="qp-input"
             autoComplete="off"
           />
@@ -165,7 +173,7 @@ export default function GuessGame({
                 <li key={p.id}>
                   <button type="button" onClick={() => submitGuess(p)}>
                     <img src={pokemonSprite(p.id)} alt="" loading="lazy" />
-                    <span>{p.nombre}</span>
+                    <span>{pokemonName(p, lang)}</span>
                   </button>
                 </li>
               ))}
@@ -176,40 +184,38 @@ export default function GuessGame({
 
       {!finished && hints.length > 0 && (
         <div className="qp-hints">
-          <span className="qp-hints-label">💡 Pistas:</span>
+          <span className="qp-hints-label">{t.detectivePokemon.hintsLabel}</span>
           {hints.map((k) => (
             <span className="qp-hint-chip" key={k}>
-              <strong>{ATTR_LABEL[k]}:</strong> {renderAttrContent(k, target)}
+              <strong>{ATTR_LABEL[k]}:</strong> {renderAttrContent(k, target, lang)}
             </span>
           ))}
           <button type="button" className="qp-btn qp-btn--danger" onClick={() => setGaveUp(true)}>
-            Solucionar
+            {t.detectivePokemon.giveUp}
           </button>
         </div>
       )}
 
       {finished && (
         <div className="qp-win">
-          <img src={pokemonSprite(target.id)} alt={target.nombre} />
+          <img src={pokemonSprite(target.id)} alt={pokemonName(target, lang)} />
           {won ? (
             <>
-              <h3>¡Es {target.nombre}!</h3>
-              <p>
-                Lo adivinaste en {guesses.length} intento{guesses.length === 1 ? "" : "s"}.
-              </p>
+              <h3>{t.detectivePokemon.wonTitle(pokemonName(target, lang))}</h3>
+              <p>{t.detectivePokemon.guessedInAttempts(guesses.length)}</p>
             </>
           ) : (
-            <h3>La respuesta era {target.nombre}</h3>
+            <h3>{t.detectivePokemon.lostTitle(pokemonName(target, lang))}</h3>
           )}
           <div className="qp-win-actions">
             {won && dateLabel !== undefined && (
               <button type="button" className="qp-btn qp-btn--primary" onClick={handleShare}>
-                Compartir resultado
+                {t.common.shareResult}
               </button>
             )}
             {onNewPractice && (
               <button type="button" className="qp-btn" onClick={onNewPractice}>
-                Otro Pokémon
+                {t.detectivePokemon.anotherPokemon}
               </button>
             )}
           </div>
@@ -232,7 +238,7 @@ export default function GuessGame({
                 <tr key={g.pokemon.id}>
                   <td className="qp-cell qp-cell--name">
                     <img src={pokemonSprite(g.pokemon.id)} alt="" loading="lazy" />
-                    <span>{g.pokemon.nombre}</span>
+                    <span>{pokemonName(g.pokemon, lang)}</span>
                   </td>
                   {ATTRIBUTE_ORDER.map((k) => {
                     const attr = g.attrs[k];
@@ -240,7 +246,7 @@ export default function GuessGame({
                       attr.direction === "up" ? "↑" : attr.direction === "down" ? "↓" : "";
                     return (
                       <td key={k} className={`qp-cell qp-cell--${attr.match}`}>
-                        {renderAttrContent(k, g.pokemon)}
+                        {renderAttrContent(k, g.pokemon, lang)}
                         {dirArrow && <span className="qp-arrow">{dirArrow}</span>}
                       </td>
                     );
@@ -255,21 +261,25 @@ export default function GuessGame({
   );
 }
 
-function renderAttrContent(key: AttributeKey, p: PokemonEntry) {
+function renderAttrContent(key: AttributeKey, p: PokemonEntry, lang: Lang) {
   switch (key) {
     case "tipo1":
     case "tipo2": {
-      const t = key === "tipo1" ? p.tipos[0] : p.tipos[1];
-      return t ? <img src={typeIcon(t)} alt={t} className="qp-type-icon" /> : <span>—</span>;
+      const type = key === "tipo1" ? p.tipos[0] : p.tipos[1];
+      return type ? (
+        <img src={typeIcon(type)} alt={type} className="qp-type-icon" />
+      ) : (
+        <span>—</span>
+      );
     }
     case "generacion":
       return <span>{p.generacion}</span>;
     case "fase":
       return <span>{p.fase}</span>;
     case "metodo":
-      return <span>{p.metodo}</span>;
+      return <span>{metodoLabel(p.metodo, lang)}</span>;
     case "color":
-      return <span>{p.color}</span>;
+      return <span>{colorLabel(p.color, lang)}</span>;
     case "altura":
       return <span>{p.altura} m</span>;
     case "peso":

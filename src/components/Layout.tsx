@@ -5,28 +5,40 @@ import { randomBackground } from "../data/backgrounds";
 import { loadTheme, saveTheme, type Theme } from "../data/theme";
 import { loadStats, type DailyStats } from "../data/stats";
 import { GAMES } from "../games/registry";
+import { useLanguage } from "../i18n/LanguageContext";
+import type { Strings } from "../i18n/strings";
 import Modal from "./Modal";
 import "./Layout.css";
 
-function StatsSection({ title, stats }: { title: string; stats: DailyStats }) {
+function StatsSection({
+  title,
+  stats,
+  t,
+}: {
+  title: string;
+  stats: DailyStats;
+  t: Strings;
+}) {
   return (
     <div>
-      <p style={{ fontWeight: 600, marginBottom: "0.5rem" }}>{title} · Reto diario</p>
+      <p style={{ fontWeight: 600, marginBottom: "0.5rem" }}>
+        {title} · {t.stats.dailyChallengeSuffix}
+      </p>
       {stats.completados === 0 ? (
-        <p className="stats-empty">Aún no has completado ningún reto diario.</p>
+        <p className="stats-empty">{t.stats.empty}</p>
       ) : (
         <div className="stats-grid">
           <div>
             <strong>{stats.completados}</strong>
-            <span>Completados</span>
+            <span>{t.stats.completed}</span>
           </div>
           <div>
             <strong>{stats.rachaActual}</strong>
-            <span>Racha actual</span>
+            <span>{t.stats.currentStreak}</span>
           </div>
           <div>
             <strong>{stats.mejorRacha}</strong>
-            <span>Mejor racha</span>
+            <span>{t.stats.bestStreak}</span>
           </div>
         </div>
       )}
@@ -34,7 +46,7 @@ function StatsSection({ title, stats }: { title: string; stats: DailyStats }) {
   );
 }
 
-const HELP_CONTENT: Record<string, { title: string; body: ReactNode }> = {
+const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
   "/juegos/tabla-de-tipos": {
     title: "Cómo jugar: Tabla de tipos",
     body: (
@@ -140,10 +152,117 @@ const HELP_CONTENT: Record<string, { title: string; body: ReactNode }> = {
   },
 };
 
+const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
+  "/juegos/tabla-de-tipos": {
+    title: "How to play: Type Chart",
+    body: (
+      <>
+        <p>
+          Fill in the effectiveness chart from memory: the row's type attacks the column's type.
+          Pick a brush (Neutral, Half, Double or None) and click cells to paint them.
+        </p>
+        <p>
+          Once it's complete, click "Check" to see your score. Incorrect and empty cells get
+          marked so you know what to review. You can pause the timer at any time.
+        </p>
+      </>
+    ),
+  },
+  "/juegos/detective-pokemon": {
+    title: "How to play: Pokémon Detective",
+    body: (
+      <>
+        <p>
+          Type Pokémon names to narrow down the target. Each guess compares type, generation,
+          evolutionary stage, evolution method, color, height and weight: green is an exact
+          match, yellow is a partial match, and the arrows show whether the real value is higher
+          or lower.
+        </p>
+        <p>
+          In the <strong>Daily Challenge</strong> everyone plays the same Pokémon each day and
+          you can share your result. In <strong>Free Practice</strong> you get a hint every 4
+          misses and a button to give up and see the answer.
+        </p>
+      </>
+    ),
+  },
+  "/juegos/conexiones": {
+    title: "How to play: Connections",
+    body: (
+      <>
+        <p>
+          There are 16 Pokémon in the grid, grouped into 4 hidden categories of 4 members each.
+          Select 4 cards you think share something (type, generation, how they evolve,
+          weaknesses...) and click "Check group".
+        </p>
+        <p>
+          If you're right, the group locks at the top with its category revealed. If you're
+          wrong, you lose a life: you get 4 mistakes before the game ends and the categories you
+          were missing get revealed.
+        </p>
+      </>
+    ),
+  },
+  "/juegos/mayor-o-menor": {
+    title: "How to play: Higher or Lower",
+    body: (
+      <>
+        <p>
+          Pick a stat (HP, Attack, Defense, Special Attack, Special Defense, Speed or Pokédex
+          Number). The Pokémon on the left always shows its value; the one on the right keeps it
+          hidden.
+        </p>
+        <p>
+          The ball in the middle tells you what to look for: the green Nest Ball asks for the
+          Pokémon with the higher value (HIGHER) and the red Poké Ball asks for the lower one
+          (LOWER). Click the Pokémon you think is correct: get it right and your streak keeps
+          growing; get it wrong and the game ends.
+        </p>
+      </>
+    ),
+  },
+  "/juegos/quien-es-ese-pokemon": {
+    title: "How to play: Who's That Pokémon?",
+    body: (
+      <>
+        <p>
+          You'll see a Pokémon's black silhouette and have to type its name. You start with 15
+          seconds on the clock: every correct guess adds 5 more seconds, up to a maximum of 15.
+        </p>
+        <p>
+          There are no options to pick from, so any way of typing the name works (capitalization,
+          accents or hyphens don't matter). Every correct guess adds a point and increases your
+          streak; if you're wrong, the streak resets but the clock keeps running. The game ends
+          when the timer hits zero.
+        </p>
+      </>
+    ),
+  },
+  "/juegos/parrilla-pokemon": {
+    title: "How to play: Pokémon Grid",
+    body: (
+      <>
+        <p>
+          Each row and column has a category (type, generation, evolution, weaknesses, moves it
+          can learn...). Select an empty cell and type a Pokémon that matches both its row's and
+          its column's category.
+        </p>
+        <p>
+          If you're right, the cell fills in and you move to the next one. If you're wrong, no
+          problem: you can try again as many times as you like. Just remember, you can't reuse
+          the same Pokémon in two cells of the same game.
+        </p>
+      </>
+    ),
+  },
+};
+
 export default function Layout() {
   const [bg] = useState(randomBackground);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const { lang, setLang, t } = useLanguage();
+  const HELP_CONTENT = lang === "en" ? HELP_CONTENT_EN : HELP_CONTENT_ES;
   const help = HELP_CONTENT[location.pathname];
 
   const [theme, setTheme] = useState<Theme>(loadTheme);
@@ -186,8 +305,8 @@ export default function Layout() {
             <button
               type="button"
               className="icon-btn"
-              aria-label="Juegos"
-              title="Juegos"
+              aria-label={t.header.gamesTooltip}
+              title={t.header.gamesTooltip}
               onClick={() => setMenuOpen((v) => !v)}
             >
               🎮
@@ -202,7 +321,7 @@ export default function Layout() {
                     onClick={() => setMenuOpen(false)}
                   >
                     <img src={g.icono ?? "/brand/logo.png"} alt="" />
-                    <span>{g.titulo}</span>
+                    <span>{t.games[g.strKey].title}</span>
                   </Link>
                 ))}
               </div>
@@ -212,8 +331,8 @@ export default function Layout() {
           <button
             type="button"
             className="icon-btn"
-            aria-label="Estadísticas"
-            title="Estadísticas"
+            aria-label={t.header.statsTooltip}
+            title={t.header.statsTooltip}
             onClick={() => setStatsOpen(true)}
           >
             📊
@@ -222,19 +341,29 @@ export default function Layout() {
           <button
             type="button"
             className="icon-btn"
-            aria-label="Cambiar tema"
-            title="Cambiar tema"
-            onClick={() => setTheme((t) => (t === "dark" ? "light" : "dark"))}
+            aria-label={t.header.themeTooltip}
+            title={t.header.themeTooltip}
+            onClick={() => setTheme((prev) => (prev === "dark" ? "light" : "dark"))}
           >
             {theme === "dark" ? "🌙" : "☀️"}
+          </button>
+
+          <button
+            type="button"
+            className="icon-btn icon-btn--lang"
+            aria-label={t.header.languageTooltip}
+            title={t.header.languageTooltip}
+            onClick={() => setLang(lang === "es" ? "en" : "es")}
+          >
+            {lang === "es" ? "ES" : "EN"}
           </button>
 
           {help && (
             <button
               type="button"
               className="icon-btn"
-              aria-label="Ayuda"
-              title="Ayuda"
+              aria-label={t.header.helpTooltip}
+              title={t.header.helpTooltip}
               onClick={() => setHelpOpen(true)}
             >
               ❓
@@ -242,7 +371,12 @@ export default function Layout() {
           )}
 
           {!isHome && (
-            <Link to="/" className="icon-btn" aria-label="Volver al inicio" title="Volver al inicio">
+            <Link
+              to="/"
+              className="icon-btn"
+              aria-label={t.header.homeTooltip}
+              title={t.header.homeTooltip}
+            >
               🏠
             </Link>
           )}
@@ -254,18 +388,18 @@ export default function Layout() {
       </main>
 
       <footer className="site-footer">
-        <p>Proyecto de aficionado, sin ánimo de lucro. Pokémon © Nintendo / Game Freak.</p>
+        <p>{t.footer.disclaimer}</p>
         <p>
-          Un proyecto de <a href="https://mdlabs.app">MDLabs</a> · descubre
-          también <a href="https://linktr.ee/thehoodieapp">HOODIE</a>.
+          {t.footer.creditBefore} <a href="https://mdlabs.app">MDLabs</a> · {t.footer.creditAfter}{" "}
+          <a href="https://linktr.ee/thehoodieapp">HOODIE</a>.
         </p>
       </footer>
 
       {statsOpen && (
-        <Modal title="Estadísticas" onClose={() => setStatsOpen(false)}>
-          <StatsSection title="Detective Pokémon" stats={guessStats} />
+        <Modal title={t.stats.modalTitle} onClose={() => setStatsOpen(false)}>
+          <StatsSection title={t.games.detectivePokemon.title} stats={guessStats} t={t} />
           <div style={{ height: "1rem" }} />
-          <StatsSection title="Conexiones" stats={connectionsStats} />
+          <StatsSection title={t.games.conexiones.title} stats={connectionsStats} t={t} />
         </Modal>
       )}
 

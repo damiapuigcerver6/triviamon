@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { TYPES, TYPE_IDS, typeIcon, type TypeId } from "../../data/types";
+import { TYPE_IDS, typeIcon, typeName, type TypeId } from "../../data/types";
 import { getMultiplier, type Multiplier } from "../../data/typeChart";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./TypeChartGame.css";
 
 type Board = Partial<Record<TypeId, Partial<Record<TypeId, Multiplier>>>>;
@@ -9,17 +10,6 @@ const TOTAL_CELLS = TYPE_IDS.length * TYPE_IDS.length;
 
 // Orden de la paleta: neutra, mitad, doble, nula
 const PALETTE: Multiplier[] = [1, 0.5, 2, 0];
-
-const LABEL: Record<Multiplier, string> = {
-  1: "Neutra",
-  0.5: "Mitad",
-  2: "Doble",
-  0: "Nula",
-};
-
-function nombreDe(id: TypeId): string {
-  return TYPES.find((t) => t.id === id)?.nombre ?? id;
-}
 
 function formatTime(totalSeconds: number): string {
   const m = Math.floor(totalSeconds / 60)
@@ -30,6 +20,17 @@ function formatTime(totalSeconds: number): string {
 }
 
 export default function TypeChartGame() {
+  const { lang, t } = useLanguage();
+  const LABEL: Record<Multiplier, string> = {
+    1: t.tablaTipos.brushNeutral,
+    0.5: t.tablaTipos.brushHalf,
+    2: t.tablaTipos.brushDouble,
+    0: t.tablaTipos.brushNone,
+  };
+  function nombreDe(id: TypeId): string {
+    return typeName(id, lang);
+  }
+
   const [board, setBoard] = useState<Board>({});
   const [brush, setBrush] = useState<Multiplier>(1);
   const [checked, setChecked] = useState(false);
@@ -135,7 +136,7 @@ export default function TypeChartGame() {
   return (
     <div className="tc-game" onPointerUp={stopPaint} onPointerLeave={stopPaint}>
       <div className="tc-toolbar">
-        <div className="tc-palette" role="group" aria-label="Leyenda de colores">
+        <div className="tc-palette" role="group" aria-label={t.tablaTipos.colorLegend}>
           {PALETTE.map((m) => (
             <button
               key={m}
@@ -156,7 +157,7 @@ export default function TypeChartGame() {
           <thead>
             <tr>
               <th className="tc-corner">
-                <span className="tc-corner-label">Atacante ↓ / Defensor →</span>
+                <span className="tc-corner-label">{t.tablaTipos.attackerDefender}</span>
               </th>
               {TYPE_IDS.map((def) => (
                 <th key={def} className="tc-col-head" title={nombreDe(def)}>
@@ -180,13 +181,13 @@ export default function TypeChartGame() {
                     const correctValue = getMultiplier(atk, def);
                     if (value === undefined) {
                       cls += " tc-cell--missing";
-                      title = `Sin responder. Correcto: ${LABEL[correctValue]}`;
+                      title = `${t.tablaTipos.unanswered} ${LABEL[correctValue]}`;
                     } else if (value === correctValue) {
                       cls += ` tc-cell--${value} tc-cell--correct`;
-                      title = "¡Correcto!";
+                      title = t.tablaTipos.correctBang;
                     } else {
                       cls += ` tc-cell--${value} tc-cell--wrong`;
-                      title = `Tu respuesta: ${LABEL[value]}. Correcto: ${LABEL[correctValue]}`;
+                      title = `${t.tablaTipos.yourAnswer} ${LABEL[value]}. ${t.tablaTipos.correctColon} ${LABEL[correctValue]}`;
                     }
                   } else if (value !== undefined && !paused) {
                     cls += ` tc-cell--${value}`;
@@ -209,9 +210,9 @@ export default function TypeChartGame() {
 
         {paused && (
           <div className="tc-pause-overlay">
-            <p className="tc-pause-text">Juego pausado</p>
+            <p className="tc-pause-text">{t.tablaTipos.gamePaused}</p>
             <button type="button" className="tc-btn tc-btn--primary" onClick={togglePause}>
-              Seguir jugando
+              {t.tablaTipos.keepPlaying}
             </button>
           </div>
         )}
@@ -226,7 +227,7 @@ export default function TypeChartGame() {
             onClick={togglePause}
             disabled={!started || checked}
           >
-            {paused ? "Reanudar" : "Pausar"}
+            {paused ? t.tablaTipos.resume : t.tablaTipos.pause}
           </button>
         </div>
 
@@ -234,7 +235,7 @@ export default function TypeChartGame() {
           {!checked ? (
             <>
               <span className="tc-progress">
-                {filledCount}/{TOTAL_CELLS} celdas
+                {filledCount}/{TOTAL_CELLS} {t.tablaTipos.cellsSuffix}
               </span>
               <button
                 type="button"
@@ -242,22 +243,22 @@ export default function TypeChartGame() {
                 onClick={handleCheck}
                 disabled={paused}
               >
-                Comprobar
+                {t.tablaTipos.check}
               </button>
               <button type="button" className="tc-btn" onClick={handleReset}>
-                Reiniciar
+                {t.tablaTipos.reset}
               </button>
             </>
           ) : (
             <>
               <span className="tc-score">
-                {result!.correct}/{result!.total} correctas ({result!.pct}%)
+                {result!.correct}/{result!.total} {t.tablaTipos.correctSuffix} ({result!.pct}%)
               </span>
               <button type="button" className="tc-btn tc-btn--primary" onClick={handleContinueEditing}>
-                Seguir editando
+                {t.tablaTipos.keepEditing}
               </button>
               <button type="button" className="tc-btn" onClick={handleReset}>
-                Reiniciar
+                {t.tablaTipos.reset}
               </button>
             </>
           )}

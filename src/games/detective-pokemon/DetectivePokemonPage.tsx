@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { recordDailyWin } from "../../data/stats";
+import { useLanguage } from "../../i18n/LanguageContext";
 import GuessGame from "./GuessGame";
 import "./DetectivePokemonPage.css";
 
@@ -35,6 +36,7 @@ function formatDateLabel(dateKey: string): string {
 }
 
 export default function DetectivePokemonPage() {
+  const { t } = useLanguage();
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
@@ -62,8 +64,8 @@ export default function DetectivePokemonPage() {
   if (!pokedex) {
     return (
       <div className="qp-page">
-        <h1>Detective Pokémon</h1>
-        <p className="qp-loading">Cargando la Pokédex…</p>
+        <h1>{t.games.detectivePokemon.title}</h1>
+        <p className="qp-loading">{t.common.loadingPokedex}</p>
       </div>
     );
   }
@@ -73,7 +75,7 @@ export default function DetectivePokemonPage() {
 
   return (
     <div className="qp-page">
-      <h1>Detective Pokémon</h1>
+      <h1>{t.games.detectivePokemon.title}</h1>
 
       <div className="qp-tabs" role="tablist">
         <button
@@ -81,14 +83,14 @@ export default function DetectivePokemonPage() {
           className={`qp-tab ${modo === "diario" ? "qp-tab--active" : ""}`}
           onClick={() => setModo("diario")}
         >
-          Reto diario
+          {t.common.dailyChallengeTab}
         </button>
         <button
           type="button"
           className={`qp-tab ${modo === "practica" ? "qp-tab--active" : ""}`}
           onClick={() => setModo("practica")}
         >
-          Práctica libre
+          {t.common.freePracticeTab}
         </button>
       </div>
 

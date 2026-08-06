@@ -1,6 +1,7 @@
 import type { PokemonEntry } from "../../data/pokedex";
 import { mulberry32 } from "../../data/rng";
 import { buildAllCategories, type Category } from "../../data/categories";
+import type { Lang } from "../../data/language";
 
 export type { Category };
 export { buildAllCategories };
@@ -26,8 +27,12 @@ function pickN<T>(pool: T[], n: number, rng: () => number): T[] {
   return out;
 }
 
-export function buildPuzzle(pokedex: PokemonEntry[], rng: () => number): ConnectionsPuzzle {
-  const allCategories = buildAllCategories(pokedex);
+export function buildPuzzle(
+  pokedex: PokemonEntry[],
+  rng: () => number,
+  lang: Lang,
+): ConnectionsPuzzle {
+  const allCategories = buildAllCategories(pokedex, lang);
   for (let attempt = 0; attempt < 300; attempt++) {
     const order = pickN(allCategories, allCategories.length, rng);
     const used = new Set<number>();
@@ -51,10 +56,11 @@ export interface ConnectionsInstance {
   cardOrder: number[];
 }
 
-/** Misma semilla -> mismo puzzle y mismo orden de cuadricula siempre (permite reto diario y persistencia). */
-export function buildInstance(pokedex: PokemonEntry[], seed: number): ConnectionsInstance {
+/** Misma semilla -> mismo puzzle y mismo orden de cuadricula siempre (permite reto diario y persistencia).
+ *  El idioma solo cambia las etiquetas mostradas, no que Pokemon salen ni el orden. */
+export function buildInstance(pokedex: PokemonEntry[], seed: number, lang: Lang): ConnectionsInstance {
   const rng = mulberry32(seed);
-  const puzzle = buildPuzzle(pokedex, rng);
+  const puzzle = buildPuzzle(pokedex, rng, lang);
   const allIds = puzzle.groups.flatMap((g) => g.members.map((p) => p.id));
   const cardOrder = pickN(allIds, allIds.length, rng);
   return { puzzle, cardOrder };

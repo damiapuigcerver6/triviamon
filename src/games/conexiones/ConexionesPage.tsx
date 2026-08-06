@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
 import { recordDailyWin } from "../../data/stats";
+import { useLanguage } from "../../i18n/LanguageContext";
 import ConnectionsGame from "./ConnectionsGame";
 import "./ConexionesPage.css";
 
@@ -31,6 +32,7 @@ function formatDateLabel(dateKey: string): string {
 }
 
 export default function ConexionesPage() {
+  const { lang, t } = useLanguage();
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
@@ -55,8 +57,8 @@ export default function ConexionesPage() {
   if (!pokedex) {
     return (
       <div className="cx-page">
-        <h1>Conexiones</h1>
-        <p className="cx-loading">Cargando la Pokédex…</p>
+        <h1>{t.games.conexiones.title}</h1>
+        <p className="cx-loading">{t.common.loadingPokedex}</p>
       </div>
     );
   }
@@ -66,10 +68,8 @@ export default function ConexionesPage() {
 
   return (
     <div className="cx-page">
-      <h1>Conexiones</h1>
-      <p className="cx-subtitle">
-        Agrupa los 16 Pokémon en 4 grupos de 4 según lo que tienen en común.
-      </p>
+      <h1>{t.games.conexiones.title}</h1>
+      <p className="cx-subtitle">{t.conexiones.subtitle}</p>
 
       <div className="cx-tabs" role="tablist">
         <button
@@ -77,20 +77,20 @@ export default function ConexionesPage() {
           className={`cx-tab ${modo === "diario" ? "cx-tab--active" : ""}`}
           onClick={() => setModo("diario")}
         >
-          Reto diario
+          {t.common.dailyChallengeTab}
         </button>
         <button
           type="button"
           className={`cx-tab ${modo === "practica" ? "cx-tab--active" : ""}`}
           onClick={() => setModo("practica")}
         >
-          Práctica libre
+          {t.common.freePracticeTab}
         </button>
       </div>
 
       <div className={modo === "diario" ? "cx-mode" : "cx-mode cx-mode--hidden"}>
         <ConnectionsGame
-          key={dateKey}
+          key={`${dateKey}-${lang}`}
           pokedex={pokedex}
           seed={dailySeed}
           storageKey={`triviamon:cx:diario:${dateKey}`}
@@ -102,7 +102,7 @@ export default function ConexionesPage() {
       <div className={modo === "practica" ? "cx-mode" : "cx-mode cx-mode--hidden"}>
         {practiceSeed !== null && (
           <ConnectionsGame
-            key={practiceRound}
+            key={`${practiceRound}-${lang}`}
             pokedex={pokedex}
             seed={practiceSeed}
             storageKey={PRACTICE_PROGRESS_KEY}

@@ -1,8 +1,10 @@
+import type { Strings } from "../i18n/strings";
+
 export interface GameMeta {
   id: string;
   path: string;
-  titulo: string;
-  descripcion: string;
+  /** Clave dentro de Strings["games"] para el titulo/descripcion traducidos. */
+  strKey: keyof Strings["games"];
   /** Icono fijo. Si se omite y iconoAleatorio es true, se elige un tipo al azar en cada carga. */
   icono?: string;
   iconoAleatorio?: boolean;
@@ -13,54 +15,42 @@ export const GAMES: GameMeta[] = [
   {
     id: "tabla-tipos",
     path: "/juegos/tabla-de-tipos",
-    titulo: "Tabla de tipos",
-    descripcion:
-      "Rellena de memoria la tabla completa de efectividades entre los 18 tipos. ¿Te la sabes al 100%?",
+    strKey: "tablaTipos",
     iconoAleatorio: true,
     disponible: true,
   },
   {
     id: "detective-pokemon",
     path: "/juegos/detective-pokemon",
-    titulo: "Detective Pokémon",
-    descripcion:
-      "Adivina el Pokémon comparando tipo, generación, evolución, color y más. Reto diario o práctica libre.",
+    strKey: "detectivePokemon",
     icono: "/brand/detective-lupa.png",
     disponible: true,
   },
   {
     id: "conexiones",
     path: "/juegos/conexiones",
-    titulo: "Conexiones",
-    descripcion:
-      "Agrupa 16 Pokémon en 4 grupos de 4 según lo que tienen en común. Reto diario o práctica libre.",
+    strKey: "conexiones",
     icono: "/brand/conexiones-icono-b.png",
     disponible: true,
   },
   {
     id: "mayor-o-menor",
     path: "/juegos/mayor-o-menor",
-    titulo: "Mayor o menor",
-    descripcion:
-      "Elige una estadística y adivina si el siguiente Pokémon la tiene mayor o menor. ¿Cuánta racha aguantas?",
+    strKey: "mayorMenor",
     icono: "/brand/nestball.png",
     disponible: true,
   },
   {
     id: "quien-es-ese-pokemon",
     path: "/juegos/quien-es-ese-pokemon",
-    titulo: "¿Quién es ese Pokémon?",
-    descripcion:
-      "Adivina el Pokémon a partir de su silueta antes de que se acabe el tiempo. ¡Cada acierto suma segundos!",
+    strKey: "quienEsEsePokemon",
     icono: "/brand/pikachu-silueta.png",
     disponible: true,
   },
   {
     id: "parrilla-pokemon",
     path: "/juegos/parrilla-pokemon",
-    titulo: "Parrilla Pokémon",
-    descripcion:
-      "Rellena la cuadrícula 3x3 con un Pokémon distinto por casilla que cumpla su fila y su columna a la vez.",
+    strKey: "parrillaPokemon",
     icono: "/brand/parrilla-icono.png",
     disponible: true,
   },

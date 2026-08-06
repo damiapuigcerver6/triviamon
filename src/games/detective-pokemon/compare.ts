@@ -71,11 +71,16 @@ export function compareGuess(guess: PokemonEntry, target: PokemonEntry): GuessRe
   return { pokemon: guess, attrs, isWin: guess.id === target.id };
 }
 
-export function shareGrid(results: GuessResult[], dateLabel: string): string {
+export function shareGrid(
+  results: GuessResult[],
+  dateLabel: string,
+  gameTitle: string,
+  attemptsLabel: string,
+): string {
   const EMOJI: Record<MatchLevel, string> = { match: "🟩", partial: "🟨", none: "⬛" };
   const lines = results.map((r) =>
     ATTRIBUTE_ORDER.map((k) => EMOJI[r.attrs[k].match]).join(""),
   );
   const attempts = results.length;
-  return `Triviamon - Detective Pokémon (${dateLabel})\nIntentos: ${attempts}\n${lines.join("\n")}`;
+  return `Triviamon - ${gameTitle} (${dateLabel})\n${attemptsLabel}: ${attempts}\n${lines.join("\n")}`;
 }

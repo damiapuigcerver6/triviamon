@@ -1,6 +1,7 @@
 import type { PokemonEntry } from "../../data/pokedex";
 import { mulberry32 } from "../../data/rng";
 import { buildAllCategories, buildMoveCategories, type Category } from "../../data/categories";
+import type { Lang } from "../../data/language";
 
 export interface GridPuzzle {
   rows: Category[];
@@ -73,8 +74,12 @@ function hasPerfectAssignment(cellCandidates: PokemonEntry[][]): boolean {
 
 const MAX_ATTEMPTS = 1500;
 
-export function buildGridPuzzle(pokedex: PokemonEntry[], rng: () => number): GridPuzzle {
-  const allCategories = [...buildAllCategories(pokedex), ...buildMoveCategories(pokedex)];
+export function buildGridPuzzle(
+  pokedex: PokemonEntry[],
+  rng: () => number,
+  lang: Lang,
+): GridPuzzle {
+  const allCategories = [...buildAllCategories(pokedex, lang), ...buildMoveCategories(pokedex, lang)];
 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const combo = pickCategoryCombo(allCategories, rng);
@@ -95,9 +100,9 @@ export function buildGridPuzzle(pokedex: PokemonEntry[], rng: () => number): Gri
   throw new Error("No se pudo generar una parrilla valida");
 }
 
-export function buildGridInstance(pokedex: PokemonEntry[], seed: number): GridInstance {
+export function buildGridInstance(pokedex: PokemonEntry[], seed: number, lang: Lang): GridInstance {
   const rng = mulberry32(seed);
-  const puzzle = buildGridPuzzle(pokedex, rng);
+  const puzzle = buildGridPuzzle(pokedex, rng, lang);
   return { puzzle };
 }
 

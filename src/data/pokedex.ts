@@ -1,9 +1,11 @@
 import type { TypeId } from "./types";
+import type { Lang } from "./language";
 
 export interface PokemonEntry {
   id: number;
   numero_pokedex: number; // numero de la Pokedex nacional (compartido entre formas de la misma especie)
   nombre: string;
+  nombre_en: string;
   tipos: [TypeId, TypeId | null];
   generacion: number;
   color: string;
@@ -41,6 +43,10 @@ export function pokemonSprite(id: number): string {
   return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 }
 
+export function pokemonName(p: PokemonEntry, lang: Lang): string {
+  return lang === "en" ? p.nombre_en : p.nombre;
+}
+
 export function normalize(text: string): string {
   return text
     .normalize("NFD")
@@ -49,14 +55,57 @@ export function normalize(text: string): string {
     .trim();
 }
 
-const CATEGORIA_LABEL: Record<PokemonEntry["categoria"], string> = {
-  normal: "Normal",
-  legendario: "Legendario",
-  mitico: "Mítico",
+const CATEGORIA_LABEL: Record<Lang, Record<PokemonEntry["categoria"], string>> = {
+  es: { normal: "Normal", legendario: "Legendario", mitico: "Mítico" },
+  en: { normal: "Normal", legendario: "Legendary", mitico: "Mythical" },
 };
 
-export function categoriaLabel(c: PokemonEntry["categoria"]): string {
-  return CATEGORIA_LABEL[c];
+export function categoriaLabel(c: PokemonEntry["categoria"], lang: Lang): string {
+  return CATEGORIA_LABEL[lang][c];
+}
+
+// El campo "color" se guarda siempre en espanol (viene de fetch-pokemon-data.py);
+// esta tabla solo traduce la ETIQUETA que se muestra, no el dato en si.
+const COLOR_EN: Record<string, string> = {
+  Verde: "Green",
+  Rojo: "Red",
+  Azul: "Blue",
+  Blanco: "White",
+  Marrón: "Brown",
+  Amarillo: "Yellow",
+  Morado: "Purple",
+  Rosa: "Pink",
+  Gris: "Gray",
+  Negro: "Black",
+};
+
+export function colorLabel(colorEs: string, lang: Lang): string {
+  return lang === "en" ? (COLOR_EN[colorEs] ?? colorEs) : colorEs;
+}
+
+// El campo "metodo" tambien se guarda siempre en espanol; se traduce solo para mostrar.
+const METODO_EN: Record<string, string> = {
+  "—": "—",
+  Nivel: "Level-up",
+  Amistad: "Friendship",
+  "Amistad y nivel": "Friendship & level",
+  Intercambio: "Trade",
+  Objeto: "Special item",
+  Especial: "Special way",
+  "Piedra Fuego": "Fire Stone",
+  "Piedra Agua": "Water Stone",
+  "Piedra Trueno": "Thunder Stone",
+  "Piedra Hoja": "Leaf Stone",
+  "Piedra Luna": "Moon Stone",
+  "Piedra Sol": "Sun Stone",
+  "Piedra Destello": "Shiny Stone",
+  "Piedra Noche": "Dusk Stone",
+  "Piedra Alba": "Dawn Stone",
+  "Piedra Hielo": "Ice Stone",
+};
+
+export function metodoLabel(metodoEs: string, lang: Lang): string {
+  return lang === "en" ? (METODO_EN[metodoEs] ?? metodoEs) : metodoEs;
 }
 
 // Fecha estable en horario local, formato YYYY-MM-DD, para el reto diario.

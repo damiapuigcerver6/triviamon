@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
 import { recordDailyWin } from "../../data/stats";
+import { useLanguage } from "../../i18n/LanguageContext";
 import GridGame from "./GridGame";
 import "./ParrillaPokemonPage.css";
 
@@ -31,6 +32,7 @@ function formatDateLabel(dateKey: string): string {
 }
 
 export default function ParrillaPokemonPage() {
+  const { lang, t } = useLanguage();
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
@@ -55,8 +57,8 @@ export default function ParrillaPokemonPage() {
   if (!pokedex) {
     return (
       <div className="pg-page">
-        <h1>Parrilla Pokémon</h1>
-        <p className="pg-loading">Cargando la Pokédex…</p>
+        <h1>{t.games.parrillaPokemon.title}</h1>
+        <p className="pg-loading">{t.common.loadingPokedex}</p>
       </div>
     );
   }
@@ -66,7 +68,7 @@ export default function ParrillaPokemonPage() {
 
   return (
     <div className="pg-page">
-      <h1>Parrilla Pokémon</h1>
+      <h1>{t.games.parrillaPokemon.title}</h1>
 
       <div className="pg-tabs" role="tablist">
         <button
@@ -74,20 +76,20 @@ export default function ParrillaPokemonPage() {
           className={`pg-tab ${modo === "diario" ? "pg-tab--active" : ""}`}
           onClick={() => setModo("diario")}
         >
-          Reto diario
+          {t.common.dailyChallengeTab}
         </button>
         <button
           type="button"
           className={`pg-tab ${modo === "practica" ? "pg-tab--active" : ""}`}
           onClick={() => setModo("practica")}
         >
-          Práctica libre
+          {t.common.freePracticeTab}
         </button>
       </div>
 
       <div className={modo === "diario" ? "pg-mode" : "pg-mode pg-mode--hidden"}>
         <GridGame
-          key={dateKey}
+          key={`${dateKey}-${lang}`}
           pokedex={pokedex}
           seed={dailySeed}
           storageKey={`triviamon:pg:diario:${dateKey}`}
@@ -99,7 +101,7 @@ export default function ParrillaPokemonPage() {
       <div className={modo === "practica" ? "pg-mode" : "pg-mode pg-mode--hidden"}>
         {practiceSeed !== null && (
           <GridGame
-            key={practiceRound}
+            key={`${practiceRound}-${lang}`}
             pokedex={pokedex}
             seed={practiceSeed}
             storageKey={PRACTICE_PROGRESS_KEY}

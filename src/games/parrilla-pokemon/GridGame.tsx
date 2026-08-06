@@ -1,15 +1,17 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
-import { normalize, pokemonSprite } from "../../data/pokedex";
+import { normalize, pokemonName, pokemonSprite } from "../../data/pokedex";
 import { typeBadge, type TypeId } from "../../data/types";
+import { useLanguage } from "../../i18n/LanguageContext";
+import type { Lang } from "../../data/language";
 import { buildGridInstance, cellCandidateIds, exampleAnswer } from "./gridBuilder";
 import type { Category } from "../../data/categories";
 import "./GridGame.css";
 
-function CategoryLabel({ category }: { category: Category }) {
+function CategoryLabel({ category, lang }: { category: Category; lang: Lang }) {
   if (category.id.startsWith("tipo:")) {
     const typeId = category.id.slice("tipo:".length) as TypeId;
-    return <img src={typeBadge(typeId)} alt={category.label} className="pg-type-badge" />;
+    return <img src={typeBadge(typeId, lang)} alt={category.label} className="pg-type-badge" />;
   }
   return <>{category.label}</>;
 }
@@ -53,7 +55,8 @@ export default function GridGame({
   onSolved,
   onNewPractice,
 }: Props) {
-  const instance = useMemo(() => buildGridInstance(pokedex, seed), [pokedex, seed]);
+  const { lang, t } = useLanguage();
+  const instance = useMemo(() => buildGridInstance(pokedex, seed, lang), [pokedex, seed, lang]);
   const { puzzle } = instance;
 
   const pokedexById = useMemo(() => {
@@ -104,9 +107,9 @@ export default function GridGame({
     const q = normalize(query);
     if (!q || selectedCell === null) return [];
     return pokedex
-      .filter((p) => !usedIds.has(p.id) && normalize(p.nombre).includes(q))
+      .filter((p) => !usedIds.has(p.id) && normalize(pokemonName(p, lang)).includes(q))
       .slice(0, 8);
-  }, [query, pokedex, usedIds, selectedCell]);
+  }, [query, pokedex, usedIds, selectedCell, lang]);
 
   function selectCell(cellIdx: number) {
     if (gameOver || filled[cellIdx] !== undefined) return;
@@ -121,7 +124,7 @@ export default function GridGame({
     const col = selectedCell % 3;
 
     if (usedIds.has(pokemon.id)) {
-      setMessage(`Ya has usado a ${pokemon.nombre} en otra casilla.`);
+      setMessage(t.parrillaPokemon.alreadyUsed(pokemonName(pokemon, lang)));
       setShakeCell(selectedCell);
       setTimeout(() => setShakeCell(null), 400);
       return;
@@ -137,7 +140,7 @@ export default function GridGame({
       setSelectedCell(nextEmpty ?? null);
     } else {
       setAttempts((prev) => prev + 1);
-      setMessage(`${pokemon.nombre} no cumple las dos categorías.`);
+      setMessage(t.parrillaPokemon.doesntMatch(pokemonName(pokemon, lang)));
       setShakeCell(selectedCell);
       setQuery("");
       setTimeout(() => setShakeCell(null), 400);
@@ -156,12 +159,12 @@ export default function GridGame({
   }
 
   async function handleShare() {
-    const text = `Triviamon - Parrilla Pokémon${dateLabel ? ` (${dateLabel})` : ""}\n${
-      revealed ? "Rendido" : `Completado`
-    } · Fallos: ${attempts}`;
+    const text = `Triviamon - ${t.games.parrillaPokemon.title}${dateLabel ? ` (${dateLabel})` : ""}\n${
+      revealed ? t.parrillaPokemon.shareGaveUp : t.parrillaPokemon.shareCompleted
+    } · ${t.parrillaPokemon.shareMistakesLine(attempts)}`;
     try {
       await navigator.clipboard.writeText(text);
-      alert("¡Resultado copiado! Pégalo donde quieras.");
+      alert(t.common.shareCopied);
     } catch {
       alert(text);
     }
@@ -171,10 +174,10 @@ export default function GridGame({
     <div className="pg-game">
       <div className="pg-topbar">
         <span>
-          Casillas: <strong>{filledCount}/9</strong>
+          {t.parrillaPokemon.cells} <strong>{filledCount}/9</strong>
         </span>
         <span>
-          Fallos: <strong>{attempts}</strong>
+          {t.parrillaPokemon.mistakes} <strong>{attempts}</strong>
         </span>
       </div>
 
@@ -182,14 +185,14 @@ export default function GridGame({
         <div className="pg-cell pg-cell--corner" />
         {puzzle.cols.map((c, i) => (
           <div key={`col-${i}`} className="pg-cell pg-cell--header">
-            <CategoryLabel category={c} />
+            <CategoryLabel category={c} lang={lang} />
           </div>
         ))}
 
         {puzzle.rows.map((r, rowIdx) => (
           <Fragment key={`row-${rowIdx}`}>
             <div className="pg-cell pg-cell--header">
-              <CategoryLabel category={r} />
+              <CategoryLabel category={r} lang={lang} />
             </div>
             {puzzle.cols.map((_, colIdx) => {
               const cellIdx = rowIdx * 3 + colIdx;
@@ -210,7 +213,7 @@ export default function GridGame({
                   {pokemon && (
                     <>
                       <img src={pokemonSprite(pokemon.id)} alt="" loading="lazy" />
-                      <span>{pokemon.nombre}</span>
+                      <span>{pokemonName(pokemon, lang)}</span>
                     </>
                   )}
                 </button>
@@ -224,8 +227,8 @@ export default function GridGame({
         <div className="pg-controls">
           <p className="pg-hint">
             {selectedCell === null
-              ? "Selecciona una casilla vacía para responder."
-              : "Escribe un Pokémon que cumpla las dos categorías de esa casilla."}
+              ? t.parrillaPokemon.selectEmptyCell
+              : t.parrillaPokemon.typeMatchingPokemon}
           </p>
           <input
             ref={inputRef}
@@ -233,7 +236,7 @@ export default function GridGame({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Escribe el nombre de un Pokémon..."
+            placeholder={t.parrillaPokemon.placeholder}
             className="pg-input"
             autoComplete="off"
             disabled={selectedCell === null}
@@ -244,7 +247,7 @@ export default function GridGame({
                 <li key={p.id}>
                   <button type="button" onClick={() => submitGuess(p)}>
                     <img src={pokemonSprite(p.id)} alt="" loading="lazy" />
-                    <span>{p.nombre}</span>
+                    <span>{pokemonName(p, lang)}</span>
                   </button>
                 </li>
               ))}
@@ -252,17 +255,15 @@ export default function GridGame({
           )}
           {message && <p className="pg-message">{message}</p>}
           <button type="button" className="pg-btn pg-btn--danger" onClick={handleReveal}>
-            Rendirse
+            {t.parrillaPokemon.giveUp}
           </button>
         </div>
       )}
 
       {gameOver && (
         <div className="pg-finish">
-          <h3>{complete ? "¡Parrilla completada!" : "Parrilla revelada"}</h3>
-          <p>
-            Casillas acertadas: <strong>{filledCount}/9</strong> · Fallos: <strong>{attempts}</strong>
-          </p>
+          <h3>{complete ? t.parrillaPokemon.completedTitle : t.parrillaPokemon.revealedTitle}</h3>
+          <p>{t.parrillaPokemon.cellsSolved(filledCount, attempts)}</p>
           {revealed && !complete && (
             <div className="pg-solution">
               {Array.from({ length: 9 }, (_, i) => i)
@@ -276,7 +277,7 @@ export default function GridGame({
                       <strong>
                         {puzzle.rows[row].label} + {puzzle.cols[col].label}:
                       </strong>{" "}
-                      {answer ? answer.nombre : "—"}
+                      {answer ? pokemonName(answer, lang) : "—"}
                     </p>
                   );
                 })}
@@ -285,12 +286,12 @@ export default function GridGame({
           <div className="pg-finish-actions">
             {complete && (
               <button type="button" className="pg-btn pg-btn--primary" onClick={handleShare}>
-                Compartir resultado
+                {t.common.shareResult}
               </button>
             )}
             {onNewPractice && (
               <button type="button" className="pg-btn" onClick={onNewPractice}>
-                Otra parrilla
+                {t.parrillaPokemon.anotherGrid}
               </button>
             )}
           </div>

@@ -177,9 +177,21 @@ def es_name(names, fallback):
     return fallback.replace("-", " ").title()
 
 
+def name_in_lang(names, lang, fallback):
+    for n in names:
+        if n["language"]["name"] == lang:
+            return n["name"]
+    return fallback.replace("-", " ").title()
+
+
+# Convencion inglesa: "Alolan Vulpix" (adjetivo delante), no "Vulpix de Alola".
+REGIONAL_ADJ_EN = {"Alola": "Alolan", "Galar": "Galarian", "Hisui": "Hisuian", "Paldea": "Paldean"}
+
+
 def fetch_species(species_id):
     sp = get(f"{API}/pokemon-species/{species_id}")
     base_name = es_name(sp["names"], sp["name"])
+    base_name_en = name_in_lang(sp["names"], "en", sp["name"])
     generation = GEN_ROMAN_TO_INT.get(sp["generation"]["name"], 1)
     color = COLOR_ES.get(sp["color"]["name"], sp["color"]["name"]) if sp["color"] else "?"
     shape_name = sp["shape"]["name"] if sp["shape"] else None
@@ -222,12 +234,14 @@ def fetch_species(species_id):
         })
 
         nombre = base_name if region is None else f"{base_name} de {region[0]}"
+        nombre_en = base_name_en if region is None else f"{REGIONAL_ADJ_EN[region[0]]} {base_name_en}"
         gen = generation if region is None else region[1]
 
         entries.append({
             "id": poke["id"],
             "numero_pokedex": species_id,
             "nombre": nombre,
+            "nombre_en": nombre_en,
             "tipos": tipos[:2],
             "generacion": gen,
             "color": color,

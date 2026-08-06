@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
-import { normalize, pokemonSprite } from "../../data/pokedex";
+import { normalize, pokemonName, pokemonSprite } from "../../data/pokedex";
+import { useLanguage } from "../../i18n/LanguageContext";
 import {
   loadBestStreak,
   loadBestScore,
@@ -38,6 +39,7 @@ interface Props {
 }
 
 export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) {
+  const { lang, t } = useLanguage();
   const [target, setTarget] = useState<PokemonEntry>(() => randomTarget(pokedex));
   const [timeLeft, setTimeLeft] = useState(START_TIME);
   const [phase, setPhase] = useState<Phase>("playing");
@@ -82,7 +84,7 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
     e.preventDefault();
     if (phase !== "playing" || !query.trim()) return;
 
-    if (normalizeGuess(query) === normalizeGuess(target.nombre)) {
+    if (normalizeGuess(query) === normalizeGuess(pokemonName(target, lang))) {
       const newScore = score + 1;
       const newStreak = streak + 1;
       setScore(newScore);
@@ -111,13 +113,13 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
     <div className="sil-game">
       <div className="sil-topbar">
         <span>
-          Puntuación: <strong>{score}</strong>
+          {t.quienEsEsePokemon.score} <strong>{score}</strong>
         </span>
         <span>
-          Racha: <strong>{streak}</strong>
+          {t.quienEsEsePokemon.streak} <strong>{streak}</strong>
         </span>
         <span>
-          Mejor racha: <strong>{recordStreak}</strong>
+          {t.quienEsEsePokemon.bestStreak} <strong>{recordStreak}</strong>
         </span>
       </div>
 
@@ -135,12 +137,13 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
             <img
               key={target.id}
               src={pokemonSprite(target.id)}
-              alt={phase === "reveal" ? target.nombre : "¿Quién es ese Pokémon?"}
+              alt={phase === "reveal" ? pokemonName(target, lang) : t.games.quienEsEsePokemon.title}
               className={`sil-sprite ${phase === "reveal" ? "sil-sprite--revealed" : "sil-sprite--silhouette"}`}
             />
             {phase === "reveal" && (
               <div className="sil-reveal-label">
-                ¡Es {target.nombre}! <span className="sil-bonus">+{BONUS}s</span>
+                {t.quienEsEsePokemon.revealedBang(pokemonName(target, lang))}{" "}
+                <span className="sil-bonus">+{BONUS}s</span>
               </div>
             )}
           </div>
@@ -151,7 +154,7 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Escribe el nombre del Pokémon..."
+              placeholder={t.quienEsEsePokemon.placeholder}
               className={`sil-input ${feedback === "wrong" ? "sil-input--wrong" : ""}`}
               autoComplete="off"
               disabled={phase === "reveal"}
@@ -162,25 +165,21 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
 
       {phase === "gameover" && (
         <div className="sil-gameover">
-          <img src={pokemonSprite(target.id)} alt={target.nombre} className="sil-gameover-sprite" />
-          <h3>¡Se acabó el tiempo!</h3>
-          <p>
-            El último era <strong>{target.nombre}</strong>.
-          </p>
-          <p>
-            Puntuación: <strong>{score}</strong> · Mejor racha de la partida:{" "}
-            <strong>{bestStreakRun}</strong>
-          </p>
-          <p className="sil-gameover-best">
-            Récords: <strong>{recordScore}</strong> puntos · <strong>{recordStreak}</strong> de
-            racha
-          </p>
+          <img
+            src={pokemonSprite(target.id)}
+            alt={pokemonName(target, lang)}
+            className="sil-gameover-sprite"
+          />
+          <h3>{t.quienEsEsePokemon.timeUp}</h3>
+          <p>{t.quienEsEsePokemon.lastWas(pokemonName(target, lang))}</p>
+          <p>{t.quienEsEsePokemon.scoreAndBestStreak(score, bestStreakRun)}</p>
+          <p className="sil-gameover-best">{t.quienEsEsePokemon.records(recordScore, recordStreak)}</p>
           <div className="sil-gameover-actions">
             <button type="button" className="sil-btn sil-btn--primary" onClick={onPlayAgain}>
-              Jugar de nuevo
+              {t.quienEsEsePokemon.playAgain}
             </button>
             <button type="button" className="sil-btn" onClick={onExit}>
-              Volver al menú
+              {t.quienEsEsePokemon.backToMenu}
             </button>
           </div>
         </div>

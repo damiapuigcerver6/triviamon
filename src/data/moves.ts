@@ -1,4 +1,6 @@
-// Nombres en español oficiales, obtenidos de PokeAPI (/move/{slug}).
+import type { Lang } from "./language";
+
+// Nombres oficiales, obtenidos de PokeAPI (/move/{slug}) en espanol e ingles.
 export const MOVE_LABELS: Record<string, string> = {
   "fire-punch": "Puño Fuego",
   "thunder-punch": "Puño Trueno",
@@ -52,6 +54,60 @@ export const MOVE_LABELS: Record<string, string> = {
   "draco-meteor": "Cometa Draco",
 };
 
-export function moveLabel(slug: string): string {
-  return MOVE_LABELS[slug] ?? slug;
+export const MOVE_LABELS_EN: Record<string, string> = {
+  "fire-punch": "Fire Punch",
+  "thunder-punch": "Thunder Punch",
+  "ice-punch": "Ice Punch",
+  "icicle-crash": "Icicle Crash",
+  flamethrower: "Flamethrower",
+  "hydro-pump": "Hydro Pump",
+  thunderbolt: "Thunderbolt",
+  "ice-beam": "Ice Beam",
+  psychic: "Psychic",
+  "shadow-ball": "Shadow Ball",
+  earthquake: "Earthquake",
+  "rock-slide": "Rock Slide",
+  "sludge-bomb": "Sludge Bomb",
+  "poison-jab": "Poison Jab",
+  crunch: "Crunch",
+  bite: "Bite",
+  "dragon-claw": "Dragon Claw",
+  outrage: "Outrage",
+  "leaf-blade": "Leaf Blade",
+  "close-combat": "Close Combat",
+  "iron-head": "Iron Head",
+  "iron-tail": "Iron Tail",
+  "extreme-speed": "Extreme Speed",
+  "double-edge": "Double-Edge",
+  megahorn: "Megahorn",
+  "x-scissor": "X-Scissor",
+  "bug-buzz": "Bug Buzz",
+  "stone-edge": "Stone Edge",
+  "shadow-claw": "Shadow Claw",
+  "night-slash": "Night Slash",
+  "air-slash": "Air Slash",
+  "brave-bird": "Brave Bird",
+  "aqua-tail": "Aqua Tail",
+  "water-pulse": "Water Pulse",
+  moonblast: "Moonblast",
+  "play-rough": "Play Rough",
+  "meteor-mash": "Meteor Mash",
+  "zen-headbutt": "Zen Headbutt",
+  "swords-dance": "Swords Dance",
+  "dragon-dance": "Dragon Dance",
+  recover: "Recover",
+  roost: "Roost",
+  "u-turn": "U-turn",
+  "knock-off": "Knock Off",
+  toxic: "Toxic",
+  "stealth-rock": "Stealth Rock",
+  "will-o-wisp": "Will-O-Wisp",
+  spore: "Spore",
+  "earth-power": "Earth Power",
+  "draco-meteor": "Draco Meteor",
+};
+
+export function moveLabel(slug: string, lang: Lang): string {
+  const table = lang === "en" ? MOVE_LABELS_EN : MOVE_LABELS;
+  return table[slug] ?? slug;
 }

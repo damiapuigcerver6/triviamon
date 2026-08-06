@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { GAMES } from "../games/registry";
 import { randomTypeIcon } from "../data/types";
+import { useLanguage } from "../i18n/LanguageContext";
 import "./Home.css";
 
 export default function Home() {
+  const { t } = useLanguage();
   const [icons] = useState<Record<string, string>>(() => {
     const map: Record<string, string> = {};
     for (const game of GAMES) {
@@ -22,19 +24,20 @@ export default function Home() {
       <section className="game-grid">
         {GAMES.map((game) => {
           const icon = game.icono ?? icons[game.id];
+          const meta = t.games[game.strKey];
           return game.disponible ? (
             <Link to={game.path} className="game-card" key={game.id}>
               <img src={icon} alt="" className="game-card-icon" />
-              <h2>{game.titulo}</h2>
-              <p>{game.descripcion}</p>
-              <span className="game-card-cta">Jugar →</span>
+              <h2>{meta.title}</h2>
+              <p>{meta.description}</p>
+              <span className="game-card-cta">{t.home.play}</span>
             </Link>
           ) : (
             <div className="game-card game-card--soon" key={game.id}>
               <img src={icon} alt="" className="game-card-icon" />
-              <h2>{game.titulo}</h2>
-              <p>{game.descripcion}</p>
-              <span className="game-card-cta">Próximamente</span>
+              <h2>{meta.title}</h2>
+              <p>{meta.description}</p>
+              <span className="game-card-cta">{t.home.comingSoon}</span>
             </div>
           );
         })}

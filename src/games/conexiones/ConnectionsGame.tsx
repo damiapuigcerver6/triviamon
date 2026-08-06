@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
-import { pokemonSprite } from "../../data/pokedex";
+import { pokemonName, pokemonSprite } from "../../data/pokedex";
+import { useLanguage } from "../../i18n/LanguageContext";
 import {
   buildInstance,
   categoryColorIndex,
@@ -52,7 +53,8 @@ export default function ConnectionsGame({
   onSolved,
   onNewPractice,
 }: Props) {
-  const instance = useMemo(() => buildInstance(pokedex, seed), [pokedex, seed]);
+  const { lang, t } = useLanguage();
+  const instance = useMemo(() => buildInstance(pokedex, seed, lang), [pokedex, seed, lang]);
   const { puzzle } = instance;
 
   const groupByPokemonId = useMemo(() => {
@@ -127,7 +129,7 @@ export default function ConnectionsGame({
 
     setShake(true);
     setSelected([]);
-    setMessage(bestCount === 3 ? "¡Solo un Pokémon no encaja!" : null);
+    setMessage(bestCount === 3 ? t.conexiones.oneAway : null);
     setTimeout(() => setShake(false), 500);
     setTimeout(() => setMessage(null), 2500);
     setMistakes((prev) => {
@@ -140,10 +142,10 @@ export default function ConnectionsGame({
   async function handleShare() {
     const idx = new Map(puzzle.groups.map((g, i) => [g.category.id, i]));
     const lines = history.map((attempt) => attempt.map((catId) => GROUP_EMOJI[idx.get(catId)!]).join(""));
-    const text = `Triviamon - Conexiones (${dateLabel})\nFallos: ${mistakes}/${MAX_MISTAKES}\n${lines.join("\n")}`;
+    const text = `Triviamon - ${t.games.conexiones.title} (${dateLabel})\n${t.conexiones.shareMistakesLine(mistakes, MAX_MISTAKES)}\n${lines.join("\n")}`;
     try {
       await navigator.clipboard.writeText(text);
-      alert("¡Resultado copiado! Pégalo donde quieras.");
+      alert(t.common.shareCopied);
     } catch {
       alert(text);
     }
@@ -162,7 +164,7 @@ export default function ConnectionsGame({
             <div key={catId} className={`cx-group cx-group--${colorIdx}`}>
               <span className="cx-group-label">{group.category.label}</span>
               <span className="cx-group-members">
-                {group.members.map((p) => p.nombre).join(", ")}
+                {group.members.map((p) => pokemonName(p, lang)).join(", ")}
               </span>
             </div>
           );
@@ -183,14 +185,14 @@ export default function ConnectionsGame({
                   onClick={() => toggleSelect(id)}
                 >
                   <img src={pokemonSprite(p.id)} alt="" loading="lazy" />
-                  <span>{p.nombre}</span>
+                  <span>{pokemonName(p, lang)}</span>
                 </button>
               );
             })}
           </div>
 
           <div className="cx-controls">
-            <div className="cx-mistakes" aria-label="Fallos restantes">
+            <div className="cx-mistakes" aria-label={t.conexiones.mistakesRemaining}>
               {Array.from({ length: MAX_MISTAKES }).map((_, i) => (
                 <span key={i} className={`cx-mistake-dot ${i < mistakes ? "cx-mistake-dot--used" : ""}`} />
               ))}
@@ -198,10 +200,10 @@ export default function ConnectionsGame({
             {message && <span className="cx-message">{message}</span>}
             <div className="cx-buttons">
               <button type="button" className="cx-btn" onClick={shuffle}>
-                Barajar
+                {t.conexiones.shuffle}
               </button>
               <button type="button" className="cx-btn" onClick={() => setSelected([])} disabled={selected.length === 0}>
-                Deseleccionar
+                {t.conexiones.deselect}
               </button>
               <button
                 type="button"
@@ -209,7 +211,7 @@ export default function ConnectionsGame({
                 onClick={submitGroup}
                 disabled={selected.length !== 4}
               >
-                Comprobar grupo
+                {t.conexiones.checkGroup}
               </button>
             </div>
           </div>
@@ -225,27 +227,27 @@ export default function ConnectionsGame({
                 return (
                   <div key={g.category.id} className={`cx-group cx-group--${colorIdx} cx-group--revealed`}>
                     <span className="cx-group-label">{g.category.label}</span>
-                    <span className="cx-group-members">{g.members.map((p) => p.nombre).join(", ")}</span>
+                    <span className="cx-group-members">
+                      {g.members.map((p) => pokemonName(p, lang)).join(", ")}
+                    </span>
                   </div>
                 );
               })}
             </div>
           )}
 
-          <h3>{allSolved ? "¡Resuelto!" : "Se acabaron los intentos"}</h3>
-          <p>
-            {mistakes}/{MAX_MISTAKES} fallos
-          </p>
+          <h3>{allSolved ? t.conexiones.solvedTitle : t.conexiones.outOfAttemptsTitle}</h3>
+          <p>{t.conexiones.mistakesCount(mistakes, MAX_MISTAKES)}</p>
 
           <div className="cx-end-actions">
             {dateLabel !== undefined && (
               <button type="button" className="cx-btn cx-btn--primary" onClick={handleShare}>
-                Compartir resultado
+                {t.common.shareResult}
               </button>
             )}
             {onNewPractice && (
               <button type="button" className="cx-btn" onClick={onNewPractice}>
-                Nueva partida
+                {t.conexiones.newGame}
               </button>
             )}
           </div>

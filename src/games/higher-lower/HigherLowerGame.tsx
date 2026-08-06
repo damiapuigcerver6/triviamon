@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { PokemonEntry } from "../../data/pokedex";
-import { pokemonSprite } from "../../data/pokedex";
+import { pokemonName, pokemonSprite } from "../../data/pokedex";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { loadBestStreak, saveBestStreakIfHigher, statLabel, statValue, type StatKey } from "./stats";
 import "./HigherLowerGame.css";
 
@@ -54,6 +55,7 @@ function correctSideFor(round: RoundState, statKey: StatKey): Side {
 }
 
 export default function HigherLowerGame({ pokedex, statKey, onChangeStat, onPlayAgain }: Props) {
+  const { lang, t } = useLanguage();
   const [round, setRound] = useState<RoundState>(() => newRound(pokedex, statKey));
   const [phase, setPhase] = useState<Phase>("guessing");
   const [chosenSide, setChosenSide] = useState<Side | null>(null);
@@ -97,12 +99,12 @@ export default function HigherLowerGame({ pokedex, statKey, onChangeStat, onPlay
     <div className="hl-game">
       <div className="hl-topbar">
         <span>
-          Racha: <strong>{streak}</strong>
+          {t.mayorMenor.streak} <strong>{streak}</strong>
         </span>
         <span>
-          Mejor racha: <strong>{best}</strong>
+          {t.mayorMenor.bestStreak} <strong>{best}</strong>
         </span>
-        <span className="hl-stat-name">{statLabel(statKey)}</span>
+        <span className="hl-stat-name">{statLabel(statKey, t)}</span>
       </div>
 
       <div className="hl-split">
@@ -112,8 +114,8 @@ export default function HigherLowerGame({ pokedex, statKey, onChangeStat, onPlay
           onClick={() => handleChoose("left")}
           disabled={phase !== "guessing"}
         >
-          <img src={pokemonSprite(round.left.id)} alt={round.left.nombre} />
-          <span className="hl-name">{round.left.nombre}</span>
+          <img src={pokemonSprite(round.left.id)} alt={pokemonName(round.left, lang)} />
+          <span className="hl-name">{pokemonName(round.left, lang)}</span>
           <span className="hl-value">{statValue(round.left, statKey)}</span>
         </button>
 
@@ -130,28 +132,28 @@ export default function HigherLowerGame({ pokedex, statKey, onChangeStat, onPlay
           onClick={() => handleChoose("right")}
           disabled={phase !== "guessing"}
         >
-          <img src={pokemonSprite(round.right.id)} alt={round.right.nombre} />
-          <span className="hl-name">{round.right.nombre}</span>
+          <img src={pokemonSprite(round.right.id)} alt={pokemonName(round.right, lang)} />
+          <span className="hl-name">{pokemonName(round.right, lang)}</span>
           <span className="hl-value">{phase === "guessing" ? "?" : statValue(round.right, statKey)}</span>
         </button>
       </div>
 
       {phase === "gameover" && (
         <div className="hl-gameover">
-          <h3>Has fallado</h3>
+          <h3>{t.mayorMenor.lostTitle}</h3>
           <p>
-            Racha final: {streak}
-            {isNewBest && " · ¡Nuevo récord!"}
+            {t.mayorMenor.finalStreak(streak)}
+            {isNewBest && ` ${t.mayorMenor.newRecord}`}
           </p>
           <div className="hl-gameover-actions">
             <button type="button" className="hl-btn hl-btn--primary" onClick={onPlayAgain}>
-              Jugar de nuevo
+              {t.mayorMenor.playAgain}
             </button>
             <button type="button" className="hl-btn" onClick={onChangeStat}>
-              Cambiar de estadística
+              {t.mayorMenor.changeStat}
             </button>
             <Link to="/" className="hl-btn">
-              Volver al inicio
+              {t.mayorMenor.backHome}
             </Link>
           </div>
         </div>

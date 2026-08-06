@@ -1,4 +1,5 @@
 import type { PokemonEntry } from "../../data/pokedex";
+import type { Strings } from "../../i18n/strings";
 
 export type StatKey =
   | "vida"
@@ -9,18 +10,30 @@ export type StatKey =
   | "velocidad"
   | "numero_pokedex";
 
-export const STAT_OPTIONS: { key: StatKey; label: string }[] = [
-  { key: "vida", label: "Vida" },
-  { key: "ataque", label: "Ataque" },
-  { key: "defensa", label: "Defensa" },
-  { key: "ataque_especial", label: "Ataque especial" },
-  { key: "defensa_especial", label: "Defensa especial" },
-  { key: "velocidad", label: "Velocidad" },
-  { key: "numero_pokedex", label: "Número de Pokédex" },
+export const STAT_KEYS: StatKey[] = [
+  "vida",
+  "ataque",
+  "defensa",
+  "ataque_especial",
+  "defensa_especial",
+  "velocidad",
+  "numero_pokedex",
 ];
 
-export function statLabel(key: StatKey): string {
-  return STAT_OPTIONS.find((s) => s.key === key)?.label ?? key;
+export function statOptions(t: Strings): { key: StatKey; label: string }[] {
+  return [
+    { key: "vida", label: t.mayorMenor.statHp },
+    { key: "ataque", label: t.mayorMenor.statAttack },
+    { key: "defensa", label: t.mayorMenor.statDefense },
+    { key: "ataque_especial", label: t.mayorMenor.statSpAttack },
+    { key: "defensa_especial", label: t.mayorMenor.statSpDefense },
+    { key: "velocidad", label: t.mayorMenor.statSpeed },
+    { key: "numero_pokedex", label: t.mayorMenor.statPokedexNumber },
+  ];
+}
+
+export function statLabel(key: StatKey, t: Strings): string {
+  return statOptions(t).find((s) => s.key === key)?.label ?? key;
 }
 
 export function statValue(p: PokemonEntry, key: StatKey): number {

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, type PokemonEntry } from "../../data/pokedex";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { loadBestScore, loadBestStreak } from "./stats";
 import SilhouetteGame from "./SilhouetteGame";
 import "./QuienEsEsePokemonPage.css";
 
 export default function QuienEsEsePokemonPage() {
+  const { t } = useLanguage();
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
   const [playing, setPlaying] = useState(false);
   const [session, setSession] = useState(0);
@@ -16,8 +18,8 @@ export default function QuienEsEsePokemonPage() {
   if (!pokedex) {
     return (
       <div className="sil-page">
-        <h1>¿Quién es ese Pokémon?</h1>
-        <p className="sil-loading">Cargando la Pokédex…</p>
+        <h1>{t.games.quienEsEsePokemon.title}</h1>
+        <p className="sil-loading">{t.common.loadingPokedex}</p>
       </div>
     );
   }
@@ -25,17 +27,14 @@ export default function QuienEsEsePokemonPage() {
   if (!playing) {
     return (
       <div className="sil-page">
-        <h1>¿Quién es ese Pokémon?</h1>
-        <p className="sil-subtitle">
-          Adivina el Pokémon a partir de su silueta antes de que se acabe el tiempo. Empiezas con
-          15 segundos y cada acierto te suma 5 más, hasta un máximo de 15.
-        </p>
+        <h1>{t.games.quienEsEsePokemon.title}</h1>
+        <p className="sil-subtitle">{t.quienEsEsePokemon.subtitle}</p>
         <div className="sil-start-stats">
           <span>
-            Mejor puntuación: <strong>{loadBestScore()}</strong>
+            {t.quienEsEsePokemon.bestScore} <strong>{loadBestScore()}</strong>
           </span>
           <span>
-            Mejor racha: <strong>{loadBestStreak()}</strong>
+            {t.quienEsEsePokemon.bestStreak} <strong>{loadBestStreak()}</strong>
           </span>
         </div>
         <button
@@ -46,7 +45,7 @@ export default function QuienEsEsePokemonPage() {
             setPlaying(true);
           }}
         >
-          Empezar
+          {t.quienEsEsePokemon.start}
         </button>
       </div>
     );
@@ -54,7 +53,7 @@ export default function QuienEsEsePokemonPage() {
 
   return (
     <div className="sil-page">
-      <h1>¿Quién es ese Pokémon?</h1>
+      <h1>{t.games.quienEsEsePokemon.title}</h1>
       <SilhouetteGame
         key={session}
         pokedex={pokedex}
