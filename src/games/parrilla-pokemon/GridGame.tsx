@@ -1,8 +1,18 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
 import { normalize, pokemonSprite } from "../../data/pokedex";
+import { typeBadge, type TypeId } from "../../data/types";
 import { buildGridInstance, cellCandidateIds, exampleAnswer } from "./gridBuilder";
+import type { Category } from "../../data/categories";
 import "./GridGame.css";
+
+function CategoryLabel({ category }: { category: Category }) {
+  if (category.id.startsWith("tipo:")) {
+    const typeId = category.id.slice("tipo:".length) as TypeId;
+    return <img src={typeBadge(typeId)} alt={category.label} className="pg-type-badge" />;
+  }
+  return <>{category.label}</>;
+}
 
 interface Props {
   pokedex: PokemonEntry[];
@@ -70,6 +80,7 @@ export default function GridGame({
   const [query, setQuery] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [shakeCell, setShakeCell] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const filledCount = Object.keys(filled).length;
   const complete = filledCount === 9;
@@ -78,6 +89,10 @@ export default function GridGame({
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify({ filled, attempts, revealed }));
   }, [filled, attempts, revealed, storageKey]);
+
+  useEffect(() => {
+    if (selectedCell !== null) inputRef.current?.focus();
+  }, [selectedCell]);
 
   useEffect(() => {
     if (complete) onSolved?.();
@@ -167,13 +182,15 @@ export default function GridGame({
         <div className="pg-cell pg-cell--corner" />
         {puzzle.cols.map((c, i) => (
           <div key={`col-${i}`} className="pg-cell pg-cell--header">
-            {c.label}
+            <CategoryLabel category={c} />
           </div>
         ))}
 
         {puzzle.rows.map((r, rowIdx) => (
           <Fragment key={`row-${rowIdx}`}>
-            <div className="pg-cell pg-cell--header">{r.label}</div>
+            <div className="pg-cell pg-cell--header">
+              <CategoryLabel category={r} />
+            </div>
             {puzzle.cols.map((_, colIdx) => {
               const cellIdx = rowIdx * 3 + colIdx;
               const pokemonId = filled[cellIdx];
@@ -190,13 +207,11 @@ export default function GridGame({
                   onClick={() => selectCell(cellIdx)}
                   disabled={gameOver || pokemon !== undefined}
                 >
-                  {pokemon ? (
+                  {pokemon && (
                     <>
                       <img src={pokemonSprite(pokemon.id)} alt="" loading="lazy" />
                       <span>{pokemon.nombre}</span>
                     </>
-                  ) : (
-                    <span className="pg-cell-plus">+</span>
                   )}
                 </button>
               );
@@ -213,6 +228,7 @@ export default function GridGame({
               : "Escribe un Pokémon que cumpla las dos categorías de esa casilla."}
           </p>
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}

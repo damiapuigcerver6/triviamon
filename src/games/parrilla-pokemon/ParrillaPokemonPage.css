@@ -9,10 +9,6 @@
   margin-bottom: 0.25rem;
 }
 
-.pg-subtitle {
-  color: var(--text-dim);
-}
-
 .pg-loading {
   color: var(--text-dim);
 }

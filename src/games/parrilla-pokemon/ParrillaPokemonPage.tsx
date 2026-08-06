@@ -67,10 +67,6 @@ export default function ParrillaPokemonPage() {
   return (
     <div className="pg-page">
       <h1>Parrilla Pokémon</h1>
-      <p className="pg-subtitle">
-        Cada casilla necesita un Pokémon que cumpla a la vez su categoría de fila y su categoría
-        de columna. No se puede repetir un Pokémon en dos casillas.
-      </p>
 
       <div className="pg-tabs" role="tablist">
         <button

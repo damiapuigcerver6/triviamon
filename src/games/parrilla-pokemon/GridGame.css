@@ -59,6 +59,10 @@
   cursor: default;
 }
 
+.pg-cell--answer:not(:disabled):hover {
+  background: var(--surface-2);
+}
+
 .pg-cell--answer img {
   width: 3.2rem;
   height: 3.2rem;
@@ -70,10 +74,9 @@
   font-size: 0.75rem;
 }
 
-.pg-cell-plus {
-  font-size: 1.6rem;
-  color: var(--text-dim);
-  font-weight: 300;
+.pg-type-badge {
+  width: 5.5rem;
+  height: auto;
 }
 
 .pg-cell--selected {
@@ -236,5 +239,8 @@
   .pg-cell--answer img {
     width: 2.4rem;
     height: 2.4rem;
+  }
+  .pg-type-badge {
+    width: 4rem;
   }
 }
