@@ -66,10 +66,11 @@
   color: var(--text);
 }
 
-.icon-btn--lang {
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+.icon-btn--lang img {
+  width: 1.4rem;
+  height: 1.4rem;
+  object-fit: cover;
+  border-radius: 3px;
 }
 
 .icon-btn:hover {

@@ -355,7 +355,10 @@ export default function Layout() {
             title={t.header.languageTooltip}
             onClick={() => setLang(lang === "es" ? "en" : "es")}
           >
-            {lang === "es" ? "ES" : "EN"}
+            <img
+              src={lang === "es" ? "/brand/flag-es.png" : "/brand/flag-en.png"}
+              alt={lang === "es" ? "Español" : "English"}
+            />
           </button>
 
           {help && (
