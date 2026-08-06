@@ -46,4 +46,13 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/nestball.png",
     disponible: true,
   },
+  {
+    id: "quien-es-ese-pokemon",
+    path: "/juegos/quien-es-ese-pokemon",
+    titulo: "¿Quién es ese Pokémon?",
+    descripcion:
+      "Adivina el Pokémon a partir de su silueta antes de que se acabe el tiempo. ¡Cada acierto suma segundos!",
+    icono: "/brand/pikachu-silueta.png",
+    disponible: true,
+  },
 ];

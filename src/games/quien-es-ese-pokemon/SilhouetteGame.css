@@ -1,0 +1,177 @@
+.sil-game {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.sil-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--text-dim);
+}
+
+.sil-topbar strong {
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.sil-timerbar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.sil-timerbar-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.1s linear, background 0.2s;
+}
+
+.sil-timerbar-fill--danger {
+  background: #e74c3c;
+}
+
+.sil-timeleft {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin: -0.4rem 0 0;
+  color: var(--text-dim);
+}
+
+.sil-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 260px;
+  padding: 1.5rem;
+  /* Fondo claro fijo (no ligado al tema) para que la silueta negra siempre tenga contraste maximo. */
+  background: #eef1f6;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: box-shadow 0.15s;
+}
+
+.sil-stage--wrong {
+  box-shadow: inset 0 0 0 3px #e74c3c;
+  animation: sil-shake 0.4s;
+}
+
+@keyframes sil-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+.sil-sprite {
+  width: 12rem;
+  height: 12rem;
+  object-fit: contain;
+}
+
+.sil-sprite--silhouette {
+  filter: brightness(0);
+}
+
+.sil-sprite--revealed {
+  filter: none;
+}
+
+.sil-reveal-label {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--text);
+  text-align: center;
+}
+
+.sil-bonus {
+  color: #2ecc71;
+  font-weight: 900;
+}
+
+.sil-form {
+  display: flex;
+}
+
+.sil-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.sil-input:disabled {
+  opacity: 0.6;
+}
+
+.sil-input--wrong {
+  border-color: #e74c3c;
+}
+
+.sil-gameover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.sil-gameover-sprite {
+  width: 8rem;
+  height: 8rem;
+  object-fit: contain;
+}
+
+.sil-gameover p {
+  color: var(--text-dim);
+}
+
+.sil-gameover-best {
+  font-size: 0.9rem;
+}
+
+.sil-gameover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.sil-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.sil-btn--primary {
+  background: var(--accent);
+  color: #1a1a1a;
+  border-color: var(--accent);
+}

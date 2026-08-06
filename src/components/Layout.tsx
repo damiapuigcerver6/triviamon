@@ -104,6 +104,23 @@ const HELP_CONTENT: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/quien-es-ese-pokemon": {
+    title: "Cómo jugar: ¿Quién es ese Pokémon?",
+    body: (
+      <>
+        <p>
+          Verás la silueta negra de un Pokémon y tendrás que escribir su nombre. Empiezas con 15
+          segundos en el reloj: cada acierto te suma 5 segundos más, hasta un máximo de 15.
+        </p>
+        <p>
+          No hay opciones entre las que elegir, así que vale cualquier forma de escribir el
+          nombre (mayúsculas, acentos o guiones no importan). Cada acierto suma un punto y
+          aumenta tu racha; si fallas, la racha se reinicia pero el reloj sigue corriendo. La
+          partida termina cuando el tiempo llega a cero.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
