@@ -25,7 +25,7 @@ export const GAMES: GameMeta[] = [
     titulo: "Detective Pokémon",
     descripcion:
       "Adivina el Pokémon comparando tipo, generación, evolución, color y más. Reto diario o práctica libre.",
-    iconoAleatorio: true,
+    icono: "/brand/detective-lupa.png",
     disponible: true,
   },
   {
