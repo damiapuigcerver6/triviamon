@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { recordDailyWin } from "../../data/stats";
 import GuessGame from "./GuessGame";
-import "./QuienEsEsePokemonPage.css";
+import "./DetectivePokemonPage.css";
 
 type Modo = "diario" | "practica";
 
-const PRACTICE_TARGET_KEY = "triviamon:qp:practica:target";
-const PRACTICE_GUESSES_KEY = "triviamon:qp:practica:guesses";
+const PRACTICE_TARGET_KEY = "triviamon:dp:practica:target";
+const PRACTICE_GUESSES_KEY = "triviamon:dp:practica:guesses";
 
 function randomTarget(list: PokemonEntry[]): PokemonEntry {
   return list[Math.floor(Math.random() * list.length)];
@@ -34,7 +34,7 @@ function formatDateLabel(dateKey: string): string {
   return `${d}/${m}/${y}`;
 }
 
-export default function QuienEsEsePokemonPage() {
+export default function DetectivePokemonPage() {
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
@@ -62,7 +62,7 @@ export default function QuienEsEsePokemonPage() {
   if (!pokedex) {
     return (
       <div className="qp-page">
-        <h1>¿Quién es ese Pokémon?</h1>
+        <h1>Detective Pokémon</h1>
         <p className="qp-loading">Cargando la Pokédex…</p>
       </div>
     );
@@ -73,7 +73,7 @@ export default function QuienEsEsePokemonPage() {
 
   return (
     <div className="qp-page">
-      <h1>¿Quién es ese Pokémon?</h1>
+      <h1>Detective Pokémon</h1>
 
       <div className="qp-tabs" role="tablist">
         <button
@@ -97,9 +97,9 @@ export default function QuienEsEsePokemonPage() {
           key={dateKey}
           pokedex={pokedex}
           target={dailyTarget}
-          storageKey={`triviamon:qp:diario:${dateKey}`}
+          storageKey={`triviamon:dp:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onWin={() => recordDailyWin("quien-es-ese-pokemon", dateKey)}
+          onWin={() => recordDailyWin("detective-pokemon", dateKey)}
         />
       </div>
 

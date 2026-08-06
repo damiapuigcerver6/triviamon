@@ -77,5 +77,5 @@ export function shareGrid(results: GuessResult[], dateLabel: string): string {
     ATTRIBUTE_ORDER.map((k) => EMOJI[r.attrs[k].match]).join(""),
   );
   const attempts = results.length;
-  return `Triviamon - ¿Quién es ese Pokémon? (${dateLabel})\nIntentos: ${attempts}\n${lines.join("\n")}`;
+  return `Triviamon - Detective Pokémon (${dateLabel})\nIntentos: ${attempts}\n${lines.join("\n")}`;
 }

@@ -52,8 +52,8 @@ const HELP_CONTENT: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
-  "/juegos/quien-es-ese-pokemon": {
-    title: "Cómo jugar: ¿Quién es ese Pokémon?",
+  "/juegos/detective-pokemon": {
+    title: "Cómo jugar: Detective Pokémon",
     body: (
       <>
         <p>
@@ -136,7 +136,7 @@ export default function Layout() {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  const guessStats = loadStats("quien-es-ese-pokemon");
+  const guessStats = loadStats("detective-pokemon");
   const connectionsStats = loadStats("conexiones");
 
   return (
@@ -229,7 +229,7 @@ export default function Layout() {
 
       {statsOpen && (
         <Modal title="Estadísticas" onClose={() => setStatsOpen(false)}>
-          <StatsSection title="¿Quién es ese Pokémon?" stats={guessStats} />
+          <StatsSection title="Detective Pokémon" stats={guessStats} />
           <div style={{ height: "1rem" }} />
           <StatsSection title="Conexiones" stats={connectionsStats} />
         </Modal>

@@ -20,12 +20,12 @@ export const GAMES: GameMeta[] = [
     disponible: true,
   },
   {
-    id: "quien-es-ese-pokemon",
-    path: "/juegos/quien-es-ese-pokemon",
-    titulo: "¿Quién es ese Pokémon?",
+    id: "detective-pokemon",
+    path: "/juegos/detective-pokemon",
+    titulo: "Detective Pokémon",
     descripcion:
       "Adivina el Pokémon comparando tipo, generación, evolución, color y más. Reto diario o práctica libre.",
-    icono: "/brand/pikachu-silueta.png",
+    iconoAleatorio: true,
     disponible: true,
   },
   {
