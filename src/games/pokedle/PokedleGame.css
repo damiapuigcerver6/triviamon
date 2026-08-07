@@ -79,6 +79,12 @@
   color: var(--text);
 }
 
+.pk-tile--hint {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  color: #fff;
+}
+
 .pk-row--shake {
   animation: pk-shake 0.4s;
 }

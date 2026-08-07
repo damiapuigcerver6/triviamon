@@ -116,6 +116,7 @@ export interface Strings {
     statSpDefense: string;
     statSpeed: string;
     statPokedexNumber: string;
+    statBstTotal: string;
   };
   quienEsEsePokemon: {
     subtitle: string;
@@ -342,6 +343,7 @@ export const STRINGS_ES: Strings = {
     statSpDefense: "Defensa especial",
     statSpeed: "Velocidad",
     statPokedexNumber: "Número de Pokédex",
+    statBstTotal: "Suma total de estadísticas (BST)",
   },
   quienEsEsePokemon: {
     subtitle:
@@ -578,6 +580,7 @@ export const STRINGS_EN: Strings = {
     statSpDefense: "Sp. Defense",
     statSpeed: "Speed",
     statPokedexNumber: "Pokédex Number",
+    statBstTotal: "Total base stats (BST)",
   },
   quienEsEsePokemon: {
     subtitle:

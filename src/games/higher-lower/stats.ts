@@ -8,7 +8,8 @@ export type StatKey =
   | "ataque_especial"
   | "defensa_especial"
   | "velocidad"
-  | "numero_pokedex";
+  | "numero_pokedex"
+  | "bst_total";
 
 export const STAT_KEYS: StatKey[] = [
   "vida",
@@ -18,6 +19,7 @@ export const STAT_KEYS: StatKey[] = [
   "defensa_especial",
   "velocidad",
   "numero_pokedex",
+  "bst_total",
 ];
 
 export function statOptions(t: Strings): { key: StatKey; label: string }[] {
@@ -29,6 +31,7 @@ export function statOptions(t: Strings): { key: StatKey; label: string }[] {
     { key: "defensa_especial", label: t.mayorMenor.statSpDefense },
     { key: "velocidad", label: t.mayorMenor.statSpeed },
     { key: "numero_pokedex", label: t.mayorMenor.statPokedexNumber },
+    { key: "bst_total", label: t.mayorMenor.statBstTotal },
   ];
 }
 
@@ -37,6 +40,9 @@ export function statLabel(key: StatKey, t: Strings): string {
 }
 
 export function statValue(p: PokemonEntry, key: StatKey): number {
+  if (key === "bst_total") {
+    return p.vida + p.ataque + p.defensa + p.ataque_especial + p.defensa_especial + p.velocidad;
+  }
   return p[key];
 }
 

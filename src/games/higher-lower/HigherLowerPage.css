@@ -7,10 +7,12 @@
 .hl-page h1 {
   font-size: 1.8rem;
   margin-bottom: 0.25rem;
+  text-align: center;
 }
 
 .hl-subtitle {
   color: var(--text-dim);
+  text-align: center;
 }
 
 .hl-loading {
@@ -19,9 +21,22 @@
 
 .hl-stat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(4, minmax(160px, 200px));
+  justify-content: center;
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .hl-stat-grid {
+    grid-template-columns: repeat(2, minmax(140px, 200px));
+  }
+}
+
+@media (max-width: 420px) {
+  .hl-stat-grid {
+    grid-template-columns: repeat(1, minmax(0, 220px));
+  }
 }
 
 .hl-stat-card {

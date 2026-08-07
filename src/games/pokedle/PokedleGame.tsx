@@ -61,6 +61,28 @@ export default function PokedleGame({
   const [error, setError] = useState<string | null>(null);
   const hiddenInputRef = useRef<HTMLInputElement>(null);
 
+  function findColdHintIndex(ids: number[]): number | null {
+    if (ids.length < 2) return null;
+    for (let i = 0; i < answerLength; i++) {
+      const neverInformative = ids.every((id) => {
+        const p = pokedexById.get(id);
+        if (!p) return true;
+        return compareGuess(pokemonName(p, lang), answerName)[i] === "absent";
+      });
+      if (neverInformative) return i;
+    }
+    return null;
+  }
+
+  const [hintIndex, setHintIndex] = useState<number | null>(() => findColdHintIndex(initial.guessIds));
+
+  useEffect(() => {
+    if (hintIndex !== null || guessIds.length < 2) return;
+    const idx = findColdHintIndex(guessIds);
+    if (idx !== null) setHintIndex(idx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [guessIds, hintIndex]);
+
   const gameOver = status !== "playing";
 
   useEffect(() => {
@@ -176,16 +198,24 @@ export default function PokedleGame({
 
             const isActive = !gameOver && rowIdx === guessIds.length;
             const typedLetters = isActive ? [...currentGuess] : [];
+            const answerLetters = [...letterWord(answerName)];
             return (
               <div className={`pk-row ${isActive && shake ? "pk-row--shake" : ""}`} key={rowIdx}>
-                {Array.from({ length: answerLength }, (_, i) => (
-                  <span
-                    key={i}
-                    className={`pk-tile ${typedLetters[i] ? "pk-tile--typed" : "pk-tile--empty"}`}
-                  >
-                    {typedLetters[i]?.toUpperCase() ?? ""}
-                  </span>
-                ))}
+                {Array.from({ length: answerLength }, (_, i) => {
+                  const typedChar = typedLetters[i];
+                  const isHintCell = !typedChar && hintIndex === i;
+                  const tileClass = typedChar
+                    ? "pk-tile--typed"
+                    : isHintCell
+                      ? "pk-tile--hint"
+                      : "pk-tile--empty";
+                  const display = typedChar?.toUpperCase() ?? (isHintCell ? answerLetters[i].toUpperCase() : "");
+                  return (
+                    <span key={i} className={`pk-tile ${tileClass}`}>
+                      {display}
+                    </span>
+                  );
+                })}
               </div>
             );
           })}
