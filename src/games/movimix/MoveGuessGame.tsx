@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
 import { normalize, pokemonName, pokemonSprite } from "../../data/pokedex";
-import { moveLabel } from "../../data/moves";
 import { typeIcon, type TypeId } from "../../data/types";
+import { moveMetaName, categoryIcon, type MoveMeta } from "../../data/moveMeta";
 import { useLanguage } from "../../i18n/LanguageContext";
 import "./MoveGuessGame.css";
 
@@ -11,6 +11,7 @@ type Status = "playing" | "won" | "lost";
 interface Props {
   pokedex: PokemonEntry[];
   target: PokemonEntry;
+  moveMeta: Record<string, MoveMeta>;
   storageKey?: string;
   /** Si se define, es el modo reto diario: muestra el boton de compartir con esta fecha. */
   dateLabel?: string;
@@ -49,6 +50,7 @@ function baseFormOf(target: PokemonEntry, pokedex: PokemonEntry[]): PokemonEntry
 export default function MoveGuessGame({
   pokedex,
   target,
+  moveMeta,
   storageKey,
   dateLabel,
   onNewPractice,
@@ -62,6 +64,10 @@ export default function MoveGuessGame({
 
   const finished = status !== "playing";
   const base = useMemo(() => baseFormOf(target, pokedex), [target, pokedex]);
+  const moveRows = useMemo(
+    () => [...target.movimientos_nivel].sort((a, b) => a.nivel - b.nivel),
+    [target],
+  );
 
   useEffect(() => {
     if (!storageKey) return;
@@ -128,12 +134,34 @@ export default function MoveGuessGame({
     <div className="mv-game">
       <div className="mv-moves">
         <span className="mv-moves-label">{t.movimix.movesLabel}</span>
-        <div className="mv-moves-list">
-          {target.movimientos.map((slug) => (
-            <span className="mv-move-chip" key={slug}>
-              {moveLabel(slug, lang)}
-            </span>
-          ))}
+        <div className="mv-table-wrap">
+          <table className="mv-table">
+            <thead>
+              <tr>
+                <th>{t.movimix.tableLevel}</th>
+                <th>{t.movimix.tableMove}</th>
+                <th>{t.movimix.tableType}</th>
+                <th>{t.movimix.tableCategory}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {moveRows.map((row) => {
+                const meta = moveMeta[row.move];
+                return (
+                  <tr key={row.move}>
+                    <td className="mv-table-level">{row.nivel === 0 ? t.movimix.evoLevel : row.nivel}</td>
+                    <td className="mv-table-move">{meta ? moveMetaName(meta, lang) : row.move}</td>
+                    <td className="mv-table-icon">
+                      {meta && <img src={typeIcon(meta.tipo)} alt={meta.tipo} />}
+                    </td>
+                    <td className="mv-table-icon">
+                      {meta && <img src={categoryIcon(meta.categoria)} alt={meta.categoria} />}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
 

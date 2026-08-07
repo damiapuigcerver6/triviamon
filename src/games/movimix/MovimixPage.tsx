@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
+import { loadMoveMeta, type MoveMeta } from "../../data/moveMeta";
 import { recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
@@ -39,12 +40,14 @@ function formatDateLabel(dateKey: string): string {
 export default function MovimixPage() {
   const { t } = useLanguage();
   const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
+  const [moveMeta, setMoveMeta] = useState<Record<string, MoveMeta> | null>(null);
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
+    loadMoveMeta().then(setMoveMeta);
   }, []);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function MovimixPage() {
     setPracticeRound((n) => n + 1);
   }
 
-  if (!pokedex) {
+  if (!pokedex || !moveMeta) {
     return (
       <div className="mv-page">
         <h1>{t.games.movimix.title}</h1>
@@ -101,6 +104,7 @@ export default function MovimixPage() {
           key={dateKey}
           pokedex={pokedex}
           target={dailyTarget}
+          moveMeta={moveMeta}
           storageKey={`triviamon:mv:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
           onWin={() => recordDailyWin("movimix", dateKey)}
@@ -113,6 +117,7 @@ export default function MovimixPage() {
             key={practiceRound}
             pokedex={pokedex}
             target={practiceTarget}
+            moveMeta={moveMeta}
             storageKey={PRACTICE_GUESSES_KEY}
             onNewPractice={handleNewPractice}
           />

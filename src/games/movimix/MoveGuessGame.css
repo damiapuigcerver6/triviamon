@@ -7,11 +7,7 @@
 .mv-moves {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  gap: 0.6rem;
 }
 
 .mv-moves-label {
@@ -20,19 +16,64 @@
   color: var(--text-dim);
 }
 
-.mv-moves-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+.mv-table-wrap {
+  max-height: 22rem;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
-.mv-move-chip {
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
+.mv-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.mv-table th {
+  position: sticky;
+  top: 0;
   background: var(--surface-2);
-  border: 1px solid var(--border);
-  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.mv-table td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.mv-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mv-table-level {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dim);
+  width: 3.5rem;
+}
+
+.mv-table-move {
   font-weight: 600;
+}
+
+.mv-table-icon {
+  width: 2.4rem;
+}
+
+.mv-table-icon img {
+  width: 1.7rem;
+  height: 1.7rem;
+  display: block;
 }
 
 .mv-search {

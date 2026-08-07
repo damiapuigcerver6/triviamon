@@ -18,10 +18,25 @@ TOTAL_SPECIES = 1025
 OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "public", "data", "pokemon.json")
 
 REGIONAL_SUFFIXES = {
-    "-alola": ("Alola", 7),
-    "-galar": ("Galar", 8),
-    "-hisui": ("Hisui", 8),
-    "-paldea": ("Paldea", 9),
+    "-alola": ("Alola", 7, "sun-moon"),
+    "-galar": ("Galar", 8, "sword-shield"),
+    "-hisui": ("Hisui", 8, "legends-arceus"),
+    "-paldea": ("Paldea", 9, "scarlet-violet"),
+}
+
+# Grupo de versiones "de referencia" para el moveset por nivel de cada generacion
+# (el juego original en el que debuto esa generacion). Las formas regionales usan
+# su propio grupo en REGIONAL_SUFFIXES en su lugar.
+GENERATION_VERSION_GROUP = {
+    1: "red-blue",
+    2: "gold-silver",
+    3: "ruby-sapphire",
+    4: "diamond-pearl",
+    5: "black-white",
+    6: "x-y",
+    7: "sun-moon",
+    8: "sword-shield",
+    9: "scarlet-violet",
 }
 
 TYPE_ES = {
@@ -170,6 +185,32 @@ def get_chain_map(chain_url):
     return out
 
 
+def extract_level_moves(poke, version_group):
+    """
+    Agrupa los movimientos que se aprenden por nivel en cada grupo de versiones
+    donde aparecen. Si el grupo de versiones "de referencia" (el juego de debut
+    de esta forma) no tiene datos, usa el primer grupo disponible como reserva
+    (puede pasar en formas muy nuevas o con huecos en PokeAPI).
+    """
+    by_vg = {}
+    for m in poke["moves"]:
+        slug = m["move"]["name"]
+        for vgd in m["version_group_details"]:
+            if vgd["move_learn_method"]["name"] != "level-up":
+                continue
+            vg = vgd["version_group"]["name"]
+            lvl = vgd["level_learned_at"]
+            bucket = by_vg.setdefault(vg, {})
+            if slug not in bucket or lvl < bucket[slug]:
+                bucket[slug] = lvl
+
+    chosen = by_vg.get(version_group) or (next(iter(by_vg.values())) if by_vg else {})
+    return sorted(
+        ({"move": slug, "nivel": lvl} for slug, lvl in chosen.items()),
+        key=lambda x: (x["nivel"], x["move"]),
+    )
+
+
 def es_name(names, fallback):
     for n in names:
         if n["language"]["name"] == "es":
@@ -210,9 +251,9 @@ def fetch_species(species_id):
             continue
         if "totem" in name:
             continue  # formas totem (batalla especial), no son un Pokemon distinto guessable
-        for suffix, (label, gen_override) in REGIONAL_SUFFIXES.items():
+        for suffix, (label, gen_override, vg_override) in REGIONAL_SUFFIXES.items():
             if name.endswith(suffix):
-                wanted.append((name, (label, gen_override)))
+                wanted.append((name, (label, gen_override, vg_override)))
                 break
 
     entries = []
@@ -236,6 +277,8 @@ def fetch_species(species_id):
         nombre = base_name if region is None else f"{base_name} de {region[0]}"
         nombre_en = base_name_en if region is None else f"{REGIONAL_ADJ_EN[region[0]]} {base_name_en}"
         gen = generation if region is None else region[1]
+        version_group = GENERATION_VERSION_GROUP[generation] if region is None else region[2]
+        movimientos_nivel = extract_level_moves(poke, version_group)
 
         entries.append({
             "id": poke["id"],
@@ -258,6 +301,7 @@ def fetch_species(species_id):
             "defensa_especial": stats.get("defensa_especial", 0),
             "velocidad": stats.get("velocidad", 0),
             "movimientos": movimientos,
+            "movimientos_nivel": movimientos_nivel,
         })
     return entries
 

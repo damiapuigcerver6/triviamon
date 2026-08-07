@@ -198,6 +198,11 @@ export interface Strings {
   movimix: {
     placeholder: string;
     movesLabel: string;
+    tableLevel: string;
+    tableMove: string;
+    tableType: string;
+    tableCategory: string;
+    evoLevel: string;
     hintLabel: string;
     previousGuessesLabel: string;
     giveUp: string;
@@ -452,7 +457,12 @@ export const STRINGS_ES: Strings = {
   },
   movimix: {
     placeholder: "Escribe un Pokémon…",
-    movesLabel: "Puede aprender:",
+    movesLabel: "Movimientos por nivel:",
+    tableLevel: "Nivel",
+    tableMove: "Movimiento",
+    tableType: "Tipo",
+    tableCategory: "Categoría",
+    evoLevel: "Evo.",
     hintLabel: "Pista, tipo:",
     previousGuessesLabel: "Intentos:",
     giveUp: "Rendirse",
@@ -706,7 +716,12 @@ export const STRINGS_EN: Strings = {
   },
   movimix: {
     placeholder: "Type a Pokémon…",
-    movesLabel: "Can learn:",
+    movesLabel: "Moves by level:",
+    tableLevel: "Level",
+    tableMove: "Move",
+    tableType: "Type",
+    tableCategory: "Category",
+    evoLevel: "Evo.",
     hintLabel: "Hint, type:",
     previousGuessesLabel: "Guesses:",
     giveUp: "Give up",

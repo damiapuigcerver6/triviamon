@@ -21,7 +21,8 @@ export interface PokemonEntry {
   ataque_especial: number;
   defensa_especial: number;
   velocidad: number;
-  movimientos: string[]; // slugs en ingles de movimientos seleccionados que puede aprender por nivel
+  movimientos: string[]; // slugs en ingles de una seleccion curada de movimientos que puede aprender (por cualquier metodo)
+  movimientos_nivel: { move: string; nivel: number }[]; // moveset real por nivel del juego de debut, ordenado ascendente
 }
 
 let cache: PokemonEntry[] | null = null;
