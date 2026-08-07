@@ -32,6 +32,13 @@ function randomTarget(list: PokemonEntry[], excludeId?: number): PokemonEntry {
   return pick;
 }
 
+// Las formas regionales usan id >= 10000 (convencion de PokeAPI); su forma base
+// comparte numero_pokedex con id < 10000. Adivinar solo el nombre base tambien cuenta.
+function baseFormOf(target: PokemonEntry, pokedex: PokemonEntry[]): PokemonEntry | null {
+  if (target.id < 10000) return null;
+  return pokedex.find((p) => p.id < 10000 && p.numero_pokedex === target.numero_pokedex) ?? null;
+}
+
 interface Props {
   pokedex: PokemonEntry[];
   onPlayAgain: () => void;
@@ -84,7 +91,12 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
     e.preventDefault();
     if (phase !== "playing" || !query.trim()) return;
 
-    if (normalizeGuess(query) === normalizeGuess(pokemonName(target, lang))) {
+    const guess = normalizeGuess(query);
+    const base = baseFormOf(target, pokedex);
+    const isCorrect =
+      guess === normalizeGuess(pokemonName(target, lang)) || (base !== null && guess === normalizeGuess(pokemonName(base, lang)));
+
+    if (isCorrect) {
       const newScore = score + 1;
       const newStreak = streak + 1;
       setScore(newScore);
