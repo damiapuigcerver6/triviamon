@@ -151,7 +151,10 @@ export interface Strings {
     shareMistakesLine: (m: number) => string;
   };
   cookieBanner: {
-    message: string;
+    title: string;
+    purposeAds: string;
+    purposeStorage: string;
+    detail: string;
     accept: string;
     reject: string;
     learnMore: string;
@@ -376,10 +379,13 @@ export const STRINGS_ES: Strings = {
     shareMistakesLine: (m) => `Fallos: ${m}`,
   },
   cookieBanner: {
-    message:
-      "Usamos cookies para publicidad (incluida publicidad personalizada) una vez se activen los anuncios. El resto de datos de juego se guardan solo en tu navegador.",
+    title: "Triviamon te pide tu consentimiento para usar tus datos personales para:",
+    purposeAds: "Publicidad personalizada y medición de anuncios",
+    purposeStorage: "Guardar y/o acceder a información en tu dispositivo",
+    detail:
+      "Usamos Google AdSense para mostrar anuncios; Google puede usar cookies para ofrecer publicidad personalizada. El resto de datos (progreso de partidas, preferencias) se guardan solo en tu navegador. Más información en policies.google.com/technologies/ads.",
     accept: "Aceptar",
-    reject: "Rechazar",
+    reject: "No aceptar",
     learnMore: "Más información",
   },
   privacy: {
@@ -609,10 +615,13 @@ export const STRINGS_EN: Strings = {
     shareMistakesLine: (m) => `Mistakes: ${m}`,
   },
   cookieBanner: {
-    message:
-      "We use cookies for advertising (including personalized ads) once ads are enabled. All other game data stays only in your browser.",
+    title: "Triviamon asks for your consent to use your personal data to:",
+    purposeAds: "Personalised advertising and ad measurement",
+    purposeStorage: "Store and/or access information on your device",
+    detail:
+      "We use Google AdSense to show ads; Google may use cookies to serve personalized ads. Everything else (game progress, preferences) stays only in your browser. Learn more at policies.google.com/technologies/ads.",
     accept: "Accept",
-    reject: "Reject",
+    reject: "Do not consent",
     learnMore: "Learn more",
   },
   privacy: {
