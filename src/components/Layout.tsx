@@ -201,6 +201,21 @@ const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/emojidex": {
+    title: "Cómo jugar: Emojidex",
+    body: (
+      <>
+        <p>
+          Un par de emojis describen a un Pokémon oculto. Escribe Pokémon (con autocompletado)
+          hasta acertar de quién se trata.
+        </p>
+        <p>
+          Cada fallo a partir del segundo revela una pista nueva (tipo, generación y primera letra
+          del nombre). Puedes rendirte en cualquier momento para ver la solución.
+        </p>
+      </>
+    ),
+  },
 };
 
 const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
@@ -356,6 +371,21 @@ const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/emojidex": {
+    title: "How to play: Emojidex",
+    body: (
+      <>
+        <p>
+          A couple of emoji describe a hidden Pokémon. Type Pokémon names (with autocomplete)
+          until you guess who it is.
+        </p>
+        <p>
+          Every miss after the second one reveals a new hint (type, generation and the first
+          letter of the name). You can give up at any time to see the answer.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
@@ -395,6 +425,7 @@ export default function Layout() {
   const pokedleStats = loadStats("pokedle");
   const movimixStats = loadStats("movimix");
   const debilidexStats = loadStats("debilidex");
+  const emojidexStats = loadStats("emojidex");
 
   return (
     <div className="layout">
@@ -516,6 +547,8 @@ export default function Layout() {
           <StatsSection title={t.games.movimix.title} stats={movimixStats} t={t} />
           <div style={{ height: "1rem" }} />
           <StatsSection title={t.games.debilidex.title} stats={debilidexStats} t={t} />
+          <div style={{ height: "1rem" }} />
+          <StatsSection title={t.games.emojidex.title} stats={emojidexStats} t={t} />
         </Modal>
       )}
 

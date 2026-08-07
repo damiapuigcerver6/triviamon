@@ -1,0 +1,225 @@
+import { useEffect, useMemo, useState } from "react";
+import type { PokemonEntry } from "../../data/pokedex";
+import { normalize, pokemonName, pokemonSprite } from "../../data/pokedex";
+import { useLanguage } from "../../i18n/LanguageContext";
+import "./EmojiGuessGame.css";
+
+type Status = "playing" | "won" | "lost";
+
+interface Props {
+  pokedex: PokemonEntry[];
+  target: PokemonEntry;
+  emojis: string;
+  storageKey?: string;
+  /** Si se define, es el modo reto diario: muestra el boton de compartir con esta fecha. */
+  dateLabel?: string;
+  onNewPractice?: () => void;
+  /** Se llama cuando la partida pasa a estado "ganado". */
+  onWin?: () => void;
+}
+
+interface StoredState {
+  guessedIds: number[];
+  status: Status;
+}
+
+function loadStored(storageKey: string | undefined): StoredState {
+  if (!storageKey) return { guessedIds: [], status: "playing" };
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return { guessedIds: [], status: "playing" };
+    const parsed = JSON.parse(raw);
+    return {
+      guessedIds: Array.isArray(parsed.guessedIds) ? parsed.guessedIds : [],
+      status: parsed.status === "won" || parsed.status === "lost" ? parsed.status : "playing",
+    };
+  } catch {
+    return { guessedIds: [], status: "playing" };
+  }
+}
+
+export default function EmojiGuessGame({
+  pokedex,
+  target,
+  emojis,
+  storageKey,
+  dateLabel,
+  onNewPractice,
+  onWin,
+}: Props) {
+  const { lang, t } = useLanguage();
+  const stored = useMemo(() => loadStored(storageKey), [storageKey]);
+  const [query, setQuery] = useState("");
+  const [guessedIds, setGuessedIds] = useState<number[]>(stored.guessedIds);
+  const [status, setStatus] = useState<Status>(stored.status);
+  const [flash, setFlash] = useState<"wrong" | null>(null);
+
+  const finished = status !== "playing";
+
+  useEffect(() => {
+    if (!storageKey) return;
+    localStorage.setItem(storageKey, JSON.stringify({ guessedIds, status }));
+  }, [guessedIds, status, storageKey]);
+
+  useEffect(() => {
+    if (status === "won") onWin?.();
+  }, [status, onWin]);
+
+  const guessedSet = useMemo(() => new Set(guessedIds), [guessedIds]);
+
+  const suggestions = useMemo(() => {
+    const q = normalize(query);
+    if (!q) return [];
+    return pokedex
+      .filter((p) => !guessedSet.has(p.id) && normalize(pokemonName(p, lang)).includes(q))
+      .slice(0, 8);
+  }, [query, pokedex, guessedSet, lang]);
+
+  function isCorrect(p: PokemonEntry): boolean {
+    return p.id === target.id;
+  }
+
+  function submitGuess(p: PokemonEntry) {
+    if (finished || guessedSet.has(p.id)) return;
+    setGuessedIds((prev) => [p.id, ...prev]);
+    setQuery("");
+    if (isCorrect(p)) {
+      setStatus("won");
+    } else {
+      setFlash("wrong");
+      setTimeout(() => setFlash(null), 400);
+    }
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && suggestions.length > 0) {
+      submitGuess(suggestions[0]);
+    }
+  }
+
+  function handleGiveUp() {
+    setStatus("lost");
+  }
+
+  async function handleShare() {
+    const resultLine =
+      status === "won"
+        ? t.emojidex.shareWon(guessedIds.length)
+        : t.emojidex.shareLost(pokemonName(target, lang));
+    const text = `Triviamon - ${t.games.emojidex.title}${dateLabel ? ` (${dateLabel})` : ""}\n${emojis}\n${resultLine}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(t.common.shareCopied);
+    } catch {
+      alert(text);
+    }
+  }
+
+  const wrongGuesses = guessedIds
+    .map((id) => pokedex.find((p) => p.id === id))
+    .filter((p): p is PokemonEntry => !!p && !isCorrect(p));
+
+  const hintLevel = Math.min(3, Math.max(0, wrongGuesses.length - 1));
+  const showHint = !finished && hintLevel > 0;
+  const targetName = pokemonName(target, lang);
+
+  return (
+    <div className="ej-game">
+      <div className={`ej-stage ${flash === "wrong" ? "ej-stage--wrong" : ""} ${status === "won" ? "ej-stage--won" : ""}`}>
+        <span className="ej-emoji-display">{emojis}</span>
+      </div>
+
+      {!finished && (
+        <div className="ej-search">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={t.emojidex.placeholder}
+            className="ej-input"
+            autoComplete="off"
+          />
+          {suggestions.length > 0 && (
+            <ul className="ej-suggestions">
+              {suggestions.map((p) => (
+                <li key={p.id}>
+                  <button type="button" onClick={() => submitGuess(p)}>
+                    <img src={pokemonSprite(p.id)} alt="" loading="lazy" />
+                    <span>{pokemonName(p, lang)}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {!finished && (
+        <div className="ej-actions-row">
+          {showHint && (
+            <div className="ej-hint">
+              <span className="ej-hint-title">{t.emojidex.hintTitle}</span>
+              <div className="ej-hint-row">
+                <span>{t.emojidex.hintTypeLabel}</span>
+                <span>{target.tipos.filter(Boolean).join(" / ")}</span>
+              </div>
+              {hintLevel >= 2 && (
+                <div className="ej-hint-row">
+                  <span>{t.emojidex.hintGenLabel}</span>
+                  <span>{target.generacion}</span>
+                </div>
+              )}
+              {hintLevel >= 3 && (
+                <div className="ej-hint-row">
+                  <span>{t.emojidex.hintFirstLetterLabel}</span>
+                  <span>{targetName.charAt(0).toUpperCase()}</span>
+                </div>
+              )}
+            </div>
+          )}
+          <button type="button" className="ej-btn ej-btn--danger" onClick={handleGiveUp}>
+            {t.emojidex.giveUp}
+          </button>
+        </div>
+      )}
+
+      {finished && (
+        <div className="ej-finish">
+          <img src={pokemonSprite(target.id)} alt={targetName} />
+          {status === "won" ? (
+            <>
+              <h3>{t.emojidex.wonTitle(targetName)}</h3>
+              <p>{t.emojidex.guessedInAttempts(guessedIds.length)}</p>
+            </>
+          ) : (
+            <h3>{t.emojidex.lostTitle(targetName)}</h3>
+          )}
+          <div className="ej-finish-actions">
+            <button type="button" className="ej-btn ej-btn--primary" onClick={handleShare}>
+              {t.common.shareResult}
+            </button>
+            {onNewPractice && (
+              <button type="button" className="ej-btn" onClick={onNewPractice}>
+                {t.emojidex.anotherPokemon}
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {wrongGuesses.length > 0 && (
+        <div className="ej-guesses">
+          <span className="ej-guesses-label">{t.emojidex.previousGuessesLabel}</span>
+          <div className="ej-guesses-list">
+            {wrongGuesses.map((p) => (
+              <span className="ej-guess-chip" key={p.id}>
+                {pokemonName(p, lang)}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

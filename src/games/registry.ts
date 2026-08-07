@@ -75,4 +75,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/debilidex-icono.png",
     disponible: true,
   },
+  {
+    id: "emojidex",
+    path: "/juegos/emojidex",
+    strKey: "emojidex",
+    icono: "/brand/emojidex-icono.png",
+    disponible: true,
+  },
 ];

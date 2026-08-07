@@ -11,6 +11,7 @@ import ParrillaPokemonPage from "./games/parrilla-pokemon/ParrillaPokemonPage";
 import PokedlePage from "./games/pokedle/PokedlePage";
 import MovimixPage from "./games/movimix/MovimixPage";
 import DebilidexPage from "./games/debilidex/DebilidexPage";
+import EmojidexPage from "./games/emojidex/EmojidexPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/juegos/pokedle" element={<PokedlePage />} />
         <Route path="/juegos/movimix" element={<MovimixPage />} />
         <Route path="/juegos/debilidex" element={<DebilidexPage />} />
+        <Route path="/juegos/emojidex" element={<EmojidexPage />} />
       </Route>
     </Routes>
   );
