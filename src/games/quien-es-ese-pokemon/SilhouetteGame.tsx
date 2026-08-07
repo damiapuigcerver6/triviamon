@@ -87,30 +87,41 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
     if (phase === "playing") inputRef.current?.focus();
   }, [phase, target]);
 
+  function isGuessCorrect(guessRaw: string): boolean {
+    const guess = normalizeGuess(guessRaw);
+    if (!guess) return false;
+    const base = baseFormOf(target, pokedex);
+    return guess === normalizeGuess(pokemonName(target, lang)) || (base !== null && guess === normalizeGuess(pokemonName(base, lang)));
+  }
+
+  function handleCorrect() {
+    const newScore = score + 1;
+    const newStreak = streak + 1;
+    setScore(newScore);
+    setStreak(newStreak);
+    setBestStreakRun((b) => Math.max(b, newStreak));
+    setFeedback("correct");
+    setTimeLeft((t) => Math.min(MAX_TIME, t + BONUS));
+    setQuery("");
+    setPhase("reveal");
+    setTimeout(() => {
+      setTarget((prev) => randomTarget(pokedex, prev.id));
+      setFeedback(null);
+      setPhase("playing");
+    }, REVEAL_MS);
+  }
+
+  useEffect(() => {
+    if (phase === "playing" && isGuessCorrect(query)) handleCorrect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (phase !== "playing" || !query.trim()) return;
 
-    const guess = normalizeGuess(query);
-    const base = baseFormOf(target, pokedex);
-    const isCorrect =
-      guess === normalizeGuess(pokemonName(target, lang)) || (base !== null && guess === normalizeGuess(pokemonName(base, lang)));
-
-    if (isCorrect) {
-      const newScore = score + 1;
-      const newStreak = streak + 1;
-      setScore(newScore);
-      setStreak(newStreak);
-      setBestStreakRun((b) => Math.max(b, newStreak));
-      setFeedback("correct");
-      setTimeLeft((t) => Math.min(MAX_TIME, t + BONUS));
-      setQuery("");
-      setPhase("reveal");
-      setTimeout(() => {
-        setTarget((prev) => randomTarget(pokedex, prev.id));
-        setFeedback(null);
-        setPhase("playing");
-      }, REVEAL_MS);
+    if (isGuessCorrect(query)) {
+      handleCorrect();
     } else {
       setStreak(0);
       setFeedback("wrong");
