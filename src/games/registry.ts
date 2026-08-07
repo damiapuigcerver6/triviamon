@@ -68,4 +68,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/movimix-icono.png",
     disponible: true,
   },
+  {
+    id: "debilidex",
+    path: "/juegos/debilidex",
+    strKey: "debilidex",
+    icono: "/brand/debilidex-icono.png",
+    disponible: true,
+  },
 ];

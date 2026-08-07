@@ -280,6 +280,8 @@ def fetch_species(species_id):
         version_group = GENERATION_VERSION_GROUP[generation] if region is None else region[2]
         movimientos_nivel = extract_level_moves(poke, version_group)
 
+        habilidades = [a["ability"]["name"] for a in sorted(poke["abilities"], key=lambda a: a["slot"])]
+
         entries.append({
             "id": poke["id"],
             "numero_pokedex": species_id,
@@ -302,6 +304,7 @@ def fetch_species(species_id):
             "velocidad": stats.get("velocidad", 0),
             "movimientos": movimientos,
             "movimientos_nivel": movimientos_nivel,
+            "habilidades": habilidades,
         })
     return entries
 

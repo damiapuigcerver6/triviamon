@@ -37,6 +37,7 @@ export interface Strings {
     parrillaPokemon: { title: string; description: string };
     pokedle: { title: string; description: string };
     movimix: { title: string; description: string };
+    debilidex: { title: string; description: string };
   };
   stats: {
     modalTitle: string;
@@ -216,6 +217,29 @@ export interface Strings {
     shareWon: (n: number) => string;
     shareLost: (name: string) => string;
   };
+  debilidex: {
+    placeholder: string;
+    chartLabel: string;
+    bucketWeak: string;
+    bucketNormal: string;
+    bucketResist: string;
+    bucketImmune: string;
+    hintTitle: string;
+    hintGenLabel: string;
+    hintCategoryLabel: string;
+    hintBstLabel: string;
+    categoryNormal: string;
+    categoryLegendary: string;
+    categoryMythic: string;
+    previousGuessesLabel: string;
+    giveUp: string;
+    wonTitle: (name: string) => string;
+    guessedInAttempts: (n: number) => string;
+    lostTitle: (name: string) => string;
+    anotherPokemon: string;
+    shareWon: (n: number) => string;
+    shareLost: (name: string) => string;
+  };
 }
 
 export const STRINGS_ES: Strings = {
@@ -289,6 +313,11 @@ export const STRINGS_ES: Strings = {
       title: "Movimix",
       description:
         "Se revela el conjunto de movimientos que puede aprender un Pokémon oculto. Adivina de quién se trata.",
+    },
+    debilidex: {
+      title: "Debilidex",
+      description:
+        "Se muestran las debilidades y resistencias (habilidad incluida) de un Pokémon oculto. Adivina de quién se trata.",
     },
   },
   stats: {
@@ -479,6 +508,29 @@ export const STRINGS_ES: Strings = {
     shareWon: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
     shareLost: (name) => `No lo conseguí. Era ${name}`,
   },
+  debilidex: {
+    placeholder: "Escribe un Pokémon…",
+    chartLabel: "Debilidades y resistencias:",
+    bucketWeak: "Débil contra",
+    bucketNormal: "Debilidad normal",
+    bucketResist: "Resistente a",
+    bucketImmune: "Inmune",
+    hintTitle: "Pistas",
+    hintGenLabel: "Generación:",
+    hintCategoryLabel: "Categoría:",
+    hintBstLabel: "Suma de estadísticas:",
+    categoryNormal: "Normal",
+    categoryLegendary: "Legendario",
+    categoryMythic: "Mítico",
+    previousGuessesLabel: "Intentos:",
+    giveUp: "Rendirse",
+    wonTitle: (name) => `¡Correcto! Era ${name}`,
+    guessedInAttempts: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    lostTitle: (name) => `Era ${name}`,
+    anotherPokemon: "Otro Pokémon",
+    shareWon: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    shareLost: (name) => `No lo conseguí. Era ${name}`,
+  },
 };
 
 export const STRINGS_EN: Strings = {
@@ -551,6 +603,10 @@ export const STRINGS_EN: Strings = {
     movimix: {
       title: "Movimix",
       description: "The move set a hidden Pokémon can learn is revealed. Guess who it is.",
+    },
+    debilidex: {
+      title: "Debilidex",
+      description: "The weaknesses and resistances (ability included) of a hidden Pokémon are shown. Guess who it is.",
     },
   },
   stats: {
@@ -732,6 +788,29 @@ export const STRINGS_EN: Strings = {
     hintTypeLabel: "Type:",
     hintGenLabel: "Generation:",
     hintBstLabel: "Total base stats:",
+    previousGuessesLabel: "Guesses:",
+    giveUp: "Give up",
+    wonTitle: (name) => `Correct! It was ${name}`,
+    guessedInAttempts: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    lostTitle: (name) => `It was ${name}`,
+    anotherPokemon: "Another Pokémon",
+    shareWon: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    shareLost: (name) => `Didn't get it. It was ${name}`,
+  },
+  debilidex: {
+    placeholder: "Type a Pokémon…",
+    chartLabel: "Weaknesses and resistances:",
+    bucketWeak: "Weak to",
+    bucketNormal: "Normal effectiveness",
+    bucketResist: "Resistant to",
+    bucketImmune: "Immune",
+    hintTitle: "Hints",
+    hintGenLabel: "Generation:",
+    hintCategoryLabel: "Category:",
+    hintBstLabel: "Total base stats:",
+    categoryNormal: "Normal",
+    categoryLegendary: "Legendary",
+    categoryMythic: "Mythical",
     previousGuessesLabel: "Guesses:",
     giveUp: "Give up",
     wonTitle: (name) => `Correct! It was ${name}`,

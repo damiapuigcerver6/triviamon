@@ -10,6 +10,7 @@ import QuienEsEsePokemonPage from "./games/quien-es-ese-pokemon/QuienEsEsePokemo
 import ParrillaPokemonPage from "./games/parrilla-pokemon/ParrillaPokemonPage";
 import PokedlePage from "./games/pokedle/PokedlePage";
 import MovimixPage from "./games/movimix/MovimixPage";
+import DebilidexPage from "./games/debilidex/DebilidexPage";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/juegos/parrilla-pokemon" element={<ParrillaPokemonPage />} />
         <Route path="/juegos/pokedle" element={<PokedlePage />} />
         <Route path="/juegos/movimix" element={<MovimixPage />} />
+        <Route path="/juegos/debilidex" element={<DebilidexPage />} />
       </Route>
     </Routes>
   );

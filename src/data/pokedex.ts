@@ -23,6 +23,7 @@ export interface PokemonEntry {
   velocidad: number;
   movimientos: string[]; // slugs en ingles de una seleccion curada de movimientos que puede aprender (por cualquier metodo)
   movimientos_nivel: { move: string; nivel: number }[]; // moveset real por nivel del juego de debut, ordenado ascendente
+  habilidades: string[]; // slugs en ingles de sus habilidades posibles, en orden de slot (la oculta al final)
 }
 
 let cache: PokemonEntry[] | null = null;
