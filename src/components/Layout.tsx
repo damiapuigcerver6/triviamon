@@ -169,6 +169,21 @@ const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/movimix": {
+    title: "Cómo jugar: Movimix",
+    body: (
+      <>
+        <p>
+          Se muestra el conjunto de movimientos que puede aprender un Pokémon oculto. Escribe
+          Pokémon (con autocompletado) hasta acertar de quién se trata.
+        </p>
+        <p>
+          Si fallas 2 veces, se revela como pista el tipo del Pokémon oculto. Puedes rendirte en
+          cualquier momento para ver la solución.
+        </p>
+      </>
+    ),
+  },
 };
 
 const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
@@ -292,6 +307,21 @@ const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/movimix": {
+    title: "How to play: Movimix",
+    body: (
+      <>
+        <p>
+          The move set a hidden Pokémon can learn is shown. Type Pokémon names (with autocomplete)
+          until you guess who it is.
+        </p>
+        <p>
+          If you miss twice, the hidden Pokémon's type is revealed as a hint. You can give up at
+          any time to see the answer.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
@@ -329,6 +359,7 @@ export default function Layout() {
   const guessStats = loadStats("detective-pokemon");
   const connectionsStats = loadStats("conexiones");
   const pokedleStats = loadStats("pokedle");
+  const movimixStats = loadStats("movimix");
 
   return (
     <div className="layout">
@@ -446,6 +477,8 @@ export default function Layout() {
           <StatsSection title={t.games.conexiones.title} stats={connectionsStats} t={t} />
           <div style={{ height: "1rem" }} />
           <StatsSection title={t.games.pokedle.title} stats={pokedleStats} t={t} />
+          <div style={{ height: "1rem" }} />
+          <StatsSection title={t.games.movimix.title} stats={movimixStats} t={t} />
         </Modal>
       )}
 

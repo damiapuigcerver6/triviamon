@@ -36,6 +36,7 @@ export interface Strings {
     quienEsEsePokemon: { title: string; description: string };
     parrillaPokemon: { title: string; description: string };
     pokedle: { title: string; description: string };
+    movimix: { title: string; description: string };
   };
   stats: {
     modalTitle: string;
@@ -194,6 +195,19 @@ export interface Strings {
     shareWon: (n: number, max: number) => string;
     shareLost: (max: number) => string;
   };
+  movimix: {
+    placeholder: string;
+    movesLabel: string;
+    hintLabel: string;
+    previousGuessesLabel: string;
+    giveUp: string;
+    wonTitle: (name: string) => string;
+    guessedInAttempts: (n: number) => string;
+    lostTitle: (name: string) => string;
+    anotherPokemon: string;
+    shareWon: (n: number) => string;
+    shareLost: (name: string) => string;
+  };
 }
 
 export const STRINGS_ES: Strings = {
@@ -262,6 +276,11 @@ export const STRINGS_ES: Strings = {
       title: "Pokédle",
       description:
         "Adivina el Pokémon oculto en 6 intentos. Cada letra de tu intento se colorea según esté en el sitio correcto, en otro sitio o no esté.",
+    },
+    movimix: {
+      title: "Movimix",
+      description:
+        "Se revela el conjunto de movimientos que puede aprender un Pokémon oculto. Adivina de quién se trata.",
     },
   },
   stats: {
@@ -431,6 +450,19 @@ export const STRINGS_ES: Strings = {
     shareWon: (n, max) => `${n}/${max}`,
     shareLost: (max) => `X/${max}`,
   },
+  movimix: {
+    placeholder: "Escribe un Pokémon…",
+    movesLabel: "Puede aprender:",
+    hintLabel: "Pista, tipo:",
+    previousGuessesLabel: "Intentos:",
+    giveUp: "Rendirse",
+    wonTitle: (name) => `¡Correcto! Era ${name}`,
+    guessedInAttempts: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    lostTitle: (name) => `Era ${name}`,
+    anotherPokemon: "Otro Pokémon",
+    shareWon: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    shareLost: (name) => `No lo conseguí. Era ${name}`,
+  },
 };
 
 export const STRINGS_EN: Strings = {
@@ -499,6 +531,10 @@ export const STRINGS_EN: Strings = {
       title: "Pokédle",
       description:
         "Guess the hidden Pokémon in 6 tries. Every letter of your guess is colored by whether it's in the right spot, elsewhere, or not in the name.",
+    },
+    movimix: {
+      title: "Movimix",
+      description: "The move set a hidden Pokémon can learn is revealed. Guess who it is.",
     },
   },
   stats: {
@@ -667,5 +703,18 @@ export const STRINGS_EN: Strings = {
     anotherWord: "Another word",
     shareWon: (n, max) => `${n}/${max}`,
     shareLost: (max) => `X/${max}`,
+  },
+  movimix: {
+    placeholder: "Type a Pokémon…",
+    movesLabel: "Can learn:",
+    hintLabel: "Hint, type:",
+    previousGuessesLabel: "Guesses:",
+    giveUp: "Give up",
+    wonTitle: (name) => `Correct! It was ${name}`,
+    guessedInAttempts: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    lostTitle: (name) => `It was ${name}`,
+    anotherPokemon: "Another Pokémon",
+    shareWon: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    shareLost: (name) => `Didn't get it. It was ${name}`,
   },
 };

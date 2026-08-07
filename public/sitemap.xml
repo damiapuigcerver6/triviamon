@@ -32,4 +32,8 @@
     <loc>https://triviamon.mdlabs.app/juegos/pokedle</loc>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/movimix</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>

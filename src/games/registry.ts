@@ -61,4 +61,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/pokedle-icono.png",
     disponible: true,
   },
+  {
+    id: "movimix",
+    path: "/juegos/movimix",
+    strKey: "movimix",
+    icono: "/brand/movimix-icono.png",
+    disponible: true,
+  },
 ];

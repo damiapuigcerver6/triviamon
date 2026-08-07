@@ -9,6 +9,7 @@ import HigherLowerPage from "./games/higher-lower/HigherLowerPage";
 import QuienEsEsePokemonPage from "./games/quien-es-ese-pokemon/QuienEsEsePokemonPage";
 import ParrillaPokemonPage from "./games/parrilla-pokemon/ParrillaPokemonPage";
 import PokedlePage from "./games/pokedle/PokedlePage";
+import MovimixPage from "./games/movimix/MovimixPage";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/juegos/quien-es-ese-pokemon" element={<QuienEsEsePokemonPage />} />
         <Route path="/juegos/parrilla-pokemon" element={<ParrillaPokemonPage />} />
         <Route path="/juegos/pokedle" element={<PokedlePage />} />
+        <Route path="/juegos/movimix" element={<MovimixPage />} />
       </Route>
     </Routes>
   );
