@@ -127,8 +127,11 @@ export default function MoveGuessGame({
     .map((id) => pokedex.find((p) => p.id === id))
     .filter((p): p is PokemonEntry => !!p && !isCorrect(p));
 
-  const showHint = !finished && wrongGuesses.length >= 2;
+  const hintLevel = Math.min(3, Math.max(0, wrongGuesses.length - 1));
+  const showHint = !finished && hintLevel > 0;
   const targetTypes = target.tipos.filter((tp): tp is TypeId => !!tp);
+  const targetBst =
+    target.vida + target.ataque + target.defensa + target.ataque_especial + target.defensa_especial + target.velocidad;
 
   return (
     <div className="mv-game">
@@ -195,10 +198,25 @@ export default function MoveGuessGame({
         <div className="mv-actions-row">
           {showHint && (
             <div className="mv-hint">
-              <span className="mv-hint-label">{t.movimix.hintLabel}</span>
-              {targetTypes.map((tp) => (
-                <img key={tp} src={typeIcon(tp)} alt={tp} className="mv-hint-type" />
-              ))}
+              <span className="mv-hint-title">{t.movimix.hintTitle}</span>
+              <div className="mv-hint-row">
+                <span>{t.movimix.hintTypeLabel}</span>
+                {targetTypes.map((tp) => (
+                  <img key={tp} src={typeIcon(tp)} alt={tp} className="mv-hint-type" />
+                ))}
+              </div>
+              {hintLevel >= 2 && (
+                <div className="mv-hint-row">
+                  <span>{t.movimix.hintGenLabel}</span>
+                  <span>{target.generacion}</span>
+                </div>
+              )}
+              {hintLevel >= 3 && (
+                <div className="mv-hint-row">
+                  <span>{t.movimix.hintBstLabel}</span>
+                  <span>{targetBst}</span>
+                </div>
+              )}
             </div>
           )}
           <button type="button" className="mv-btn mv-btn--danger" onClick={handleGiveUp}>

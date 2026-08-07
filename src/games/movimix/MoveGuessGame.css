@@ -17,8 +17,6 @@
 }
 
 .mv-table-wrap {
-  max-height: 22rem;
-  overflow-y: auto;
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -30,8 +28,6 @@
 }
 
 .mv-table th {
-  position: sticky;
-  top: 0;
   background: var(--surface-2);
   color: var(--text-dim);
   font-size: 0.72rem;
@@ -146,14 +142,28 @@
 }
 
 .mv-hint {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
   gap: 0.4rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.6rem 0.85rem;
   background: var(--surface);
   border: 1px dashed var(--accent);
   border-radius: 10px;
   font-size: 0.85rem;
+}
+
+.mv-hint-title {
+  font-weight: 700;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.mv-hint-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-weight: 600;
 }
 

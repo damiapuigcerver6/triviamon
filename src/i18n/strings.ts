@@ -203,7 +203,10 @@ export interface Strings {
     tableType: string;
     tableCategory: string;
     evoLevel: string;
-    hintLabel: string;
+    hintTitle: string;
+    hintTypeLabel: string;
+    hintGenLabel: string;
+    hintBstLabel: string;
     previousGuessesLabel: string;
     giveUp: string;
     wonTitle: (name: string) => string;
@@ -463,7 +466,10 @@ export const STRINGS_ES: Strings = {
     tableType: "Tipo",
     tableCategory: "Categoría",
     evoLevel: "Evo.",
-    hintLabel: "Pista, tipo:",
+    hintTitle: "Pistas",
+    hintTypeLabel: "Tipo:",
+    hintGenLabel: "Generación:",
+    hintBstLabel: "Suma de estadísticas:",
     previousGuessesLabel: "Intentos:",
     giveUp: "Rendirse",
     wonTitle: (name) => `¡Correcto! Era ${name}`,
@@ -722,7 +728,10 @@ export const STRINGS_EN: Strings = {
     tableType: "Type",
     tableCategory: "Category",
     evoLevel: "Evo.",
-    hintLabel: "Hint, type:",
+    hintTitle: "Hints",
+    hintTypeLabel: "Type:",
+    hintGenLabel: "Generation:",
+    hintBstLabel: "Total base stats:",
     previousGuessesLabel: "Guesses:",
     giveUp: "Give up",
     wonTitle: (name) => `Correct! It was ${name}`,
