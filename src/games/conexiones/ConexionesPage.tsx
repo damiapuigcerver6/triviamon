@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import ConnectionsGame from "./ConnectionsGame";
 import "./ConexionesPage.css";
 
@@ -38,6 +40,7 @@ export default function ConexionesPage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("conexiones"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -90,6 +93,8 @@ export default function ConexionesPage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "cx-mode" : "cx-mode cx-mode--hidden"}>
         <ConnectionsGame
           key={`${dateKey}-${lang}`}
@@ -97,7 +102,10 @@ export default function ConexionesPage() {
           seed={dailySeed}
           storageKey={`triviamon:cx:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onSolved={() => recordDailyWin("conexiones", dateKey)}
+          onSolved={() => {
+            recordDailyWin("conexiones", dateKey);
+            setStats(loadStats("conexiones"));
+          }}
         />
       </div>
 
@@ -112,6 +120,8 @@ export default function ConexionesPage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="conexiones" />
     </div>
   );
 }

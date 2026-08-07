@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import WeaknessGuessGame from "./WeaknessGuessGame";
 import "./DebilidexPage.css";
 
@@ -42,6 +44,7 @@ export default function DebilidexPage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("debilidex"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -96,6 +99,8 @@ export default function DebilidexPage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "dbx-mode" : "dbx-mode dbx-mode--hidden"}>
         <WeaknessGuessGame
           key={dateKey}
@@ -103,7 +108,10 @@ export default function DebilidexPage() {
           target={dailyTarget}
           storageKey={`triviamon:dbx:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onWin={() => recordDailyWin("debilidex", dateKey)}
+          onWin={() => {
+            recordDailyWin("debilidex", dateKey);
+            setStats(loadStats("debilidex"));
+          }}
         />
       </div>
 
@@ -118,6 +126,8 @@ export default function DebilidexPage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="debilidex" />
     </div>
   );
 }

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import GuessGame from "./GuessGame";
 import "./DetectivePokemonPage.css";
 
@@ -42,6 +44,7 @@ export default function DetectivePokemonPage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("detective-pokemon"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -99,6 +102,8 @@ export default function DetectivePokemonPage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "qp-mode" : "qp-mode qp-mode--hidden"}>
         <GuessGame
           key={dateKey}
@@ -106,7 +111,10 @@ export default function DetectivePokemonPage() {
           target={dailyTarget}
           storageKey={`triviamon:dp:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onWin={() => recordDailyWin("detective-pokemon", dateKey)}
+          onWin={() => {
+            recordDailyWin("detective-pokemon", dateKey);
+            setStats(loadStats("detective-pokemon"));
+          }}
         />
       </div>
 
@@ -122,6 +130,8 @@ export default function DetectivePokemonPage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="detective-pokemon" />
     </div>
   );
 }

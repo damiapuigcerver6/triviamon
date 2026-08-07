@@ -7,6 +7,7 @@ export interface Strings {
     shareResult: string;
     shareCopied: string;
     playAgain: string;
+    otherGamesLabel: string;
   };
   header: {
     gamesTooltip: string;
@@ -251,6 +252,7 @@ export const STRINGS_ES: Strings = {
     shareResult: "Compartir resultado",
     shareCopied: "¡Resultado copiado! Pégalo donde quieras.",
     playAgain: "Jugar de nuevo",
+    otherGamesLabel: "Otros juegos",
   },
   header: {
     gamesTooltip: "Juegos",
@@ -542,6 +544,7 @@ export const STRINGS_EN: Strings = {
     shareResult: "Share result",
     shareCopied: "Result copied! Paste it anywhere.",
     playAgain: "Play again",
+    otherGamesLabel: "Other games",
   },
   header: {
     gamesTooltip: "Games",

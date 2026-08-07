@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, dailyIndex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { loadMoveMeta, type MoveMeta } from "../../data/moveMeta";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import MoveGuessGame from "./MoveGuessGame";
 import "./MovimixPage.css";
 
@@ -44,6 +46,7 @@ export default function MovimixPage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceTarget, setPracticeTarget] = useState<PokemonEntry | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("movimix"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -99,6 +102,8 @@ export default function MovimixPage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "mv-mode" : "mv-mode mv-mode--hidden"}>
         <MoveGuessGame
           key={dateKey}
@@ -107,7 +112,10 @@ export default function MovimixPage() {
           moveMeta={moveMeta}
           storageKey={`triviamon:mv:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onWin={() => recordDailyWin("movimix", dateKey)}
+          onWin={() => {
+            recordDailyWin("movimix", dateKey);
+            setStats(loadStats("movimix"));
+          }}
         />
       </div>
 
@@ -123,6 +131,8 @@ export default function MovimixPage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="movimix" />
     </div>
   );
 }

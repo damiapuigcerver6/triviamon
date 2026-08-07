@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import PokedleGame from "./PokedleGame";
 import "./PokedlePage.css";
 
@@ -38,6 +40,7 @@ export default function PokedlePage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("pokedle"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -89,6 +92,8 @@ export default function PokedlePage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "pk-mode" : "pk-mode pk-mode--hidden"}>
         <PokedleGame
           key={`${dateKey}-${lang}`}
@@ -96,7 +101,10 @@ export default function PokedlePage() {
           seed={dailySeed}
           storageKey={`triviamon:pk:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onSolved={() => recordDailyWin("pokedle", dateKey)}
+          onSolved={() => {
+            recordDailyWin("pokedle", dateKey);
+            setStats(loadStats("pokedle"));
+          }}
         />
       </div>
 
@@ -111,6 +119,8 @@ export default function PokedlePage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="pokedle" />
     </div>
   );
 }

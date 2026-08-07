@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
 import { hashString } from "../../data/rng";
-import { recordDailyWin } from "../../data/stats";
+import { loadStats, recordDailyWin } from "../../data/stats";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
 import GridGame from "./GridGame";
 import "./ParrillaPokemonPage.css";
 
@@ -38,6 +40,7 @@ export default function ParrillaPokemonPage() {
   const [modo, setModo] = useState<Modo>("diario");
   const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
   const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("parrilla-pokemon"));
 
   useEffect(() => {
     loadPokedex().then(setPokedex);
@@ -92,6 +95,8 @@ export default function ParrillaPokemonPage() {
         </button>
       </div>
 
+      <StreakBadge stats={stats} />
+
       <div className={modo === "diario" ? "pg-mode" : "pg-mode pg-mode--hidden"}>
         <GridGame
           key={`${dateKey}-${lang}`}
@@ -99,7 +104,10 @@ export default function ParrillaPokemonPage() {
           seed={dailySeed}
           storageKey={`triviamon:pg:diario:${dateKey}`}
           dateLabel={formatDateLabel(dateKey)}
-          onSolved={() => recordDailyWin("parrilla-pokemon", dateKey)}
+          onSolved={() => {
+            recordDailyWin("parrilla-pokemon", dateKey);
+            setStats(loadStats("parrilla-pokemon"));
+          }}
         />
       </div>
 
@@ -114,6 +122,8 @@ export default function ParrillaPokemonPage() {
           />
         )}
       </div>
+
+      <RelatedGames currentId="parrilla-pokemon" />
     </div>
   );
 }

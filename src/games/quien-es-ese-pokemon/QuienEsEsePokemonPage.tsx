@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPokedex, type PokemonEntry } from "../../data/pokedex";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import RelatedGames from "../../components/RelatedGames";
 import { loadBestScore, loadBestStreak } from "./stats";
 import SilhouetteGame from "./SilhouetteGame";
 import "./QuienEsEsePokemonPage.css";
@@ -52,6 +53,7 @@ export default function QuienEsEsePokemonPage() {
         >
           {t.quienEsEsePokemon.start}
         </button>
+        <RelatedGames currentId="quien-es-ese-pokemon" />
       </div>
     );
   }

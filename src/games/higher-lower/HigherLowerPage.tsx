@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { loadPokedex, type PokemonEntry } from "../../data/pokedex";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import RelatedGames from "../../components/RelatedGames";
 import { statOptions, loadBestStreak, type StatKey } from "./stats";
 import HigherLowerGame from "./HigherLowerGame";
 import "./HigherLowerPage.css";
@@ -49,6 +50,7 @@ export default function HigherLowerPage() {
             </button>
           ))}
         </div>
+        <RelatedGames currentId="mayor-o-menor" />
       </div>
     );
   }
@@ -63,6 +65,7 @@ export default function HigherLowerPage() {
         onChangeStat={() => setStatKey(null)}
         onPlayAgain={() => setSession((n) => n + 1)}
       />
+      <RelatedGames currentId="mayor-o-menor" />
     </div>
   );
 }

@@ -1,0 +1,27 @@
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  cursor: default;
+}
+
+.streak-badge-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.streak-badge-label {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.streak-badge-value {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}

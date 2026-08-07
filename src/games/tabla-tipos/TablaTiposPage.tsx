@@ -1,6 +1,7 @@
 import TypeChartGame from "./TypeChartGame";
 import { useLanguage } from "../../i18n/LanguageContext";
 import Seo from "../../components/Seo";
+import RelatedGames from "../../components/RelatedGames";
 import "./TablaTiposPage.css";
 
 export default function TablaTiposPage() {
@@ -10,6 +11,7 @@ export default function TablaTiposPage() {
       <Seo title={`${t.games.tablaTipos.title} · Triviamon`} description={t.games.tablaTipos.description} />
       <h1>{t.games.tablaTipos.title}</h1>
       <TypeChartGame />
+      <RelatedGames currentId="tabla-tipos" />
     </div>
   );
 }

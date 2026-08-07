@@ -17,6 +17,7 @@
 }
 
 .dbx-chart-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
@@ -24,9 +25,38 @@
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 14px;
+  overflow: hidden;
+}
+
+.dbx-chart-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 65% 55% at 50% 0%, rgba(248, 208, 48, 0.16), transparent 70%);
+  animation: dbx-glow-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes dbx-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dbx-chart-panel::before {
+    animation: none;
+  }
 }
 
 .dbx-group {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;

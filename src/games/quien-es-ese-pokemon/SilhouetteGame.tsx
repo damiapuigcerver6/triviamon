@@ -156,7 +156,11 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
           </div>
           <p className="sil-timeleft">{timeLeft.toFixed(1)}s</p>
 
-          <div className={`sil-stage ${feedback === "wrong" ? "sil-stage--wrong" : ""}`}>
+          <div
+            className={`sil-stage ${feedback === "wrong" ? "sil-stage--wrong" : ""} ${
+              phase === "reveal" ? "sil-stage--reveal" : ""
+            }`}
+          >
             <img
               key={target.id}
               src={pokemonSprite(target.id)}
