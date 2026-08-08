@@ -38,6 +38,8 @@ export default function TypeChartGame() {
   const [running, setRunning] = useState(false);
   const [paused, setPaused] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  const [hoverAtk, setHoverAtk] = useState<TypeId | null>(null);
+  const [hoverDef, setHoverDef] = useState<TypeId | null>(null);
   const painting = useRef(false);
   const paintValue = useRef<Multiplier | null>(1);
 
@@ -103,6 +105,11 @@ export default function TypeChartGame() {
     painting.current = false;
   }
 
+  function clearHover() {
+    setHoverAtk(null);
+    setHoverDef(null);
+  }
+
   function handleCheck() {
     if (paused) return;
     setChecked(true);
@@ -153,14 +160,22 @@ export default function TypeChartGame() {
       </div>
 
       <div className={`tc-table-wrap ${paused ? "tc-table-wrap--paused" : ""}`}>
-        <table className="tc-table">
+        <table className="tc-table" onMouseLeave={clearHover}>
           <thead>
             <tr>
               <th className="tc-corner">
                 <span className="tc-corner-label">{t.tablaTipos.attackerDefender}</span>
               </th>
               {TYPE_IDS.map((def) => (
-                <th key={def} className="tc-col-head" title={nombreDe(def)}>
+                <th
+                  key={def}
+                  className={`tc-col-head ${def === hoverDef ? "tc-head--hover" : ""}`}
+                  title={nombreDe(def)}
+                  onPointerEnter={() => {
+                    setHoverAtk(null);
+                    setHoverDef(def);
+                  }}
+                >
                   <img src={typeIcon(def)} alt={nombreDe(def)} />
                 </th>
               ))}
@@ -169,7 +184,14 @@ export default function TypeChartGame() {
           <tbody>
             {TYPE_IDS.map((atk) => (
               <tr key={atk}>
-                <th className="tc-row-head" title={nombreDe(atk)}>
+                <th
+                  className={`tc-row-head ${atk === hoverAtk ? "tc-head--hover" : ""}`}
+                  title={nombreDe(atk)}
+                  onPointerEnter={() => {
+                    setHoverAtk(atk);
+                    setHoverDef(null);
+                  }}
+                >
                   <img src={typeIcon(atk)} alt={nombreDe(atk)} />
                 </th>
                 {TYPE_IDS.map((def) => {
@@ -193,13 +215,19 @@ export default function TypeChartGame() {
                     cls += ` tc-cell--${value}`;
                   }
 
+                  if (atk === hoverAtk || def === hoverDef) cls += " tc-cell--hover";
+
                   return (
                     <td
                       key={def}
                       className={cls}
                       title={title}
                       onPointerDown={() => startPaint(atk, def)}
-                      onPointerEnter={() => continuePaint(atk, def)}
+                      onPointerEnter={() => {
+                        continuePaint(atk, def);
+                        setHoverAtk(atk);
+                        setHoverDef(def);
+                      }}
                     />
                   );
                 })}
