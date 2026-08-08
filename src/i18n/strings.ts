@@ -41,6 +41,7 @@ export interface Strings {
     debilidex: { title: string; description: string };
     emojidex: { title: string; description: string };
     piramide: { title: string; description: string };
+    cromodex: { title: string; description: string };
   };
   stats: {
     modalTitle: string;
@@ -268,6 +269,21 @@ export interface Strings {
     anotherPyramid: string;
     shareWon: (n: number) => string;
   };
+  cromodex: {
+    placeholder: string;
+    paletteLabel: string;
+    hintTitle: string;
+    hintTypeLabel: string;
+    hintGenLabel: string;
+    previousGuessesLabel: string;
+    giveUp: string;
+    wonTitle: (name: string) => string;
+    guessedInAttempts: (n: number) => string;
+    lostTitle: (name: string) => string;
+    anotherPokemon: string;
+    shareWon: (n: number) => string;
+    shareLost: (name: string) => string;
+  };
 }
 
 export const STRINGS_ES: Strings = {
@@ -356,6 +372,10 @@ export const STRINGS_ES: Strings = {
       title: "Pirámide",
       description:
         "Ordena 11 Pokémon en una pirámide según una característica aleatoria, sin saber si aciertas hasta comprobarlo.",
+    },
+    cromodex: {
+      title: "Cromodex",
+      description: "Se muestra la paleta de colores de un Pokémon oculto. Adivina de quién se trata.",
     },
   },
   stats: {
@@ -594,6 +614,21 @@ export const STRINGS_ES: Strings = {
     anotherPyramid: "Otra pirámide",
     shareWon: (n) => `Resuelto en ${n} ${n === 1 ? "intento" : "intentos"}`,
   },
+  cromodex: {
+    placeholder: "Escribe un Pokémon…",
+    paletteLabel: "Paleta de colores:",
+    hintTitle: "Pistas",
+    hintTypeLabel: "Tipo:",
+    hintGenLabel: "Generación:",
+    previousGuessesLabel: "Intentos:",
+    giveUp: "Rendirse",
+    wonTitle: (name) => `¡Correcto! Era ${name}`,
+    guessedInAttempts: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    lostTitle: (name) => `Era ${name}`,
+    anotherPokemon: "Otro Pokémon",
+    shareWon: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    shareLost: (name) => `No lo conseguí. Era ${name}`,
+  },
 };
 
 export const STRINGS_EN: Strings = {
@@ -680,6 +715,10 @@ export const STRINGS_EN: Strings = {
       title: "Pyramid",
       description:
         "Sort 11 Pokémon into a pyramid by a random characteristic, with no way to know if you're right until you check.",
+    },
+    cromodex: {
+      title: "Cromodex",
+      description: "The color palette of a hidden Pokémon is shown. Guess who it is.",
     },
   },
   stats: {
@@ -917,5 +956,20 @@ export const STRINGS_EN: Strings = {
     guessedInAttempts: (n) => `Solved in ${n} ${n === 1 ? "try" : "tries"}`,
     anotherPyramid: "Another pyramid",
     shareWon: (n) => `Solved in ${n} ${n === 1 ? "try" : "tries"}`,
+  },
+  cromodex: {
+    placeholder: "Type a Pokémon…",
+    paletteLabel: "Color palette:",
+    hintTitle: "Hints",
+    hintTypeLabel: "Type:",
+    hintGenLabel: "Generation:",
+    previousGuessesLabel: "Guesses:",
+    giveUp: "Give up",
+    wonTitle: (name) => `Correct! It was ${name}`,
+    guessedInAttempts: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    lostTitle: (name) => `It was ${name}`,
+    anotherPokemon: "Another Pokémon",
+    shareWon: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
+    shareLost: (name) => `Didn't get it. It was ${name}`,
   },
 };

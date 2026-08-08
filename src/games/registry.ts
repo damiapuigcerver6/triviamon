@@ -89,4 +89,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/piramide-icono.png",
     disponible: true,
   },
+  {
+    id: "cromodex",
+    path: "/juegos/cromodex",
+    strKey: "cromodex",
+    icono: "/brand/cromodex-icono.png",
+    disponible: true,
+  },
 ];

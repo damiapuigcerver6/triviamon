@@ -1,0 +1,260 @@
+.crd-game {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.crd-palette-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: box-shadow 0.15s;
+}
+
+.crd-palette-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+}
+
+.crd-palette-bar {
+  display: flex;
+  height: 6rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.crd-swatch {
+  height: 100%;
+  transition: flex-grow 0.2s;
+}
+
+.crd-palette-panel--wrong {
+  box-shadow: inset 0 0 0 3px #e74c3c;
+  animation: crd-shake 0.4s;
+}
+
+.crd-palette-panel--won {
+  box-shadow: inset 0 0 0 3px #2ecc71;
+}
+
+@keyframes crd-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crd-palette-panel--wrong {
+    animation: none;
+  }
+}
+
+.crd-search {
+  position: relative;
+  max-width: 420px;
+}
+
+.crd-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.crd-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.crd-suggestions {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  right: 0;
+  z-index: 15;
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.crd-suggestions li button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border: none;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.crd-suggestions li button:hover {
+  background: var(--surface-2);
+}
+
+.crd-suggestions img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.crd-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.crd-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--surface);
+  border: 1px dashed var(--accent);
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.crd-hint-title {
+  font-weight: 700;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.crd-hint-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.crd-hint-types {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.crd-hint-type-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.crd-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.crd-btn--danger {
+  margin-left: auto;
+  background: transparent;
+  border-color: var(--text-dim);
+  color: var(--text-dim);
+}
+
+.crd-btn--danger:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.crd-btn--primary {
+  background: var(--accent);
+  color: #1a1a1a;
+  border-color: var(--accent);
+}
+
+.crd-finish {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.crd-finish img {
+  width: 6rem;
+  height: 6rem;
+  object-fit: contain;
+}
+
+.crd-finish p {
+  color: var(--text-dim);
+}
+
+.crd-finish-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.crd-guesses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.crd-guesses-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.crd-guesses-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.crd-guess-chip {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 520px) {
+  .crd-palette-bar {
+    height: 4.5rem;
+  }
+}

@@ -13,6 +13,7 @@ import MovimixPage from "./games/movimix/MovimixPage";
 import DebilidexPage from "./games/debilidex/DebilidexPage";
 import EmojidexPage from "./games/emojidex/EmojidexPage";
 import PiramidePage from "./games/piramide/PiramidePage";
+import CromodexPage from "./games/cromodex/CromodexPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/juegos/debilidex" element={<DebilidexPage />} />
         <Route path="/juegos/emojidex" element={<EmojidexPage />} />
         <Route path="/juegos/piramide" element={<PiramidePage />} />
+        <Route path="/juegos/cromodex" element={<CromodexPage />} />
       </Route>
     </Routes>
   );

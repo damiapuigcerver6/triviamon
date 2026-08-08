@@ -234,6 +234,21 @@ const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/cromodex": {
+    title: "Cómo jugar: Cromodex",
+    body: (
+      <>
+        <p>
+          Se muestra la paleta de colores extraída del sprite de un Pokémon oculto, ordenada de
+          más a menos dominante. Adivina de quién se trata escribiendo su nombre.
+        </p>
+        <p>
+          Cada fallo a partir del segundo revela una pista nueva (tipo y generación). Puedes
+          rendirte en cualquier momento para ver la solución.
+        </p>
+      </>
+    ),
+  },
 };
 
 const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
@@ -422,6 +437,21 @@ const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/cromodex": {
+    title: "How to play: Cromodex",
+    body: (
+      <>
+        <p>
+          The color palette extracted from a hidden Pokémon's artwork is shown, ordered from most
+          to least dominant. Guess who it is by typing their name.
+        </p>
+        <p>
+          Every miss after the second one reveals a new hint (type and generation). You can give
+          up at any time to see the answer.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
@@ -464,6 +494,7 @@ export default function Layout() {
   const debilidexStats = loadStats("debilidex");
   const emojidexStats = loadStats("emojidex");
   const piramideStats = loadStats("piramide");
+  const cromodexStats = loadStats("cromodex");
 
   return (
     <div className="layout">
@@ -589,6 +620,8 @@ export default function Layout() {
           <StatsSection title={t.games.emojidex.title} stats={emojidexStats} t={t} />
           <div style={{ height: "1rem" }} />
           <StatsSection title={t.games.piramide.title} stats={piramideStats} t={t} />
+          <div style={{ height: "1rem" }} />
+          <StatsSection title={t.games.cromodex.title} stats={cromodexStats} t={t} />
         </Modal>
       )}
 
