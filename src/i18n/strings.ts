@@ -355,7 +355,7 @@ export const STRINGS_ES: Strings = {
     piramide: {
       title: "Pirámide",
       description:
-        "Ordena 13 Pokémon en una pirámide según una característica aleatoria, sin saber si aciertas hasta comprobarlo.",
+        "Ordena 11 Pokémon en una pirámide según una característica aleatoria, sin saber si aciertas hasta comprobarlo.",
     },
   },
   stats: {
@@ -679,7 +679,7 @@ export const STRINGS_EN: Strings = {
     piramide: {
       title: "Pyramid",
       description:
-        "Sort 13 Pokémon into a pyramid by a random characteristic, with no way to know if you're right until you check.",
+        "Sort 11 Pokémon into a pyramid by a random characteristic, with no way to know if you're right until you check.",
     },
   },
   stats: {

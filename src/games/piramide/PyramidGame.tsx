@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import type { PokemonEntry } from "../../data/pokedex";
 import { pokemonName, pokemonSprite } from "../../data/pokedex";
 import { statLabel } from "../higher-lower/stats";
@@ -55,6 +55,13 @@ function loadStored(storageKey: string | undefined): StoredState {
   }
 }
 
+interface DragState {
+  id: number;
+  fromSlot: number | null;
+  x: number;
+  y: number;
+}
+
 export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, onNewPractice, onWin }: Props) {
   const { lang, t } = useLanguage();
   const stored = useMemo(() => loadStored(storageKey), [storageKey]);
@@ -62,7 +69,9 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
   const [attempts, setAttempts] = useState(stored.attempts);
   const [checkedResult, setCheckedResult] = useState<CheckedResult>(stored.checkedResult);
   const [solved, setSolved] = useState(stored.solved);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [drag, setDrag] = useState<DragState | null>(null);
+  const [hoverSlot, setHoverSlot] = useState<number | null>(null);
+  const [hoverBank, setHoverBank] = useState(false);
 
   const byId = useMemo(() => {
     const map = new Map<number, PokemonEntry>();
@@ -88,35 +97,53 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
     if (checkedResult) setCheckedResult(null);
   }
 
-  function selectBank(id: number) {
+  function startDrag(e: ReactPointerEvent<HTMLButtonElement>, id: number, fromSlot: number | null) {
     if (solved) return;
-    setSelectedId((prev) => (prev === id ? null : id));
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setDrag({ id, fromSlot, x: e.clientX, y: e.clientY });
   }
 
-  function clickSlot(slotIndex: number) {
-    if (solved) return;
-    const occupant = placements[slotIndex];
+  function moveDrag(e: ReactPointerEvent<HTMLDivElement>) {
+    if (!drag) return;
+    const x = e.clientX;
+    const y = e.clientY;
+    setDrag((d) => (d ? { ...d, x, y } : d));
+    const el = document.elementFromPoint(x, y);
+    const slotEl = el?.closest<HTMLElement>("[data-slot-index]");
+    setHoverSlot(slotEl ? Number(slotEl.dataset.slotIndex) : null);
+    setHoverBank(!!el?.closest(".pyr-bank"));
+  }
 
-    if (selectedId !== null) {
+  function endDrag() {
+    if (!drag) return;
+    const { id, fromSlot } = drag;
+    if (hoverSlot !== null && hoverSlot !== fromSlot) {
       setPlacements((prev) => {
         const next = [...prev];
-        next[slotIndex] = selectedId;
+        const occupant = next[hoverSlot];
+        next[hoverSlot] = id;
+        if (fromSlot !== null) next[fromSlot] = occupant;
         return next;
       });
-      setSelectedId(null);
       clearCheck();
-      return;
-    }
-
-    if (occupant !== null) {
+    } else if (hoverBank && fromSlot !== null) {
       setPlacements((prev) => {
         const next = [...prev];
-        next[slotIndex] = null;
+        next[fromSlot] = null;
         return next;
       });
-      setSelectedId(occupant);
       clearCheck();
     }
+    setDrag(null);
+    setHoverSlot(null);
+    setHoverBank(false);
+  }
+
+  function cancelDrag() {
+    setDrag(null);
+    setHoverSlot(null);
+    setHoverBank(false);
   }
 
   function handleCheck() {
@@ -140,7 +167,12 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
   let cursor = 0;
 
   return (
-    <div className="pyr-game">
+    <div
+      className="pyr-game"
+      onPointerMove={drag ? moveDrag : undefined}
+      onPointerUp={drag ? endDrag : undefined}
+      onPointerCancel={drag ? cancelDrag : undefined}
+    >
       <p className="pyr-characteristic">{t.piramide.orderBy(statLabel(puzzle.statKey, t))}</p>
 
       <div className="pyr-pyramid">
@@ -151,11 +183,14 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
             const occupantId = placements[slotIndex];
             const occupant = occupantId !== null ? byId.get(occupantId) : undefined;
             const result = checkedResult ? checkedResult[slotIndex] : null;
+            const isDragSource = drag?.fromSlot === slotIndex;
             const slotClass = [
               "pyr-slot",
               occupant ? "pyr-slot--filled" : "pyr-slot--empty",
               result === true ? "pyr-slot--correct" : "",
               result === false ? "pyr-slot--wrong" : "",
+              hoverSlot === slotIndex && drag && drag.fromSlot !== slotIndex ? "pyr-slot--hover" : "",
+              isDragSource ? "pyr-slot--dragging" : "",
             ]
               .filter(Boolean)
               .join(" ");
@@ -163,12 +198,13 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
               <button
                 type="button"
                 key={slotIndex}
+                data-slot-index={slotIndex}
                 className={slotClass}
-                onClick={() => clickSlot(slotIndex)}
+                onPointerDown={(e) => occupant && startDrag(e, occupant.id, slotIndex)}
                 disabled={solved}
                 aria-label={occupant ? pokemonName(occupant, lang) : t.piramide.emptySlot}
               >
-                {occupant && <img src={pokemonSprite(occupant.id)} alt="" />}
+                {occupant && !isDragSource && <img src={pokemonSprite(occupant.id)} alt="" draggable={false} />}
               </button>,
             );
           }
@@ -181,23 +217,39 @@ export default function PyramidGame({ pokedex, puzzle, storageKey, dateLabel, on
       </div>
 
       {bankIds.length > 0 && (
-        <div className="pyr-bank">
+        <div className={`pyr-bank ${hoverBank && drag?.fromSlot !== null ? "pyr-bank--hover" : ""}`}>
           {bankIds.map((id) => {
             const p = byId.get(id);
             if (!p) return null;
+            const isDragSource = drag?.id === id && drag.fromSlot === null;
             return (
               <button
                 type="button"
                 key={id}
-                className={`pyr-bank-item ${selectedId === id ? "pyr-bank-item--selected" : ""}`}
-                onClick={() => selectBank(id)}
+                className={`pyr-bank-item ${isDragSource ? "pyr-bank-item--dragging" : ""}`}
+                onPointerDown={(e) => startDrag(e, id, null)}
               >
-                <img src={pokemonSprite(p.id)} alt={pokemonName(p, lang)} />
+                {!isDragSource && <img src={pokemonSprite(p.id)} alt={pokemonName(p, lang)} draggable={false} />}
               </button>
             );
           })}
         </div>
       )}
+
+      {drag &&
+        (() => {
+          const p = byId.get(drag.id);
+          if (!p) return null;
+          return (
+            <img
+              className="pyr-drag-ghost"
+              src={pokemonSprite(p.id)}
+              alt=""
+              draggable={false}
+              style={{ left: drag.x, top: drag.y }}
+            />
+          );
+        })()}
 
       {!solved && (
         <div className="pyr-actions-row">

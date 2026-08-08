@@ -2,8 +2,8 @@ import type { PokemonEntry } from "../../data/pokedex";
 import { mulberry32 } from "../../data/rng";
 import { STAT_KEYS, statValue, type StatKey } from "../higher-lower/stats";
 
-export const PYRAMID_ROWS = [1, 2, 4, 6];
-export const PYRAMID_SIZE = PYRAMID_ROWS.reduce((a, b) => a + b, 0); // 13
+export const PYRAMID_ROWS = [1, 2, 3, 5];
+export const PYRAMID_SIZE = PYRAMID_ROWS.reduce((a, b) => a + b, 0); // 11
 
 export interface PyramidPuzzle {
   statKey: StatKey;
