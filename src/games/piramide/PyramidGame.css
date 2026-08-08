@@ -1,0 +1,181 @@
+.pyr-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.pyr-characteristic {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.pyr-pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pyr-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.pyr-slot {
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 10px;
+  border: 2px dashed var(--border);
+  background: var(--surface);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pyr-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pyr-slot--filled {
+  border-style: solid;
+  border-color: var(--border);
+  background: var(--surface-2);
+}
+
+.pyr-slot--empty:hover {
+  border-color: var(--accent);
+}
+
+.pyr-slot--correct {
+  border-color: #2ecc71;
+  background: rgba(46, 204, 113, 0.16);
+}
+
+.pyr-slot--wrong {
+  border-color: #e74c3c;
+  background: rgba(231, 76, 60, 0.14);
+}
+
+.pyr-slot:disabled {
+  cursor: default;
+}
+
+.pyr-bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 34rem;
+  padding: 0.85rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.pyr-bank-item {
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.pyr-bank-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pyr-bank-item--selected {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pyr-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pyr-attempts {
+  font-weight: 600;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.pyr-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pyr-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.pyr-btn--primary {
+  background: var(--accent);
+  color: #1a1a1a;
+  border-color: var(--accent);
+}
+
+.pyr-btn--primary:disabled {
+  background: var(--surface-2);
+  color: var(--text-dim);
+  border-color: var(--border);
+}
+
+.pyr-finish {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+  padding: 1.5rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.pyr-finish p {
+  color: var(--text-dim);
+}
+
+.pyr-finish-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 520px) {
+  .pyr-slot,
+  .pyr-bank-item {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .pyr-row,
+  .pyr-bank {
+    gap: 0.4rem;
+  }
+}

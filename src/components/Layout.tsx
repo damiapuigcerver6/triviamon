@@ -216,6 +216,24 @@ const HELP_CONTENT_ES: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/piramide": {
+    title: "Cómo jugar: Pirámide",
+    body: (
+      <>
+        <p>
+          Aparecen 13 Pokémon y una característica al azar (una estadística base o el número de
+          Pokédex). Colócalos en la pirámide de forma que el mejor en esa característica quede
+          arriba del todo y el peor abajo del todo a la derecha, leyendo la pirámide fila por fila.
+        </p>
+        <p>
+          Toca un Pokémon para seleccionarlo y toca un hueco para colocarlo (o toca un hueco ya
+          ocupado para volver a cogerlo). Cuando estén los 13 colocados, pulsa "Comprobar": los
+          huecos correctos se ponen en verde y los incorrectos en rojo. No hay límite de intentos
+          ni botón de rendirse, solo un contador de intentos.
+        </p>
+      </>
+    ),
+  },
 };
 
 const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
@@ -386,6 +404,23 @@ const HELP_CONTENT_EN: Record<string, { title: string; body: ReactNode }> = {
       </>
     ),
   },
+  "/juegos/piramide": {
+    title: "How to play: Pyramid",
+    body: (
+      <>
+        <p>
+          13 Pokémon and a random characteristic (a base stat or Pokédex number) appear. Place
+          them in the pyramid so the best one in that characteristic ends up at the very top and
+          the worst one at the bottom right, reading the pyramid row by row.
+        </p>
+        <p>
+          Tap a Pokémon to select it and tap a slot to place it (or tap an occupied slot to pick
+          it back up). Once all 13 are placed, hit "Check": correct slots turn green and incorrect
+          ones turn red. There's no attempt limit or give-up button, just an attempt counter.
+        </p>
+      </>
+    ),
+  },
 };
 
 export default function Layout() {
@@ -427,6 +462,7 @@ export default function Layout() {
   const movimixStats = loadStats("movimix");
   const debilidexStats = loadStats("debilidex");
   const emojidexStats = loadStats("emojidex");
+  const piramideStats = loadStats("piramide");
 
   return (
     <div className="layout">
@@ -550,6 +586,8 @@ export default function Layout() {
           <StatsSection title={t.games.debilidex.title} stats={debilidexStats} t={t} />
           <div style={{ height: "1rem" }} />
           <StatsSection title={t.games.emojidex.title} stats={emojidexStats} t={t} />
+          <div style={{ height: "1rem" }} />
+          <StatsSection title={t.games.piramide.title} stats={piramideStats} t={t} />
         </Modal>
       )}
 

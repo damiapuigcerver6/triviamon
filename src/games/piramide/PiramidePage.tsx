@@ -1,0 +1,129 @@
+import { useEffect, useState } from "react";
+import { loadPokedex, todayKey, type PokemonEntry } from "../../data/pokedex";
+import { hashString } from "../../data/rng";
+import { loadStats, recordDailyWin } from "../../data/stats";
+import { useLanguage } from "../../i18n/LanguageContext";
+import Seo from "../../components/Seo";
+import StreakBadge from "../../components/StreakBadge";
+import RelatedGames from "../../components/RelatedGames";
+import { buildPyramid } from "./pyramidBuilder";
+import PyramidGame from "./PyramidGame";
+import "./PiramidePage.css";
+
+type Modo = "diario" | "practica";
+
+const PRACTICE_SEED_KEY = "triviamon:pyr:practica:seed";
+const PRACTICE_PROGRESS_KEY = "triviamon:pyr:practica:progress";
+
+function randomSeed(): number {
+  return Math.floor(Math.random() * 2 ** 31);
+}
+
+function loadOrPickPracticeSeed(): number {
+  const raw = localStorage.getItem(PRACTICE_SEED_KEY);
+  if (raw) {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return n;
+  }
+  const seed = randomSeed();
+  localStorage.setItem(PRACTICE_SEED_KEY, String(seed));
+  return seed;
+}
+
+function formatDateLabel(dateKey: string): string {
+  const [y, m, d] = dateKey.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+export default function PiramidePage() {
+  const { t } = useLanguage();
+  const [pokedex, setPokedex] = useState<PokemonEntry[] | null>(null);
+  const [modo, setModo] = useState<Modo>("diario");
+  const [practiceSeed, setPracticeSeed] = useState<number | null>(null);
+  const [practiceRound, setPracticeRound] = useState(0);
+  const [stats, setStats] = useState(() => loadStats("piramide"));
+
+  useEffect(() => {
+    loadPokedex().then(setPokedex);
+  }, []);
+
+  useEffect(() => {
+    if (practiceSeed === null) setPracticeSeed(loadOrPickPracticeSeed());
+  }, [practiceSeed]);
+
+  function handleNewPractice() {
+    const next = randomSeed();
+    localStorage.setItem(PRACTICE_SEED_KEY, String(next));
+    localStorage.removeItem(PRACTICE_PROGRESS_KEY);
+    setPracticeSeed(next);
+    setPracticeRound((n) => n + 1);
+  }
+
+  if (!pokedex) {
+    return (
+      <div className="pyr-page">
+        <h1>{t.games.piramide.title}</h1>
+        <p className="pyr-loading">{t.common.loadingPokedex}</p>
+      </div>
+    );
+  }
+
+  const dateKey = todayKey();
+  const dailySeed = hashString(`piramide:${dateKey}`);
+  const dailyPuzzle = buildPyramid(pokedex, dailySeed);
+  const practicePuzzle = practiceSeed !== null ? buildPyramid(pokedex, practiceSeed) : null;
+
+  return (
+    <div className="pyr-page">
+      <Seo title={`${t.games.piramide.title} · Triviamon`} description={t.games.piramide.description} />
+      <h1>{t.games.piramide.title}</h1>
+
+      <div className="pyr-tabs" role="tablist">
+        <button
+          type="button"
+          className={`pyr-tab ${modo === "diario" ? "pyr-tab--active" : ""}`}
+          onClick={() => setModo("diario")}
+        >
+          {t.common.dailyChallengeTab}
+        </button>
+        <button
+          type="button"
+          className={`pyr-tab ${modo === "practica" ? "pyr-tab--active" : ""}`}
+          onClick={() => setModo("practica")}
+        >
+          {t.common.freePracticeTab}
+        </button>
+      </div>
+
+      <StreakBadge stats={stats} />
+
+      <div className={modo === "diario" ? "pyr-mode" : "pyr-mode pyr-mode--hidden"}>
+        <PyramidGame
+          key={dateKey}
+          pokedex={pokedex}
+          puzzle={dailyPuzzle}
+          storageKey={`triviamon:pyr:diario:${dateKey}`}
+          dateLabel={formatDateLabel(dateKey)}
+          onWin={() => {
+            recordDailyWin("piramide", dateKey);
+            setStats(loadStats("piramide"));
+          }}
+        />
+      </div>
+
+      <div className={modo === "practica" ? "pyr-mode" : "pyr-mode pyr-mode--hidden"}>
+        {practicePuzzle && (
+          <PyramidGame
+            key={practiceRound}
+            pokedex={pokedex}
+            puzzle={practicePuzzle}
+            storageKey={PRACTICE_PROGRESS_KEY}
+            onNewPractice={handleNewPractice}
+          />
+        )}
+      </div>
+
+      <RelatedGames currentId="piramide" />
+    </div>
+  );
+}

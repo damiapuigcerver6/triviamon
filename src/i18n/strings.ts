@@ -40,6 +40,7 @@ export interface Strings {
     movimix: { title: string; description: string };
     debilidex: { title: string; description: string };
     emojidex: { title: string; description: string };
+    piramide: { title: string; description: string };
   };
   stats: {
     modalTitle: string;
@@ -257,6 +258,16 @@ export interface Strings {
     shareWon: (n: number) => string;
     shareLost: (name: string) => string;
   };
+  piramide: {
+    orderBy: (stat: string) => string;
+    emptySlot: string;
+    check: string;
+    attemptsLabel: (n: number) => string;
+    wonTitle: string;
+    guessedInAttempts: (n: number) => string;
+    anotherPyramid: string;
+    shareWon: (n: number) => string;
+  };
 }
 
 export const STRINGS_ES: Strings = {
@@ -340,6 +351,11 @@ export const STRINGS_ES: Strings = {
     emojidex: {
       title: "Emojidex",
       description: "Un Pokémon oculto se describe con un par de emojis. Adivina de quién se trata.",
+    },
+    piramide: {
+      title: "Pirámide",
+      description:
+        "Ordena 13 Pokémon en una pirámide según una característica aleatoria, sin saber si aciertas hasta comprobarlo.",
     },
   },
   stats: {
@@ -568,6 +584,16 @@ export const STRINGS_ES: Strings = {
     shareWon: (n) => `Adivinado en ${n} ${n === 1 ? "intento" : "intentos"}`,
     shareLost: (name) => `No lo conseguí. Era ${name}`,
   },
+  piramide: {
+    orderBy: (stat) => `Ordena por: ${stat}`,
+    emptySlot: "Hueco vacío",
+    check: "Comprobar",
+    attemptsLabel: (n) => `Intentos: ${n}`,
+    wonTitle: "¡Pirámide resuelta!",
+    guessedInAttempts: (n) => `Resuelto en ${n} ${n === 1 ? "intento" : "intentos"}`,
+    anotherPyramid: "Otra pirámide",
+    shareWon: (n) => `Resuelto en ${n} ${n === 1 ? "intento" : "intentos"}`,
+  },
 };
 
 export const STRINGS_EN: Strings = {
@@ -649,6 +675,11 @@ export const STRINGS_EN: Strings = {
     emojidex: {
       title: "Emojidex",
       description: "A hidden Pokémon is described with a couple of emoji. Guess who it is.",
+    },
+    piramide: {
+      title: "Pyramid",
+      description:
+        "Sort 13 Pokémon into a pyramid by a random characteristic, with no way to know if you're right until you check.",
     },
   },
   stats: {
@@ -876,5 +907,15 @@ export const STRINGS_EN: Strings = {
     anotherPokemon: "Another Pokémon",
     shareWon: (n) => `Guessed in ${n} ${n === 1 ? "try" : "tries"}`,
     shareLost: (name) => `Didn't get it. It was ${name}`,
+  },
+  piramide: {
+    orderBy: (stat) => `Order by: ${stat}`,
+    emptySlot: "Empty slot",
+    check: "Check",
+    attemptsLabel: (n) => `Attempts: ${n}`,
+    wonTitle: "Pyramid solved!",
+    guessedInAttempts: (n) => `Solved in ${n} ${n === 1 ? "try" : "tries"}`,
+    anotherPyramid: "Another pyramid",
+    shareWon: (n) => `Solved in ${n} ${n === 1 ? "try" : "tries"}`,
   },
 };

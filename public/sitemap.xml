@@ -44,4 +44,8 @@
     <loc>https://triviamon.mdlabs.app/juegos/emojidex</loc>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://triviamon.mdlabs.app/juegos/piramide</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>

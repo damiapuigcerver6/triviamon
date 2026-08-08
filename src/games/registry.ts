@@ -82,4 +82,11 @@ export const GAMES: GameMeta[] = [
     icono: "/brand/emojidex-icono.png",
     disponible: true,
   },
+  {
+    id: "piramide",
+    path: "/juegos/piramide",
+    strKey: "piramide",
+    icono: "/brand/piramide-icono.png",
+    disponible: true,
+  },
 ];
