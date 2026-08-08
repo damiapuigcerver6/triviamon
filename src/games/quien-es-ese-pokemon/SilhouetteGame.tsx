@@ -12,6 +12,11 @@ import "./SilhouetteGame.css";
 
 const START_TIME = 15;
 const MAX_TIME = 15;
+// Tope real del tiempo acumulable con la bonificacion, mayor que MAX_TIME para que
+// una buena racha de aciertos pueda ganar colchon en vez de quedarse siempre igual
+// (si no, una silueta dificil podia agotar el tiempo a mitad de una racha de aciertos
+// correctos, sin ningun fallo visible, dando la sensacion de que la racha se reseteaba sola).
+const TIME_CAP = 25;
 const BONUS = 5;
 const TICK_MS = 100;
 const REVEAL_MS = 900;
@@ -101,7 +106,7 @@ export default function SilhouetteGame({ pokedex, onPlayAgain, onExit }: Props) 
     setStreak(newStreak);
     setBestStreakRun((b) => Math.max(b, newStreak));
     setFeedback("correct");
-    setTimeLeft((t) => Math.min(MAX_TIME, t + BONUS));
+    setTimeLeft((t) => Math.min(TIME_CAP, t + BONUS));
     setQuery("");
     setPhase("reveal");
     setTimeout(() => {
